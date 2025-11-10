@@ -16,8 +16,8 @@ El proyecto promueve la verificación responsable de la información y el pensam
  - Dato: 
  - Usuario:  
  - Repositorios:
- -Verificaciones_IA:
- -Logros:
- -Preguntas_Quiz:
+ - Verificaciones_IA:
+ - Logros:
+ - Preguntas_Quiz:
 
 ## Instalación
