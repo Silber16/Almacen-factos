@@ -1,19 +1,8 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+class AlmacenFact {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name
+  }
+}
 
-const AlmacenFacts = sequelize.define('AlmacenFacts', {
-    UserId: { 
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    FactsIds: { 
-        type: DataTypes.JSON,
-        default: []
-    },
-}, {
-    timestamps: true,
-    tableName: 'almacenFacts'
-});
-
-module.exports = AlmacenFacts;
+module.exports = AlmacenFact;
