@@ -15,6 +15,4 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.listen(3000, () => { 
-    console.log( ' El servidor se está ejecutando en el puerto 3000' ) ; 
-    }) ;
+module.exports = app;
