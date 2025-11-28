@@ -10,10 +10,6 @@ async function getAllFacts() {
 }
 
 async function getFact(id) {
-    if (!id || isNaN(Number(id))) {
-        throw new err("ID de hecho no válido."); 
-    }
-
     try {
         const result = await factsRepository.getFactById(id);
         
