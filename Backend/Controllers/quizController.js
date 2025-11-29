@@ -16,3 +16,27 @@ const obtenerPregunta = async (req, res) =>  {
         res.status(500).json({ error: 'Error del servidor.' });
     }
 };
+
+//valida la respuesta y asigna los puntos correspondientes al user
+const validarRespuesta = async (req, res) => {
+    try {
+        const { factId, textoMostrado, respuestaUsuario, userId } = req.body;
+        
+        const resultado = await quizService.validarYActualizarPuntos(
+            factId, 
+            textoMostrado, 
+            respuestaUsuario, 
+            userId
+        );
+        
+        res.json(resultado);
+    } catch (error) {
+        console.error('Error al validar respuesta:', error);
+        res.status(500).json({ error: 'Error del servidor' });
+    }
+};
+
+module.exports = {
+    obtenerPregunta,
+    validarRespuesta
+};
