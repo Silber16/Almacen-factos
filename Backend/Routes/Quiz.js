@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const quizController = require('../Controllers/quizController');
 
-//este url se ejecuta cuando se muestra la pregunta al usuario
+//esta url se ejecuta cuando se muestra la pregunta al usuario
 router.get('/pregunta', quizController.obtenerPregunta);
 
-//este url se ejecuta cuando el usuario elige verdadero o falso
+//esta url se ejecuta cuando el usuario elige verdadero o falso
 router.post('/respuesta', quizController.validarRespuesta);
 
 
