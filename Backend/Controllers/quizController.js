@@ -12,7 +12,7 @@ const obtenerPregunta = async (req, res) =>  {
         res.json(pregunta);
 
     } catch (error) {
-        console.error('Error al obtener pregunta:', error);
+        console.error('Error al obtener facto:', error);
         res.status(500).json({ error: 'Error del servidor.' });
     }
 };
