@@ -46,3 +46,17 @@ btnJugar.addEventListener('click', async () => {
     cambiarEstado(playing);
     iniciarTimer();
 })
+//obtener pregunta del back
+async function obtenerPregunta() {
+    try {
+        const response = await fetch(`${API_URL}/pregunta`);
+        const data = await response.json();
+
+        preguntaActual = data;
+        preguntaTexto.textContent = data.texto;
+
+    } catch (error) {
+        console.error('Error al obtener pregunta:', error);
+        alert('Error al cargar la pregunta. Intente de nuevo.')
+    }
+}
