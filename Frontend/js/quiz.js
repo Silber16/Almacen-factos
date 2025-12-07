@@ -1,0 +1,1 @@
+//obtener elementos del DOM
