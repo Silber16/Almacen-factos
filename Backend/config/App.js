@@ -1,7 +1,10 @@
 const express = require ( 'express' ); 
 const db = require ( './db' ); 
+const quizRoutes = require('./Routes/quizRoutes');
 
 const app = express (); 
+
+app.use(express.json());
 
 app.get('/', async (req, res) => {
     try {
@@ -14,5 +17,7 @@ app.get('/', async (req, res) => {
         res.status(500).send('Error interno del servidor');
     }
 });
+
+app.use('/quiz', quizRoutes);
 
 module.exports = app;
