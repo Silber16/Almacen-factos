@@ -46,4 +46,18 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
     if (!userId || isNaN(Number(userId))) {
         throw new Error("ID de usuario no valido.");
     }
+
+
+    try {
+        //buscar el facto
+        const facts = await quizRepository.getFactById(factoId);
+
+        if (!facts || facts.length === 0) {
+            throw new Error("Facto no encontrado.");
+        }
+        const facto = facts[0];
+
+    } catch(err) {
+        throw err;
+    }
 }
