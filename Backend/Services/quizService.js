@@ -23,5 +23,15 @@ async function obtenerPreguntaRandom() {
         } else {
             textoMostrado = facto.contenido
         }
+
+        //objeto que se envia al controlador
+        return {
+            factoId: facto.id,
+            texto: textoMostrado,
+            tiempoLimite: 30
+        };
+
+    } catch (err) {
+        throw err;
     }
 }
