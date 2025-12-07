@@ -1,0 +1,1 @@
+const quizRepository = require('../Repositories/quizRepository');
