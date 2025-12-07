@@ -17,3 +17,12 @@ const resultadoIcono = document.getElementById('resultado-icono');
 const resultadoMensaje = document.getElementById('resultado-mensaje');
 const puntosGanados = document.getElementById('puntos-ganados');
 const puntajeTotal = document.getElementById('puntaje-total');
+
+const API_URL = 'http://localhost:5000/quiz';
+
+
+//variables de juego
+let = preguntaActual = null;
+let tiempoRestante = 30;
+let intervalTimer = null;
+let userId = 1; //por ahora hardcodeado
