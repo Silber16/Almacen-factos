@@ -3,9 +3,9 @@ const db = require('../config/db.js');
 //buscar facto random en la bd
 async function getRandomFact() {
     const query = `   
-        SELECT id, content, quiz_content
+        SELECT id, content, modified_content
         FROM facts
-        WHERE quiz_content IS NOT NULL
+        WHERE modified_content IS NOT NULL
         ORDER BY RANDOM()
         LIMIT 1;
     `;
@@ -16,7 +16,7 @@ async function getRandomFact() {
 //recibe el id del facto que se le mostro al usuario para validar la respuesta del usuario
 async function getFactById(id) {
     const query = `
-        SELECT content, quiz_content 
+        SELECT content, modified_content 
         FROM facts
         WHERE id = $1;
     `;
