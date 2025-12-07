@@ -33,3 +33,14 @@ async function updateUserPoints(userId, points) {
     `;
     await db.query(query, [points, userId]);
 }
+
+//una vez que termine el juego se le va a mostrar al usuario su puntaje total
+async function getUserPoints(userId) {
+    const query = `
+        SELECT score 
+        FROM users 
+        WHERE id = $1;
+        `;
+    const result = await db.query(query, [userId]);
+    return result.rows;
+}
