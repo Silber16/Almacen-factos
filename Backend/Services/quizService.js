@@ -82,7 +82,26 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
             puntosGanados = 0;
         }
 
+        //actualizar puntos
+        await quizRepository.updateUserPoints(userId, puntosGanados);
+
+        
+        //obtener puntaje total
+        const userPoints = await quizRepository.getUserPoints(userId);
+        const puntajeTotal = userPoints[0].score;
+
+        return {
+            correcto: respondioCorrectamente,
+            puntosGanados,
+            puntajeTotal
+        };
+
     } catch(err) {
         throw err;
     }
 }
+
+module.exports = {
+    obtenerPreguntaRandom,
+    validarYActualizarPuntos
+};
