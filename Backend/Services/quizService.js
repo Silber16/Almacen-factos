@@ -57,6 +57,18 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
         }
         const facto = facts[0];
 
+
+        //determinar respuesta correcta
+        let respuestaCorrecta;
+
+        if (textoMostrado === facto.contenido) {
+            respuestaCorrecta = true;
+        } else if (textoMostrado === facto.contenido_modificado) {
+            respuestaCorrecta = false;
+        } else {
+            throw new Error("El texto mostrado no coincide con ningun facto.");
+        }
+
     } catch(err) {
         throw err;
     }
