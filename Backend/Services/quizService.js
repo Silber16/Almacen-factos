@@ -69,6 +69,19 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
             throw new Error("El texto mostrado no coincide con ningun facto.");
         }
 
+
+        //verificar respusta del usuario
+        let respondioCorrectamente;
+        let puntosGanados;
+
+        if (respuestaUsuario === respuestaCorrecta) {
+            respondioCorrectamente = true;
+            puntosGanados = 10;
+        } else {
+            respondioCorrectamente = false;
+            puntosGanados = 0;
+        }
+
     } catch(err) {
         throw err;
     }
