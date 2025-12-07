@@ -26,3 +26,13 @@ let = preguntaActual = null;
 let tiempoRestante = 30;
 let intervalTimer = null;
 let userId = 1; //por ahora hardcodeado
+
+
+//funcion para cambiar estados de juego
+function cambiarEstado(estadoActivo) {
+    lobby.classList.remove('active');
+    playing.classList.remove('active');
+    result.classList.remove('active');
+
+    estadoActivo.classList.add('active');
+}
