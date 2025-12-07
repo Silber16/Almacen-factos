@@ -1,4 +1,4 @@
-const { obtenerPregunta } = require("../../Backend/Controllers/quizController");
+const { obtenerPregunta, validarRespuesta } = require("../../Backend/Controllers/quizController");
 
 //obtener elementos del DOM
 const lobby = document.getElementById('lobby');
@@ -59,4 +59,35 @@ async function obtenerPregunta() {
         console.error('Error al obtener pregunta:', error);
         alert('Error al cargar la pregunta. Intente de nuevo.')
     }
+}
+
+
+//iniciar el timer
+function iniciarTimer() {
+    tiempoRestante= 30;
+    timerTexto.textContent = tiempoRestante;
+    timerProgreso.style.width = '100%';
+    timerProgreso.classList.remove('alerta');
+    timerTexto.classList.remove('alerta');
+
+    intervalTimer = setInterval(() => {
+        tiempoRestante--;
+        timerTexto.textContent = tiempoRestante;
+
+        const porcentaje = (tiempoRestante / 30) * 100;
+        timerProgreso.style.width = porcentaje + '%';
+
+        if (tiempoRestante <= 10) {
+            timerProgreso.classList.add('alerta');
+            timerTexto.classList.add('alerta')
+        }
+        if (tiempoRestante === 0) {
+            detenerTimer();
+            validarRespuesta(false);
+        }
+    }, 1000);
+}
+
+function detenerTimer() {
+    clearInterval(intervalTimer);
 }
