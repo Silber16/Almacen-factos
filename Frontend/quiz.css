@@ -163,3 +163,20 @@ p {
     border: 3px solid #fe7f2d;
     min-width: 100px;
 }
+#timer.alerta {
+    color:#f44336;
+    border-color: #f44336;
+    background-color: rgba(244, 67, 54, 0.1);
+    animation: parpadeo 0.5s infinite;
+}
+
+@keyframes parpadeo {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
+
+
