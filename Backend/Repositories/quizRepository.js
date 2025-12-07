@@ -23,3 +23,13 @@ async function getFactById(id) {
     const result = await db.query(query, [id]);
     return result.rows
 }
+
+//suma puntos a la columna score de users en caso de que el usuario haya contestado correctamente
+async function updateUserPoints(userId, points) {
+    const query = `
+    UPDATE users
+    SET score = score + $1 
+    WHERE id = $2;
+    `;
+    await db.query(query, [points, userId]);
+}
