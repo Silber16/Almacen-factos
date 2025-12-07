@@ -260,3 +260,60 @@ p {
     font-size: 1.5rem;
     margin: 1rem 0;
 }
+
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .boton {
+        font-size: 1.5rem;
+        padding: 12px 30px;
+    }
+
+    #pregunta-texto {
+        font-size: 1.4rem;
+    }
+
+    .boton-respuesta {
+        min-width: 200px;
+        font-size: 1.3rem;
+        padding: 15px 35px;
+    }
+
+    #timer {
+        font-size: 2.5rem;
+    }
+
+    .logo {
+        width: 120px;
+        height: 120px;
+        font-size: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .pregunta-card {
+        padding: 40px 25px;
+        min-height: 200px;
+    }
+
+    #pregunta-texto {
+        font-size: 1.2rem;
+    }
+    .boton-respuesta {
+        width: 100%;
+    }
+    .botones-resultado {
+        flex-direction: column;
+    }
+
+    .boton {
+        width: 100%;
+    }
+}
