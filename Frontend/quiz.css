@@ -40,3 +40,26 @@ body {
         transform: translateY(0);
     }
 }
+
+h1 {
+    color: #E4EEF0;
+    font-size: 3.5rem;
+    margin: 2rem 0 1rem;
+}
+
+p {
+    color: #E4EEF0;
+    font-size: 1.2rem;
+    margin: 1rem 0;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.accent {
+    color: #fe7f2d
+}
+
