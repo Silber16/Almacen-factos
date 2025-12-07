@@ -6,4 +6,10 @@
 
 body {
     background-color: #16232A;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
 }
