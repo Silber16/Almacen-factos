@@ -1,0 +1,31 @@
+services:
+  backend:
+    build: ./backend
+    container_name: mi-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - mi-red
+    volumes:
+      - ./backend:/app
+      - /app/node_modules 
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: mi-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - mi-red
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro 
+    restart: unless-stopped
+
+networks:
+  mi-red:
+    driver: bridge
