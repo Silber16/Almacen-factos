@@ -63,3 +63,19 @@ p {
     color: #fe7f2d
 }
 
+
+.logo {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(to bottom right, #fe7f2d, #1d5e61);
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 70px;
+    font-weight: bold;
+    margin: 0 auto 2rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(255, 255, 255, 0.1);
+}
