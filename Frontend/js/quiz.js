@@ -1,3 +1,5 @@
+const { obtenerPregunta } = require("../../Backend/Controllers/quizController");
+
 //obtener elementos del DOM
 const lobby = document.getElementById('lobby');
 const playing = document.getElementById('playing');
@@ -36,3 +38,11 @@ function cambiarEstado(estadoActivo) {
 
     estadoActivo.classList.add('active');
 }
+
+
+//iniciar juego
+btnJugar.addEventListener('click', async () => {
+    await obtenerPregunta();
+    cambiarEstado(playing);
+    iniciarTimer();
+})
