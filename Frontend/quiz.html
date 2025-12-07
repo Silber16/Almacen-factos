@@ -13,19 +13,23 @@
         <div class="logo-header">
             <div class="logo">AF</div>
         </div>
+
             <div class="container">
 
             <!--Estado LOBBY-->
-            <div id="lobby" class="screen active">
+            <div id="lobby" class="screen">
                 <h1>¿<span class="accent">Facto</span> o <span class="accent">Falso</span>?</h1>
                 <p class="subtitle">Porque no todo lo que suena real lo es.</p>
                 <button id="btn-jugar" class="boton">🎮 JUGAR</button>
             </div>
 
             <!--Estado PLAYING-->
-            <div id="playing" class="screen">
+            <div id="playing" class="screen active">
                 <div id="timer-container">
-                    <div id="timer">30</div>
+                    <div id="timer-barra">
+                        <div id="timer-progreso"></div>
+                    </div>
+                    <div id="timer-texto">30</div>
                 </div>
                 <div class="pregunta-card">
                     <p id="pregunta-texto"></p>
