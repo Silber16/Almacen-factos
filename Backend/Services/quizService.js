@@ -35,3 +35,9 @@ async function obtenerPreguntaRandom() {
         throw err;
     }
 }
+
+
+
+async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario, userId) {
+    
+}
