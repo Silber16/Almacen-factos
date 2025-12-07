@@ -44,3 +44,11 @@ async function getUserPoints(userId) {
     const result = await db.query(query, [userId]);
     return result.rows;
 }
+
+
+module.exports =  {
+    getRandomFact,
+    getFactById,
+    updateUserPoints,
+    getUserPoints
+};
