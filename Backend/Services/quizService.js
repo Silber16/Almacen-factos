@@ -39,5 +39,11 @@ async function obtenerPreguntaRandom() {
 
 
 async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario, userId) {
-    
+    //validar parametros
+    if (!factoId || isNaN(Number(factoId))) {
+        throw new Error("ID de facto no valido.");
+    }
+    if (!userId || isNaN(Number(userId))) {
+        throw new Error("ID de usuario no valido.");
+    }
 }
