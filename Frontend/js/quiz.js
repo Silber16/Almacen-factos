@@ -91,3 +91,17 @@ function iniciarTimer() {
 function detenerTimer() {
     clearInterval(intervalTimer);
 }
+
+
+//manejo de las respuestas del usuario
+btnVerdadero.addEventListener('click', () => {
+    detenerTimer();
+    validarRespuesta(true);
+});
+
+btnFalso.addEventListener('click', () => {
+    detenerTimer();
+    validarRespuesta(False);
+});
+
+
