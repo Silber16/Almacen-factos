@@ -18,7 +18,7 @@ const resultadoMensaje = document.getElementById('resultado-mensaje');
 const puntosGanados = document.getElementById('puntos-ganados');
 const puntajeTotal = document.getElementById('puntaje-total');
 
-const API_URL = 'http://localhost:5000/quiz';
+const API_URL = 'http://localhost:3030/quiz';
 
 
 //variables de juego
