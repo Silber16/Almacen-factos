@@ -4,13 +4,12 @@ const quizRepository = require('../Repositories/quizRepository');
 //traer facto
 async function obtenerPreguntaRandom() {
     try {
-        const facts = await quizRepository.getRandomFact();
+        const facto = await quizRepository.getRandomFact();
         
-        if (!facts || facts.length === 0) {
+        if (!facto) {
             return null;
         }
         
-        const facto = facts[0];
 
         //aca se elige aleatoriamente 50/50 si mostrar el facto verdadero o el falso
         const mostrarModificado = Math.random() < 0.5;
@@ -19,15 +18,15 @@ async function obtenerPreguntaRandom() {
         //si el numero que salio es menor a 0.5 se muestra el modificado
         let textoMostrado;
         if (mostrarModificado) {
-            textoMostrado = facto.contenido_modificado;
+            textoMostrado = facto.modified_content;
         } else {
-            textoMostrado = facto.contenido
+            textoMostrado = facto.content;
         }
 
         //objeto que se envia al controlador
         return {
-            factoId: facto.id,
-            texto: textoMostrado,
+            id: facto.id,
+            modified_content: textoMostrado,
             tiempoLimite: 30
         };
 
@@ -61,9 +60,9 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
         //determinar respuesta correcta
         let respuestaCorrecta;
 
-        if (textoMostrado === facto.contenido) {
+        if (textoMostrado === facto.content) {
             respuestaCorrecta = true;
-        } else if (textoMostrado === facto.contenido_modificado) {
+        } else if (textoMostrado === facto.modified_content) {
             respuestaCorrecta = false;
         } else {
             throw new Error("El texto mostrado no coincide con ningun facto.");

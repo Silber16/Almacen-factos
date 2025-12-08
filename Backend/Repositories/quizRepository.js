@@ -10,7 +10,7 @@ async function getRandomFact() {
         LIMIT 1;
     `;
         const result = await db.query(query);
-        return result.rows;
+        return result.rows[0];
 }
 
 //recibe el id del facto que se le mostro al usuario para validar la respuesta del usuario
