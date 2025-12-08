@@ -46,6 +46,7 @@ btnJugar.addEventListener('click', async () => {
     cambiarEstado(playing);
     iniciarTimer();
 })
+
 //obtener pregunta del back
 async function obtenerPregunta() {
     try {
@@ -103,5 +104,31 @@ btnFalso.addEventListener('click', () => {
     detenerTimer();
     validarRespuesta(False);
 });
+
+
+//validar respuesta del usuario
+async function validarRespuesta(respuestaUsuario) {
+    try {
+        const response = await fetch(`${API_URL}/responder`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                factoId: preguntaActual.factoId,
+                textoMostrado: preguntaActual.texto,
+                respuestaUsuario: respuestaUsuario,
+                userId: userId
+            })
+        });
+
+        const data = await response.json();
+        mostrarResultado(data);
+
+    } catch (error) {
+        console.error('Error al validar respuesta:', error);
+        alert('Error al validar respuesta. Intente de nuevo.');
+    }
+}
 
 
