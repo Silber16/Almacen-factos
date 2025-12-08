@@ -132,3 +132,20 @@ async function validarRespuesta(respuestaUsuario) {
 }
 
 
+//funcion q muestra los resultados
+function mostrarResultado(data) {
+    if (data.correcto) {
+        resultadoIcono.textContent = '✅';
+        resultadoMensaje.textContent = '¡CORRECTO!';
+        btnSalir.style.display = 'none';
+    } else {
+        resultadoIcono.textContent = '❌';
+        resultadoMensaje.textcontent = '¡INCORRECTO!';
+        btnSalir.style.display = 'incline-block';
+    }
+
+    puntosGanados.textContent = data.puntosGanados;
+    puntajeTotal.textContent = data.puntajeTotal;
+
+    cambiarEstado(result)
+}
