@@ -1,6 +1,6 @@
 const express = require ( 'express' ); 
-const db = require ( './db' ); 
-const quizRoutes = require('../Routes/quizRoutes');
+const db = require ( './config/db' ); 
+const quizRoutes = require('./Routes/quizRoutes');
 
 const app = express (); 
 
