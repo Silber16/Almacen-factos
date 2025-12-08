@@ -1,5 +1,3 @@
-const { obtenerPregunta, validarRespuesta } = require("../../Backend/Controllers/quizController");
-
 //obtener elementos del DOM
 const lobby = document.getElementById('lobby');
 const playing = document.getElementById('playing');
@@ -102,14 +100,14 @@ btnVerdadero.addEventListener('click', () => {
 
 btnFalso.addEventListener('click', () => {
     detenerTimer();
-    validarRespuesta(False);
+    validarRespuesta(false);
 });
 
 
 //validar respuesta del usuario
 async function validarRespuesta(respuestaUsuario) {
     try {
-        const response = await fetch(`${API_URL}/responder`, {
+        const response = await fetch(`${API_URL}/respuesta`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -140,8 +138,8 @@ function mostrarResultado(data) {
         btnSalir.style.display = 'none';
     } else {
         resultadoIcono.textContent = '❌';
-        resultadoMensaje.textcontent = '¡INCORRECTO!';
-        btnSalir.style.display = 'incline-block';
+        resultadoMensaje.textContent = '¡INCORRECTO!';
+        btnSalir.style.display = 'inline-block';
     }
 
     puntosGanados.textContent = data.puntosGanados;
