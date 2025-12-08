@@ -149,3 +149,14 @@ function mostrarResultado(data) {
 
     cambiarEstado(result)
 }
+
+//boton para pasar a la siguiente pregunta
+btnSiguiente.addEventListener('click', async () => {
+    await obtenerPregunta();
+    cambiarEstado(playing);
+    iniciarTimer();
+});
+//boton salir
+btnSalir.addEventListener('click', () => {
+    cambiarEstado(lobby)
+});
