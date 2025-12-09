@@ -40,11 +40,8 @@ function cambiarEstado(estadoActivo) {
 
 //iniciar juego
 btnJugar.addEventListener('click', async () => {
-    console.log('Botón JUGAR clickeado');
     await obtenerPregunta();
-    console.log('Cambiando a estado PLAYING');
     cambiarEstado(playing);
-    console.log('Estado cambiado, iniciando timer');
     iniciarTimer();
 })
 
@@ -59,10 +56,7 @@ async function obtenerPregunta() {
             texto: data.modified_content
         };
 
-        console.log('preguntaActual guardada:', preguntaActual);
         preguntaTexto.textContent = data.modified_content;
-        console.log('Texto asignado al elemento:', preguntaTexto.textContent);  // NUEVA
-        console.log('Elemento preguntaTexto:', preguntaTexto);
 
     } catch (error) {
         console.error('Error al obtener pregunta:', error);
@@ -92,7 +86,7 @@ function iniciarTimer() {
         }
         if (tiempoRestante === 0) {
             detenerTimer();
-            validarRespuesta(false);
+            manejarTimeout();
         }
     }, 1000);
 }
@@ -101,6 +95,28 @@ function detenerTimer() {
     clearInterval(intervalTimer);
 }
 
+//funcion q maneja cuando se acaba el tiempo, obtiene el puntaje sin sumar puntos
+async function manejarTimeout() {
+    try {
+        const response = await fetch(`${API_URL}/puntaje/${userId}`);
+        const data = await response.json();
+
+        mostrarResultado({
+            correcto: false,
+            puntosGanados: 0,
+            puntajeTotal: data.puntajeTotal || 0,
+            timeout: true
+        });
+    } catch (error) {
+
+        mostrarResultado({
+            correcto: false,
+            puntosGanados: 0,
+            puntajeTotal: 0,
+            timeout: true
+        });
+    }
+}
 
 //manejo de las respuestas del usuario
 btnVerdadero.addEventListener('click', () => {
@@ -142,7 +158,11 @@ async function validarRespuesta(respuestaUsuario) {
 
 //funcion q muestra los resultados
 function mostrarResultado(data) {
-    if (data.correcto) {
+    if (data.timeout) {
+        resultadoIcono.textContent = '⏱️';
+        resultadoMensaje.textContent = '¡TIEMPO AGOTADO!';
+        btnSalir.style.display = 'inline-block';
+    } else if (data.correcto) {
         resultadoIcono.textContent = '✅';
         resultadoMensaje.textContent = '¡CORRECTO!';
         btnSalir.style.display = 'none';
