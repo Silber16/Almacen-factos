@@ -1,4 +1,5 @@
 const quizService = require('../Services/quizService');
+const quizRepository = require('..//Repositories/quizRepository');
 
 //obtener pregunta aleatoria
 const obtenerPregunta = async (req, res) =>  {
