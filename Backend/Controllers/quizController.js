@@ -36,7 +36,25 @@ const validarRespuesta = async (req, res) => {
     }
 };
 
+//obtener solo el puntaje sin validar respuesta
+const obtenerPuntaje = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const userPoints = await quizRepository.getUserPoints(userId);
+
+        if (!userPoints || userPoints === 0) {
+            return res.json({ puntajeTotal: 0 });
+        }
+
+        res.json({ puntajeTotal: userPoints[0].score });
+    } catch (error) {
+        console.error('Error al obtener puntaje:', error);
+        res.status(500).json({ error: 'Error del servidor' });
+    }
+};
+
 module.exports = {
     obtenerPregunta,
-    validarRespuesta
+    validarRespuesta,
+    obtenerPuntaje
 };

@@ -8,6 +8,8 @@ router.get('/pregunta', quizController.obtenerPregunta);
 //esta url se ejecuta cuando el usuario elige verdadero o falso
 router.post('/respuesta', quizController.validarRespuesta);
 
+router.get('/puntaje/:userId', quizController.obtenerPuntaje);
+
 
 module.exports = router;
 
