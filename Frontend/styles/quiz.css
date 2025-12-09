@@ -384,6 +384,23 @@ p {
     margin: 1rem 0;
 }
 
+
+.link-fuente {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #fe7f2d;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 8px 16px;
+    border: 2px solid #fe7f2d;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+.link-fuente:hover {
+    background-color: #fe7f2d;
+    color: white;
+}
+
 /*responsive*/
 @media (max-width: 768px) {
     h1 {

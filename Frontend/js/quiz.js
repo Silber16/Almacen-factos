@@ -17,6 +17,7 @@ const resultadoIcono = document.getElementById('resultado-icono');
 const resultadoMensaje = document.getElementById('resultado-mensaje');
 const puntosGanados = document.getElementById('puntos-ganados');
 const puntajeTotal = document.getElementById('puntaje-total');
+const linkFuente = document.getElementById('link-fuente');
 
 const API_URL = 'http://localhost:3030/quiz';
 
@@ -53,7 +54,8 @@ async function obtenerPregunta() {
 
         preguntaActual = {
             factoId: data.id,
-            texto: data.modified_content
+            texto: data.modified_content,
+            font: data.font
         };
 
         preguntaTexto.textContent = data.modified_content;
@@ -174,6 +176,14 @@ function mostrarResultado(data) {
 
     puntosGanados.textContent = data.puntosGanados;
     puntajeTotal.textContent = data.puntajeTotal;
+
+    //fuente
+    if (preguntaActual.font) {
+        linkFuente.href = preguntaActual.font;
+        linkFuente.style.display = 'inline-block';
+    } else {
+        linkFuente.style.display = 'none';
+    }
 
     cambiarEstado(result)
 }

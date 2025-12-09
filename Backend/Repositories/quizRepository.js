@@ -3,7 +3,7 @@ const db = require('../config/db.js');
 //buscar facto random en la bd
 async function getRandomFact() {
     const query = `   
-        SELECT id, content, modified_content
+        SELECT id, content, modified_content, font
         FROM facts
         WHERE modified_content IS NOT NULL
         ORDER BY RANDOM()

@@ -24,7 +24,8 @@ async function obtenerPreguntaRandom() {
         return {
             id: facto.id,
             modified_content: textoMostrado,
-            tiempoLimite: 30
+            tiempoLimite: 30,
+            font: facto.font
         };
 
     } catch (err) {
