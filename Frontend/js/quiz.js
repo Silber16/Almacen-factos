@@ -22,7 +22,7 @@ const API_URL = 'http://localhost:3030/quiz';
 
 
 //variables de juego
-let = preguntaActual = null;
+let preguntaActual = null;
 let tiempoRestante = 30;
 let intervalTimer = null;
 let userId = 1; //por ahora hardcodeado
@@ -40,8 +40,11 @@ function cambiarEstado(estadoActivo) {
 
 //iniciar juego
 btnJugar.addEventListener('click', async () => {
+    console.log('Botón JUGAR clickeado');
     await obtenerPregunta();
+    console.log('Cambiando a estado PLAYING');
     cambiarEstado(playing);
+    console.log('Estado cambiado, iniciando timer');
     iniciarTimer();
 })
 
@@ -51,8 +54,15 @@ async function obtenerPregunta() {
         const response = await fetch(`${API_URL}/pregunta`);
         const data = await response.json();
 
-        preguntaActual = data;
-        preguntaTexto.textContent = data.texto;
+        preguntaActual = {
+            factoId: data.id,
+            texto: data.modified_content
+        };
+
+        console.log('preguntaActual guardada:', preguntaActual);
+        preguntaTexto.textContent = data.modified_content;
+        console.log('Texto asignado al elemento:', preguntaTexto.textContent);  // NUEVA
+        console.log('Elemento preguntaTexto:', preguntaTexto);
 
     } catch (error) {
         console.error('Error al obtener pregunta:', error);

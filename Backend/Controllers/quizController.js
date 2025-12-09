@@ -20,10 +20,10 @@ const obtenerPregunta = async (req, res) =>  {
 //valida la respuesta y asigna los puntos correspondientes al user
 const validarRespuesta = async (req, res) => {
     try {
-        const { factId, textoMostrado, respuestaUsuario, userId } = req.body;
-        
+        const { factoId, textoMostrado, respuestaUsuario, userId } = req.body;
+
         const resultado = await quizService.validarYActualizarPuntos(
-            factId, 
+            factoId, 
             textoMostrado, 
             respuestaUsuario, 
             userId

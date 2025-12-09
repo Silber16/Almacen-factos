@@ -9,11 +9,8 @@ async function obtenerPreguntaRandom() {
         if (!facto) {
             return null;
         }
-        
-
         //aca se elige aleatoriamente 50/50 si mostrar el facto verdadero o el falso
         const mostrarModificado = Math.random() < 0.5;
-
         //si el numero que salio es mayor a 0.5 se muestra el original
         //si el numero que salio es menor a 0.5 se muestra el modificado
         let textoMostrado;
@@ -46,7 +43,6 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
         throw new Error("ID de usuario no valido.");
     }
 
-
     try {
         //buscar el facto
         const facts = await quizRepository.getFactById(factoId);
@@ -55,7 +51,6 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
             throw new Error("Facto no encontrado.");
         }
         const facto = facts[0];
-
 
         //determinar respuesta correcta
         let respuestaCorrecta;
@@ -67,7 +62,6 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
         } else {
             throw new Error("El texto mostrado no coincide con ningun facto.");
         }
-
 
         //verificar respusta del usuario
         let respondioCorrectamente;
@@ -87,6 +81,11 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
         
         //obtener puntaje total
         const userPoints = await quizRepository.getUserPoints(userId);
+        
+        if (!userPoints || userPoints.length === 0) {
+            throw new Error('Usuario no encontrado');
+        }
+
         const puntajeTotal = userPoints[0].score;
 
         return {

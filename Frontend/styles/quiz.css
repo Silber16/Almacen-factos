@@ -208,8 +208,8 @@ p {
 /*tarjeta de pregunta*/
 .pregunta-card {
     position: relative;
-    z-index: 3;
-    background-color: #E4EEF0;
+    z-index: 10;
+    background-color: #ffffff;
     color: #16232A;
     border-radius: 28px;
     padding: 60px 40px;
@@ -234,7 +234,7 @@ p {
     transform: translateX(-50%);
     background: #ffffff;
     border-radius: 24px;
-    z-index: 2;
+    z-index: -1;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
 }
 .pregunta-card::after {
@@ -247,7 +247,7 @@ p {
     transform: translateX(-50%);
     background: #ffffff;
     border-radius: 20px;
-    z-index: 1;
+    z-index: -2;
     box-shadow: 0 5px 12px rgba(0,0,0,0.10);
 }
 #pregunta-texto {
@@ -255,6 +255,8 @@ p {
     line-height: 1.6;
     color:#16232A;
     font-weight: 500;
+    margin: 0;
+    padding: 0;
 }
 
 
