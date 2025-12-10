@@ -92,7 +92,8 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
         return {
             correcto: respondioCorrectamente,
             puntosGanados,
-            puntajeTotal
+            puntajeTotal,
+            respuestaCorrecta: respuestaCorrecta
         };
 
     } catch(err) {

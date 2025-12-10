@@ -14,12 +14,12 @@
             <div class="logo">AF</div>
         </div>
 
-            <div class="container">
+        <div class="container">
 
             <!--Estado LOBBY-->
             <div id="lobby" class="screen active">
                 <h1>¿<span class="accent">Facto</span> o <span class="accent">Falso</span>?</h1>
-                <p class="subtitle">Porque no todo lo que suena real lo es.</p>
+                <p class="subtitle">Porque no todo lo que parece real lo es.</p>
                 <button id="btn-jugar" class="boton">🎮 JUGAR</button>
             </div>
 
@@ -47,14 +47,32 @@
                 <div class="puntaje-info">
                     <p>Puntos ganados: <span id="puntos-ganados" class="accent">0</span></p>
                     <p>Puntaje total: <span id="puntaje-total" class="accent">0</span></p>
+                    <a id="btn-ver-facto" class="link-fuente">📖 Ver facto</a>
                     <a id="link-fuente" href="#" target="_blank" class="link-fuente">🔗 Chequealo acá</a>
                 </div>
                 <div class="botones-resultado">
                     <button id="btn-siguiente" class="boton">➡️ SIGUIENTE</button>
-                    <button id="btn-salir" class=" boton boton-secundario">🚪 SALIR</button>
+                    <button id="btn-salir" class="boton boton-secundario">🚪 SALIR</button>
                 </div>
             </div>
+
+            <!--Estado VER_FACTO-->
+            <div id="ver-facto" class="screen">
+
+                <div class="pregunta-card">
+                    <p id="facto-revision-texto"></p>
+                </div>
+
+                <div class="botones-respuesta-revision">
+                    <button id="btn-verdadero-revision" class="boton-respuesta verdadero" disabled>✅ VERDADERO</button>
+                    <button id="btn-falso-revision" class="boton-respuesta falso" disabled>❌ FALSO</button>
+                </div>
+
+                <button id="btn-volver-resultado" class="boton">⬅️ VOLVER</button>
+            </div>
+
         </div>
+
         <script src="../js/quiz.js"></script>
     </body>
 </html>

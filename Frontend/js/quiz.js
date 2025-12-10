@@ -18,6 +18,12 @@ const resultadoMensaje = document.getElementById('resultado-mensaje');
 const puntosGanados = document.getElementById('puntos-ganados');
 const puntajeTotal = document.getElementById('puntaje-total');
 const linkFuente = document.getElementById('link-fuente');
+const verFacto = document.getElementById('ver-facto');
+const btnVerFacto = document.getElementById('btn-ver-facto');
+const btnVolverResultado = document.getElementById('btn-volver-resultado');
+const factoRevisionTexto = document.getElementById('facto-revision-texto');
+const btnVerdaderoRevision = document.getElementById('btn-verdadero-revision');
+const btnFalsoRevision = document.getElementById('btn-falso-revision');
 
 const API_URL = 'http://localhost:3030/quiz';
 
@@ -27,6 +33,7 @@ let preguntaActual = null;
 let tiempoRestante = 30;
 let intervalTimer = null;
 let userId = 1; //por ahora hardcodeado
+let respuestaCorrectaGuardada = null;
 
 
 //funcion para cambiar estados de juego
@@ -55,6 +62,7 @@ async function obtenerPregunta() {
         preguntaActual = {
             factoId: data.id,
             texto: data.modified_content,
+            contenidoOriginal: data.modified_content,
             font: data.font
         };
 
@@ -149,6 +157,7 @@ async function validarRespuesta(respuestaUsuario) {
         });
 
         const data = await response.json();
+        respuestaCorrectaGuardada = data.respuestaCorrecta;
         mostrarResultado(data);
 
     } catch (error) {
@@ -196,5 +205,35 @@ btnSiguiente.addEventListener('click', async () => {
 });
 //boton salir
 btnSalir.addEventListener('click', () => {
-    cambiarEstado(lobby)
+    cambiarEstado(lobby);
 });
+
+
+//evento para volver a ver el facto
+btnVerFacto.addEventListener('click', (e) => {
+    e.preventDefault();
+    mostrarFactoCompleto();
+});
+btnVolverResultado.addEventListener('click', () => {
+    verFacto.classList.remove('active');
+    cambiarEstado(result);
+});
+
+function mostrarFactoCompleto() {
+    //mostrar el mismo texto que vio en el quiz
+    factoRevisionTexto.textContent = preguntaActual.texto;
+
+    //limpiar clases anteriores
+    btnVerdaderoRevision.classList.remove('correcta');
+    btnVerdaderoRevision.classList.remove('correcta-falso');
+    btnFalsoRevision.classList.remove('correcta');
+    btnFalsoRevision.classList.remove('correcta-falso');
+    
+    //resalta el boton de la respuesta q haya sido correcta
+    if (respuestaCorrectaGuardada === true) {
+        btnVerdaderoRevision.classList.add('correcta');
+    } else {
+        btnFalsoRevision.classList.add('correcta-falso'); 
+    }
+    cambiarEstado(verFacto);
+}
