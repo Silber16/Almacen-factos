@@ -35,7 +35,7 @@ function securePassword(password, name, last_name, birth_date) {
 const register = async ( req, res) => {
     const { name, last_name, username, email, password, birth_date } = req.body;
     try{
-        if (!name || !last_name || !username || !password || !birth_date){
+        if (!name || !last_name || !username || !email || !password || !birth_date){
             return res.status(400).json({error: "faltan datos"});
         }
         const passwordError = securePassword(password, name, last_name, birth_date);
@@ -95,5 +95,3 @@ const login = async (req , res) => {
     }
 };
 module.exports = {register , login };
-
-
