@@ -94,4 +94,21 @@ const login = async (req , res) => {
         return res.status(500).json({ error: "error interno del servidor"});
     }
 };
-module.exports = {register , login };
+const me = async (erq, res) => {
+    try {
+        const userData = await db.query(
+            "SELECT id, name, last_name, username, email, birth_date, score FROM users WHERE id = $1",
+            [req.user.id]
+        );
+        if (userData.rows.length === 0){
+            return res.status(404).json ({ error: "usuario no encontrado"});
+        }
+        res.json (userData.rows[0]);
+
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({ error: "error interno del servidor" });
+    }
+};
+module.exports = {register , login, me };
