@@ -67,15 +67,6 @@ async function updateUserProfile(userId, name, username, bio, profilePicture) {
             throw new Error('Usuario no encontrado.');
         }
 
-        console.log('=== CURRENT USER ===');
-    console.log('currentUser completo:', currentUser);
-    console.log('currentUser.name:', currentUser.name);
-    console.log('currentUser.username:', currentUser.username);
-    console.log('currentUser.bio:', currentUser.bio);
-    console.log('currentUser.profile_picture:', currentUser.profile_picture);
-    console.log('====================');
-
-
         //aca se decide q valores se usan, si los nuevos o los que ya estaban
         let finalName;
         if (name !== undefined) {

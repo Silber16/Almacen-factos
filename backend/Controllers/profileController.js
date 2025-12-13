@@ -24,12 +24,6 @@ const updateUserProfile = async (req, res) => {
         const { userId } = req.params;
         const { name, username, bio, profile_picture } = req.body;
 
-        console.log('userId:', userId);
-        console.log('name:', name);
-        console.log('username:', username);
-        console.log('bio:', bio);            
-        console.log('profile_picture:', profile_picture);
-
         const updatedUser = await profileService.updateUserProfile(
             userId,
             name,
