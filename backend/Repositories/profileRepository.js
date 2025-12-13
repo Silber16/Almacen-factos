@@ -1,0 +1,83 @@
+const db = require('../config/db.js');
+
+//obtener usuario por id
+async function getUserById(userId) {
+    const query = `
+        SELECT id, name, username, score, bio, profile_picture, created_at
+        FROM users
+        WHERE id= $1;
+    `;
+    const result = await db.query(query, [userId]);
+    return result.rows[0];
+}
+
+
+//actualizar o editar perfil
+async function updateUserProfile(userId, name, username, bio, profilePicture) {
+    const query = `
+        UPDATE users
+        SET name = $1, username = $2, bio = $3, profile_picture = $4
+        WHERE id = $5
+        RETURNING id, name, username, score, bio, profile_picture, created_at;
+    `;
+    const userIdNum = parseInt(userId, 10);
+
+    console.log('=== DEBUG REPOSITORY ===');
+    console.log('userId original:', userId, 'tipo:', typeof userId);
+    console.log('userId convertido:', userIdNum, 'tipo:', typeof userIdNum);
+    console.log('Params:', [name, username, bio, profilePicture, userIdNum]);
+
+    const result = await db.query(query, [name, username, bio, profilePicture, userId]);
+    
+    console.log('Result rows:', result.rows);
+    console.log('========================');
+    
+    return result.rows[0];
+}
+
+
+//obtener los factos publicados por el usuario, van a aparecer tipo twitter
+async function getUserFactos(userId) {
+    const query = `
+        SELECT id, content, font, created_at
+        FROM facts
+        WHERE createdby = $1
+        ORDER BY created_at DESC;
+    `;
+    const result = await db.query(query, [userId]);
+    return result.rows;
+}
+
+
+//obtener logros del usuario
+async function getUserTrophies(userId) {
+    const query = `
+        SELECT t.id, t.title, t.description, t.iconurl, t.pointsneeded, t.category, ut.earned_at
+        FROM trophy t
+        INNER JOIN users_trophy ut ON t.id = ut.trophyid
+        WHERE ut.usersid = $1
+        ORDER BY ut.earned_at DESC;
+    `;
+    const result = await db.query(query, [userId]);
+    return result.rows;
+}
+
+//buscar usuario por username
+async function getUserByUsername(username) {
+    const query = `
+    SELECT id, name, username
+    FROM users
+    WHERE username = $1;
+    `;
+    const result = await db.query(query, [username]);
+    return result.rows[0];
+}
+
+
+module.exports = {
+    getUserById,
+    updateUserProfile,
+    getUserFactos,
+    getUserTrophies,
+    getUserByUsername
+}
