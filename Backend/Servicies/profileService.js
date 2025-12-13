@@ -80,8 +80,14 @@ async function updateUserProfile(userId, name, username, bio, profilePicture) {
             throw new Error('No se pudo actualizar el perfil.');
         }
         return updatedUser;
-        
+
     } catch (err) {
         throw err;
     }
 }
+
+
+module.exports = {
+    getUserProfile,
+    updateUserProfile
+};
