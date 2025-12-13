@@ -13,11 +13,11 @@ async function getUserById(userId) {
 
 
 //actualizar o editar perfil
-async function updateUserProfile(userId, bio, profilePicture) {
+async function updateUserProfile(userId, name, username, bio, profilePicture) {
     const query = `
         UPDATE users
-        SET bio = $1, profile_picture = $2
-        WHERE id = $3
+        SET bio = $1, username = $2, bio = $3,  profile_picture = $4
+        WHERE id = $5
         RETURNING id, naame, username, score, bio, profile_picture, created_at;
     `;
     const result = await db.query(query [bio, profilePicture, userId]);
