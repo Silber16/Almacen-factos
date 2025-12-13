@@ -3,6 +3,10 @@ const db = require ( './config/db' );
 
 const app = express (); 
 
+//middleware para parsear json
+app.use(express.json());
+
+
 app.get('/', async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM facts');
@@ -14,5 +18,9 @@ app.get('/', async (req, res) => {
         res.status(500).send('Error interno del servidor');
     }
 });
+
+const profileRoutes = require('./Routes/profileRoutes');
+
+app.use('/api/users', profileRoutes);
 
 module.exports = app;
