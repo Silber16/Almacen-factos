@@ -51,10 +51,22 @@ async function getUserTrophies(userId) {
     return result.rows;
 }
 
+//buscar usuario por username
+async function getUserByUsername(username) {
+    const query = `
+    SELECT id, name, username
+    FROM users
+    WHERE username = $1;
+    `;
+    const result = await db.query(query, [username]);
+    return result.rows[0];
+}
+
 
 module.exports = {
     getUserById,
     updateUserProfile,
     getUserFactos,
-    getUserTrophies
+    getUserTrophies,
+    getUserByUsername
 }
