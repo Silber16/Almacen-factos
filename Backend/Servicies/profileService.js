@@ -61,20 +61,55 @@ async function updateUserProfile(userId, name, username, bio, profilePicture) {
     }
 
     try {
+        const currentUser = await userRepository.getUserById(userId);
+
+        if(!currentUser) {
+            throw new Error('Usuario no encontrado.');
+        }
+
+        //aca se decide q valores se usan, si los nuevos o los que ya estaban
+        let finalName;
+        if (name !== undefined) {
+            finalName = name;
+        } else {
+            finalName = currentUser.name;
+        }
+
+        let finalUsername;
+        if (username !== undefined) {
+            finalUsername = username;
+        } else {
+            finalUsername = currentUser.username;
+        }
+
+        let finalBio;
+        if (bio !== undefined) {
+            finalBio = bio;
+        } else {
+            finalBio = currentUser.bio;
+        }
+
+        let finalPicture;
+        if (profilePicture !== undefined) {
+            finalPicture = profilePicture;
+        } else {
+            finalPicture = currentUser.profile_picture;
+        }
+
         //verifica si el username ya esta en uso
-        if (username) {
+        if (username && username !== currentUser.username) {
             const existingUser = await userRepository.getUserByUsername(username);
             if (existingUser && existingUser.id !== userId) {
                 throw new Error('El username ya esta en uso.');
             }
         }
-        //objeto
+        //actualizar valores finales
         const updatedUser = await userRepository.updateUserProfile(
             userId,
-            name,
-            username,
-            bio,
-            profilePicture,
+            finalName,
+            finalUsername,
+            finalBio,
+            finalPicture,
         );
         if (!updatedUser) {
             throw new Error('No se pudo actualizar el perfil.');
