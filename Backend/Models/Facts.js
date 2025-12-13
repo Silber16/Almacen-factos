@@ -1,10 +1,11 @@
 class Facts {
-  constructor(Id, Title, Text, Font, Category) {
+  constructor(Id, Title, Content, Font, Category, createdBy) {
     this.Id = Id;
     this.Title = Title;
-    this.Text = Text;
+    this.Content = Content;
     this.Font = Font;
     this.Category = Category;
+    this.CreatedBy = createdBy;
   }
 }
 

@@ -1,4 +1,4 @@
-const db = require("./config/db");
+const db = require("../config/db");
 
 async function getFactsAll () {
     const query = "SELECT * FROM facts";
@@ -28,10 +28,9 @@ async function getFactsByUserId (userId) {
 
 async function getFactsCategory (category) {
     const query = `SELECT * FROM facts WHERE category = ${category}`;
-
+    
     try {
         const result = await db.query(query);
-
         return result.rows;
     } catch (err) {
         console.error("Error al obtener facts: ", err);

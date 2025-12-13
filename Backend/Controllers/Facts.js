@@ -1,8 +1,9 @@
-const factsService = require('../services/facts.service');
+const factsService = require('../services/FactsService');
 
 const factsController = {
     
     getAll: async (req, res) => {
+         console.log('entra getAll');
         try {
         const facts = await factsService.getAllFacts();
         res.status(200).json(facts);
@@ -51,7 +52,7 @@ const factsController = {
 
     getByCategory: async (req, res) => {
         const category = req.params.category;
-    
+        console.log(category)
         try {
             const facts = await factsService.getFactsByCategoryName(category);
             res.status(200).json(facts);

@@ -1,0 +1,124 @@
+:root {
+    --principal-green: #004643;
+    --principal-green-o75: #004643c2;
+    --principal-dark: #16232A;
+    --principal-orange: #fe7f2d;
+    --principal-orange-o75: #fe812dc9;
+    --principal-sandwhite: #E4EEF0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Monda", sans-serif;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--principal-dark);
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-flex {
+    display: flex;  
+    align-items: center;
+}
+
+#header-principal {
+    justify-content: space-between;  
+    background-color: var(--principal-dark);
+    padding: 1.5rem;
+    width: 100%;
+    z-index: 100;
+}
+
+.header-login {
+    font-size: 1rem;
+}
+
+#header-principal h1 {
+    color: var(--principal-sandwhite);
+}
+
+#header-principal .title-span {
+   color: var(--principal-orange);
+}
+
+#header-navbar {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    background-color: var(--principal-green);
+    padding: 1rem 1.5rem;
+    box-shadow: 0px 10px 40px -6px var(--principal-orange-o75);
+}
+
+main {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+main h1 {
+    color: var(--principal-orange);
+}
+
+#form-create-fact {
+    background-color: var(--principal-green);
+    padding: 2rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    min-width: 30%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    width: 100%;
+}
+
+.form-group label {
+    color: var(--principal-sandwhite);
+}
+
+.input-item {
+    background-color: var(--principal-dark);
+    border: none;
+    border-left: 1px solid var(--principal-orange);
+    padding: .2rem;
+    color: var(--principal-sandwhite);
+
+}
+
+.button-func {
+    background-color: var(--principal-orange);
+    padding: .6rem;
+    border-radius: .3rem;
+    border: none;
+    color: var(--principal-sandwhite);
+    border: 1px solid var(--principal-orange);
+    height: 3rem;
+    text-decoration: none;
+}
+
+#btn-verificar-ia {
+    border: none;
+    background-image: linear-gradient(to right, rgb(0, 87, 250), #0400f75e);
+}

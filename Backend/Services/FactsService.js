@@ -1,4 +1,4 @@
-const FactsRepository = require("./Repositories/FactsRepository")
+const factsRepository = require("../Repositories/FactsRepository")
 
 async function getAllFacts() {
     try {
@@ -37,9 +37,9 @@ async function getFactsByUser(userId) {
 }
 
 async function getFactsByCategoryName(category) {
-    if (!category || typeof category !== 'string' || category.trim().length === 0) {
-        throw new err("El nombre de la categoría no puede estar vacío.");
-    }
+    // if (!category || typeof category !== 'string' || category.trim().length === 0) {
+    //     throw new err("El nombre de la categoría no puede estar vacío.");
+    // }
     try {
         const facts = await factsRepository.getFactsCategory(category);
         return facts;
