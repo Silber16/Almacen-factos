@@ -1,7 +1,7 @@
 const db = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-function securePassword(password, name, last_name, birth_date) {
+function securePassword(password) {
     if (password.length < 8) {
         return "La contraseña debe tener al menos 8 caracteres";
     }
@@ -17,28 +17,16 @@ function securePassword(password, name, last_name, birth_date) {
     if (!/[!@#$%^&*(),.?":{}|<>_\-]/.test(password)) {
         return "La contraseña debe contener al menos un símbolo especial";
     }
-    const passwordLower = password.toLowerCase();
-    if (passwordLower.includes(name.toLowerCase())) {
-        return "La contraseña no puede contener tu nombre";
-    }
-    if (passwordLower.includes(last_name.toLowerCase())) {
-        return "La contraseña no puede contener tu apellido";
-    }
-    if (birth_date) {
-        const year = new Date(birth_date).getFullYear().toString();
-        if (password.includes(year)) {
-            return "La contraseña no puede contener tu año de nacimiento";
-        }
-    }
     return null;
 }
 const register = async ( req, res) => {
-    const { name, last_name, username, email, password, birth_date } = req.body;
+    const {username, email, password} = req.body;
+    console.log("REGISTER BODY:",req.body)
     try{
-        if (!name || !last_name || !username || !email || !password || !birth_date){
+        if (!username || !email || !password ){
             return res.status(400).json({error: "faltan datos"});
         }
-        const passwordError = securePassword(password, name, last_name, birth_date);
+        const passwordError = securePassword(password);
         if (passwordError){
             return res.status(400).json({ error: passwordError});
         }
@@ -51,20 +39,21 @@ const register = async ( req, res) => {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const insertUser = await db.query(
-            'INSERT INTO users (name, last_name, username, email, password, birth_date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING  id, name, username, email',
-            [name, last_name, username,email, hashedPassword, birth_date]);
+            'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING  id, username, email',
+            [username,email, hashedPassword]);
         return res.json({
             message: "usuario creado con exito",
             user : insertUser.rows[0]
         });
     }
     catch(error){
-        console.error(error);
+        console.error("ERROR REGISTER: ",error);
         return res.status(500).json({ error: "error interno del servidor"});
     }
 };
 const login = async (req , res) => {
     const {identifier , password} = req.body;
+    console.log("LOGIN BODY:", req.body);
     try {
         const userData = await db.query(
             'SELECT * FROM users WHERE email = $1 OR username = $1',
@@ -86,18 +75,18 @@ const login = async (req , res) => {
         return res.json({
             message : "login correcto",
             token,
-            user: {id:user.id, name:user.name, username:user.username}
+            user: {id:user.id, username:user.username}
         });
     }
     catch(error){
-        console.error(error);
+        console.error("ERROR LOGIN:", error);
         return res.status(500).json({ error: "error interno del servidor"});
     }
 };
-const me = async (erq, res) => {
+const me = async (req, res) => {
     try {
         const userData = await db.query(
-            "SELECT id, name, last_name, username, email, birth_date, score FROM users WHERE id = $1",
+            "SELECT id, username, email, score FROM users WHERE id = $1",
             [req.user.id]
         );
         if (userData.rows.length === 0){
@@ -111,4 +100,4 @@ const me = async (erq, res) => {
         res.status(500).json({ error: "error interno del servidor" });
     }
 };
-module.exports = {register , login, me };
+module.exports = { register, login, me };
