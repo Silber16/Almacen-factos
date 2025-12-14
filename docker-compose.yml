@@ -22,8 +22,6 @@ services:
       - backend
     networks:
       - mi-red
-    volumes:
-      - ./frontend:/usr/share/nginx/html:ro 
     restart: unless-stopped
 
 networks:
