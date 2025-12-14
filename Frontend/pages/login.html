@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/login.css">
+    <script defer src="../scripts/login.js"></script>
+    <title>Almacen Facts | Login</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="brand-title">
+            Almacén de <span class="brand-accent">Factos</span>
+        </h1>
+        <p id="subtitle" class="auth-subtitle">
+            Bienvenido de vuelta
+        </p>
+
+        <div class="tabs">
+            <button id="btn-login" class="active">Iniciar Sesión</button>
+            <button id="btn-register">Registrarse</button>
+        </div>
+        <form id="login-form">
+            <label>Email o Usuario</label>
+            <div class="input-box">
+                <span class="icon">📧</span>
+                <input id="login-identifier" type="text" placeholder="tu@email.com">
+            </div>
+
+            <label>Contraseña</label>
+            <div class="input-box">
+                <span class="icon">🔒</span>
+                <input id="login-password" type="password" placeholder="*********">
+            </div>
+
+            <button type="submit" class="main-btn">➡️ Entrar</button>
+        </form>
+        <form id="register-form" style="display: none">
+            <label>Email</label>
+            <div class="input-box">
+                <span class="icon">📧</span>
+                <input id="reg-email" type="email" placeholder="tu@email.com">
+            </div>
+
+            <label>Nombre de Usuario</label>
+            <div class="input-box">
+                <span class="icon">👤</span>
+                <input id="reg-username" type="text" placeholder="usuario123">
+            </div>
+
+            <label>Contraseña</label>
+            <div class="input-box">
+                <span class="icon">🔒</span>
+                <input id="reg-password" type="password" placeholder="********">
+            </div>
+
+            <label>Confirmar Contraseña</label>
+            <div class="input-box">
+                <span class="icon">🔒</span>
+                <input id="reg-password2" type="password" placeholder="********">
+            </div>
+
+            <button type="submit" class="main-btn">👤 Crear Cuenta</button>
+        </form>
+
+    </div>
+</body>
+</html>
