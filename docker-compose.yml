@@ -8,6 +8,8 @@ services:
       - NODE_ENV=development
     networks:
       - mi-red
+    env_file:
+      - ./backend/.env
     volumes:
       - ./backend:/app
       - /app/node_modules 
@@ -22,9 +24,6 @@ services:
       - backend
     networks:
       - mi-red
-    volumes:
-      - ./frontend:/usr/share/nginx/html:ro 
-    restart: unless-stopped
 
 networks:
   mi-red:
