@@ -5,15 +5,28 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>¿Facto o Falso?</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Monda:wght@400..700&display=swap" rel="stylesheet">
+
         <link rel="stylesheet" href="../styles/quiz.css">
     </head>
-
     <body>
-        <div class="logo-header">
-            <div class="logo">AF</div>
+
+        <header class="header-flex">
+            <div id="header-principal" class="header-flex">
+                <h1>Almacén de <span class="title-span">Factos</span></h1>
+                <button class="button-func header-login">
+                <i class="fa-solid fa-user"></i>
+            </button>
         </div>
 
+        <nav id="header-navbar" class="header-flex" style="justify-content: center;">
+            <span style="color: var(--principal-sandwhite);">Modo Quiz</span>
+        </nav>
+        
+        </header>
         <div class="container">
 
             <!--Estado LOBBY-->
@@ -72,6 +85,8 @@
             </div>
 
         </div>
+
+        <script src="https://kit.fontawesome.com/1ff5e69ddb.js" crossorigin="anonymous"></script>
 
         <script src="../js/quiz.js"></script>
     </body>
