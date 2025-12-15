@@ -1,6 +1,7 @@
-const { Pool } = require('pg');
-require('dotenv').config();
+import pg from 'pg';
+import 'dotenv/config';
 
+const { Pool } = pg;
 const pool = new Pool({
   user: process.env.DATABASE_USERNAME,
   password: process.env.DATABASE_PASSWORD,
@@ -12,6 +13,4 @@ const pool = new Pool({
   }
 });
 
-module.exports = {
-  query: (text, params) => pool.query(text, params)
-};
+export const query = (text, params) => pool.query(text, params);
