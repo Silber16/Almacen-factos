@@ -1,7 +1,7 @@
-const express = require ( 'express' ); 
-const cors = require('cors');
-const db = require ( './config/db' ); 
-const quizRoutes = require('./Routes/quizRoutes');
+import express from 'express';
+import cors from 'cors';
+import { query } from './config/db.js';
+import quizRoutes from './Routes/quizRoutes.js';
 
 const app = express (); 
 
@@ -25,4 +25,4 @@ app.get('/', async (req, res) => {
 
 app.use('/quiz', quizRoutes);
 
-module.exports = app;
+export default app;

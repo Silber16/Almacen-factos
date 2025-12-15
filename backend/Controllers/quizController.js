@@ -1,5 +1,5 @@
-const quizService = require('../Services/quizService');
-const quizRepository = require('..//Repositories/quizRepository');
+import quizService from '../Services/quizService.js';
+import quizRepository from '../Repositories/quizRepository.js';
 
 //obtener pregunta aleatoria
 const obtenerPregunta = async (req, res) =>  {
@@ -54,7 +54,7 @@ const obtenerPuntaje = async (req, res) => {
     }
 };
 
-module.exports = {
+export default {
     obtenerPregunta,
     validarRespuesta,
     obtenerPuntaje

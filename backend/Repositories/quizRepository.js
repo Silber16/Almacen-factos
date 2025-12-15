@@ -1,4 +1,4 @@
-const db = require('../config/db.js');
+import { query } from '../config/db.js';
 
 //buscar facto random en la bd
 async function getRandomFact() {
@@ -46,7 +46,7 @@ async function getUserPoints(userId) {
 }
 
 
-module.exports =  {
+export default {
     getRandomFact,
     getFactById,
     updateUserPoints,

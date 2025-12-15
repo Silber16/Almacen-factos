@@ -1,4 +1,4 @@
-const quizRepository = require('../Repositories/quizRepository');
+import quizRepository from '../Repositories/quizRepository.js';
 
 
 //traer facto
@@ -101,7 +101,7 @@ async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario
     }
 }
 
-module.exports = {
+export default {
     obtenerPreguntaRandom,
     validarYActualizarPuntos
 };

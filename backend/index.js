@@ -1,6 +1,7 @@
-const app = require('./App');
+import app from './App.js';
+import dotenv from 'dotenv';
 
-require('dotenv').config();
+dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
@@ -9,4 +10,4 @@ app.listen(PORT, () => {
     console.log(`---------------------`);
     console.log(`URL: http://localhost:${PORT}`);
     console.log(`Entorno: ${process.env.NODE_ENV || 'development'}`);
-})
+});
