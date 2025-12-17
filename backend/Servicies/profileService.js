@@ -1,5 +1,5 @@
-const userRepository = require('../Repositories/profileRepository');
-const User = require('../Models/Users');
+import * as userRepository from '../Repositories/profileRepository.js';
+import User from '../Models/Users.js';
 
 //obtener perfil completo de un usuario
 async function getUserProfile(userId) {
@@ -122,7 +122,7 @@ async function updateUserProfile(userId, name, username, bio, profilePicture) {
 }
 
 
-module.exports = {
+export {
     getUserProfile,
     updateUserProfile
 };

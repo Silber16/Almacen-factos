@@ -1,5 +1,5 @@
 class User {
-  constructor(id, name, username, bio, profile_picture, created_at, score) {
+  constructor(id, name ,username, bio, profile_picture, created_at, score) {
     this.id = id;
     this.name = name;
     this.username = username;
@@ -10,4 +10,4 @@ class User {
   }
 }
 
-module.exports = User;
+export default User;

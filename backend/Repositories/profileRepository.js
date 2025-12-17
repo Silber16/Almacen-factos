@@ -1,4 +1,4 @@
-const db = require('../config/db.js');
+import * as db from '../config/db.js';
 
 //obtener usuario por id
 async function getUserById(userId) {
@@ -31,10 +31,10 @@ async function updateUserProfile(userId, name, username, bio, profilePicture) {
 //obtener los factos publicados por el usuario, van a aparecer tipo twitter
 async function getUserFactos(userId) {
     const query = `
-        SELECT id, content, font, created_at
+        SELECT id, content, font
         FROM facts
         WHERE createdby = $1
-        ORDER BY created_at DESC;
+        ORDER BY id DESC;
     `;
     const result = await db.query(query, [userId]);
     return result.rows;
@@ -66,10 +66,10 @@ async function getUserByUsername(username) {
 }
 
 
-module.exports = {
+export {
     getUserById,
     updateUserProfile,
     getUserFactos,
     getUserTrophies,
     getUserByUsername
-}
+};

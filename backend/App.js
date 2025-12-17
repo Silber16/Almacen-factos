@@ -1,5 +1,6 @@
-const express = require ( 'express' ); 
-const db = require ( './config/db' ); 
+import express from 'express';
+import * as db from './config/db.js';
+import profileRoutes from './Routes/profileRoutes.js';
 
 const app = express (); 
 
@@ -19,8 +20,6 @@ app.get('/', async (req, res) => {
     }
 });
 
-const profileRoutes = require('./Routes/profileRoutes');
-
 app.use('/api/users', profileRoutes);
 
-module.exports = app;
+export default app;

@@ -1,4 +1,4 @@
-const profileService = require('../Servicies/profileService');
+import * as profileService from '../Servicies/profileService.js';
 
 //obtener perfil de un usuario
 const getUserProfile = async (req, res) => {
@@ -24,12 +24,14 @@ const updateUserProfile = async (req, res) => {
         const { userId } = req.params;
         const { name, username, bio, profile_picture } = req.body;
 
+        const imagePath = req.file ? req.file.path : undefined;
+
         const updatedUser = await profileService.updateUserProfile(
             userId,
             name,
             username,
             bio,
-            profile_picture
+            imagePath
         );
         res.json(updatedUser);
 
@@ -40,7 +42,7 @@ const updateUserProfile = async (req, res) => {
 };
 
 
-module.exports = {
+export {
     getUserProfile,
     updateUserProfile
-}
+};

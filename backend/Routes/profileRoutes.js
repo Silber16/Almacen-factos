@@ -1,12 +1,13 @@
-const express = require('express');
-const router = express.Router();
-const profileController = require('../Controllers/profileController');
+import { Router } from 'express';
+import * as profileController from '../Controllers/profileController.js';
+import { upload } from '../config/cloudinary.js';
 
-//obtener perfil de un usuario
+const router = Router();
+
+// obtener perfil de un usuario
 router.get('/:userId', profileController.getUserProfile);
 
-//actualizar o editar perfil de usuario
-router.put('/:userId', profileController.updateUserProfile);
+// actualizar o editar perfil de usuario
+router.put('/:userId', upload.single('profile_picture'), profileController.updateUserProfile);
 
-
-module.exports = router;
+export default router;
