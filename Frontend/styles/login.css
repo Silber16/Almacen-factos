@@ -6,7 +6,9 @@ body {
     align-items: center;
     min-height:fit-content;
 }
-
+.h1 {
+    font-size: 20px;
+}
 .container {
     background: #1d5e61;
     width: 430px;
@@ -17,20 +19,6 @@ body {
     margin-top: 40px;
     margin-bottom: 40px;
 }
-
-.logo {
-    background: linear-gradient(120deg, #ff8c3e, #1d5e61);
-    width: 110px;
-    height: 110px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 40px;
-    border-radius: 25px;
-    color: white;
-    margin: 0 auto;
-}
-
 .tabs {
     display: flex;
     justify-content: center;
@@ -81,10 +69,8 @@ label {
     width: 100%;
     padding: 8px;
     border: none;
-    background: transparent;
-    color: white;
+    background:#d3d3d3;
 }
-
 .row {
     display: flex;
     gap: 10px;
@@ -132,12 +118,13 @@ label {
     flex: 1;
 }
 .brand-title {
-    font-size: 2.6rem;
+    font-size: 31px;
     font-weight: 800;
     text-align: center;
     margin-bottom: 0.5rem;
-    color: #050505;
+    color: #e6d6d6ab;
     letter-spacing: 0.5px;
+    font-family: -webkit-body;
 }
 
 .brand-accent {
@@ -147,6 +134,6 @@ label {
 .auth-subtitle {
     text-align: center;
     margin-bottom: 1.5rem;
-    color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.371);
     font-size: 1.1rem;
 }
