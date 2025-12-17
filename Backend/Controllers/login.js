@@ -1,6 +1,6 @@
-const db = require('../config/db');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import db from "../config/db.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 function securePassword(password) {
     if (password.length < 8) {
         return "La contraseña debe tener al menos 8 caracteres";
@@ -100,4 +100,4 @@ const me = async (req, res) => {
         res.status(500).json({ error: "error interno del servidor" });
     }
 };
-module.exports = { register, login, me };
+export default{register, login , me};

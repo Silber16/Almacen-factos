@@ -1,7 +1,10 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const db = require('./config/db');
+import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import db from "./config/db.js";
+import authRoutes from "./Routes/login.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -15,17 +18,16 @@ app.use(cors({
     credentials: true
 }));
 
-app.get('/', async (req, res) => {
+app.get("/", async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM facts');
-        res.json(result.rows);
+      const result = await db.query("SELECT * FROM facts");
+    res.json(result.rows);
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error interno del servidor');
+    console.error(err);
+    res.status(500).send("Error interno del servidor");
     }
 });
 
-const authroutes = require('./Routes/login.js');
-app.use('/api/auth', authroutes);
+app.use("/api/auth", authRoutes);
 
-module.exports = app;
+export default app;
