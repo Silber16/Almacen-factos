@@ -1,11 +1,23 @@
-const db = require("../config/db");
+import * as db from "../config/db.js";
 
 async function getFactsAll () {
-    const query = "SELECT * FROM facts";
+    const query = `
+        SELECT
+            f.id,
+            f.title,
+            f.content,
+            f.font,
+            f.category,
+            u.username,
+            f.ia_response,
+            f.ia_responseverdict
+        FROM facts f
+        LEFT JOIN users u ON f.created_by = u.id
+        ORDER BY id DESC
+        `;
     
     try {
         const result = await db.query(query);
-
         return result.rows;
     } catch (err) {
         console.error("Error al obtener facts: ", err);
@@ -52,20 +64,22 @@ async function getFactById (userId) {
 }
 
 async function createFact (factObj) {
+
     const query = `
         INSERT INTO 
-            Facts(title, text, font, category, contenido_quiz)
+            facts(title, content, font, created_by, category, ia_response, ia_responseverdict)
         VALUES 
-            ($1, $2, $3, $4, $5)
+            ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id;
     `;
-    
     const values = [
         factObj.title, 
-        factObj.text, 
+        factObj.content, 
         factObj.font, 
+        factObj.createdBy,
         factObj.category, 
-        factObj.quiz_content
+        factObj.iaResponse,
+        factObj.iaVerdict
     ];
 
     try {
@@ -126,7 +140,7 @@ async function deleteFact (factId) {
 }
 
 
-module.exports = {
+export {
     getFactsAll,
     getFactById,
     getFactsByUserId,
