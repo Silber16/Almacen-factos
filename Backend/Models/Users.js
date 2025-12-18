@@ -1,8 +1,10 @@
 class User {
-  constructor(id, name, username) {
-    this.id = id;
-    this.name = name;
-    this.username = username;
+  constructor(id, username) {
+      this.id = id;
+      this.username = username;
+      this.email = email;
+      this.password = password;
+      this.score = score;
   }
 }
 
