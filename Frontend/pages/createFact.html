@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+</head>
 <html>
     <head>
         <link rel="stylesheet" href="../styles/createFact.css">
@@ -16,14 +19,11 @@
             </div>
             <nav id="header-navbar" class="header-flex" >
                 <a href="./feed.html" class="button-func" >Volver</a>
-                <button id="btn-verificar-ia" class="button-func">
-                    Verificar y Publicar
-                </button>
             </nav>
         </header>
         <main>
             <h1>Crear Facto</h1>
-            <form id="form-create-fact" action="/api/facts" method="POST">
+            <form id="form-create-fact" method="POST">
                 <div class="form-group">
                     <label for="title">Titulo</label>
                     <input class="input-item" type="text" id="title" name="Title" required maxlength="100">
@@ -43,16 +43,21 @@
                     <label for="category">Categoría</label>
                     <select id="category" name="Category" class="input-item"  required>
                         <option value="" disabled selected>Selecciona una categoría</option>
-                        <option value="ciencia">Ciencia</option>
-                        <option value="historia">Historia</option>
-                        <option value="deportes">Deportes</option>
-                        <option value="tecnologia">Tecnología</option>
-                        <option value="otros">Otros</option>
+                        <option value="1">Geografía</option>
+                        <option value="2">Ciencia</option>
+                        <option value="3">Historia</option>
+                        <option value="4">Deportes</option>
+                        <option value="5">Arte</option>
+                        <option value="6">Entretenimiento</option>
+                        <option value="7">Otros</option>
                     </select>
                 </div>
+                <button id="btn-verificar-ia" class="button-func" type="submit" >
+                    Verificar y Publicar
+                </button>
             </form>
         </main>
-        <script src="../js/feed.js" ></script>
+        <script src="../js/createFact.js" ></script>
         <script src="https://kit.fontawesome.com/1ff5e69ddb.js" crossorigin="anonymous"></script>
     </body>
 </html>
