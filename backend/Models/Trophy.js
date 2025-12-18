@@ -8,4 +8,4 @@ class Trophy {
   }
 }
 
-module.exports = Trophy;
+export default Trophy;

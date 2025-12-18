@@ -1,8 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 import * as db from './config/db.js';
 import profileRoutes from './Routes/profileRoutes.js';
 
 const app = express (); 
+
+app.use(cors());
 
 //middleware para parsear json
 app.use(express.json());

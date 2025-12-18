@@ -29,26 +29,28 @@ async function updateUserProfile(userId, name, username, bio, profilePicture) {
 
 
 //obtener los factos publicados por el usuario, van a aparecer tipo twitter
+// obtener los factos publicados por un usuario (perfil)
 async function getUserFactos(userId) {
     const query = `
-        SELECT id, content, font
-        FROM facts
-        WHERE createdby = $1
-        ORDER BY id DESC;
+    SELECT id, title, content, font, created_at
+    FROM facts
+    WHERE created_by = $1
+    ORDER BY created_at DESC;
     `;
-    const result = await db.query(query, [userId]);
-    return result.rows;
+
+    const { rows } = await db.query(query, [userId]);
+    return rows;
 }
 
 
 //obtener logros del usuario
 async function getUserTrophies(userId) {
     const query = `
-        SELECT t.id, t.title, t.description, t.iconurl, t.pointsneeded, t.category, ut.earned_at
-        FROM trophy t
-        INNER JOIN users_trophy ut ON t.id = ut.trophyid
-        WHERE ut.usersid = $1
-        ORDER BY ut.earned_at DESC;
+        SELECT t.id, t.title, t.description, t.iconurl, t.points, t.category, ut.achieved_at
+        FROM trophies t
+        INNER JOIN user_trophies ut ON t.id = ut.trophy_id
+        WHERE ut.user_id = $1
+        ORDER BY ut.achieved_at DESC;
     `;
     const result = await db.query(query, [userId]);
     return result.rows;
