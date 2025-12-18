@@ -1,4 +1,4 @@
-const factsService = require('../services/FactsService');
+import * as factsService from '../services/FactsService.js';
 
 const factsController = {
     
@@ -52,7 +52,6 @@ const factsController = {
 
     getByCategory: async (req, res) => {
         const category = req.params.category;
-        console.log(category)
         try {
             const facts = await factsService.getFactsByCategoryName(category);
             res.status(200).json(facts);
@@ -65,6 +64,9 @@ const factsController = {
 
     create: async (req, res) => {
         const factData = req.body;
+        const userId = req.user.id;
+        
+        factData.createdBy = userId;
 
         if (!factData) {
             return res.status(400).json({ message: "El contenido del facto no puede estar vacio." });
@@ -78,8 +80,8 @@ const factsController = {
             } else {
                 res.status(500).json({ message: "Error al crear el facto." });
             }
-        } catch (error) {
-            console.error("Error en el controlador al crear facto: ", error.message);
+        } catch (err) {
+            console.error("Error en el controlador al crear facto: ", err.message);
             res.status(500);
         }
     },
@@ -134,4 +136,4 @@ const factsController = {
     }
 };
 
-module.exports = factsController;
+export default factsController;
