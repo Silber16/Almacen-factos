@@ -1,10 +1,13 @@
 const factsContainer = document.getElementById("facts-container");
 
 const CATEGORIES = [
-    { id: 1, name: 'Ciencia' },
-    { id: 2, name: 'Historia' },
-    { id: 3, name: 'Tecnologia' },
-    { id: 4, name: 'Arte' }
+    { id: 1, name: 'Geografía' },
+    { id: 2, name: 'Ciencia' },
+    { id: 3, name: 'Historia' },
+    { id: 4, name: 'Deportes' },
+    { id: 5, name: 'Arte' },
+    { id: 6, name: 'Entretenimiento' },
+    { id: 7, name: 'Otros' }
 ];
 
 async function filterFactsByCategory(categoryId) {
@@ -32,7 +35,7 @@ function renderCategoryMenu() {
 
     const allOption = document.createElement('li');
     allOption.textContent = 'Todos';
-    allOption.onclick = () => filterFactsByCategory(null); 
+    allOption.onclick = () => fetchFacts(); 
     manuCategories.appendChild(allOption);
 
     CATEGORIES.forEach(category => {
@@ -48,26 +51,53 @@ function renderCategoryMenu() {
     });
 }
 
+function toggleIaVerdict(iaResponseDiv, iaResponseButton) {
+    iaResponseDiv.classList.toggle('display-none');
+            
+    if (iaResponseDiv.classList.contains('display-none')) {
+        iaResponseButton.innerHTML = '<span class="material-symbols-outlined">stars_2</span>Ver verificación IA';
+    } else {
+        iaResponseButton.innerHTML = '<span class="material-symbols-outlined">stars_2</span>Ocultar verificación IA';
+    }
+}
+
 function renderFeed (facts) {
     factsContainer.innerHTML = ''
     facts.forEach( fact => {
         const factItem = document.createElement("li");
+
+        switch (fact.ia_responseverdict) {
+            case 'F':
+                ia_verdict_emoji = "❌❌❌❌"
+                break;
+            case 'V':
+                ia_verdict_emoji = "✅✅✅✅"
+                break;
+            case 'I':
+                ia_verdict_emoji = "🤔🤔❔❔"
+                break;
+            default:
+                break;
+        };
         factItem.className = "fact-item"
         factItem.innerHTML = `
-            <label class="fact-user" >${fact.createdBy}</label>
+            <label class="fact-user" >${fact.username}</label>
             <h3 class="fact-title" >${fact.title}</h3>
             <p class="fact-content" >${fact.content}</p>
-            <label class="fact-category" >${fact.category}</label>
-            <label class="fact-font" >${fact.font}</label>
-            <div class="fact-vote-container">
-                <button class="fact-vote">
-                    <i class="fa-solid fa-arrow-up"></i>
-                </button>
-                <button class="fact-vote">
-                    <i class="fa-solid fa-arrow-down"></i>
-                </button>
+            <label class="fact-category" >Categoria: ${CATEGORIES.find(cat => cat.id === fact.category)?.name ?? "No informada"}</label>
+            <label class="fact-font" >Fuente: ${fact.font}</label>
+            <div class="btn-iaResponse-container">
+                <button class="fact-btn-iaResponse"><span class="material-symbols-outlined">stars_2</span>Ver verificación IA</button>
             </div>
+            <div class="fact-iaResponse display-none">${ia_verdict_emoji} ${fact.ia_response}</div>
         `;
+
+        const iaResponseButton = factItem.querySelector('.fact-btn-iaResponse');
+        const iaResponseDiv = factItem.querySelector('.fact-iaResponse');
+
+        iaResponseButton.addEventListener('click', () => {
+            toggleIaVerdict(iaResponseDiv, iaResponseButton);
+        });
 
         factsContainer.appendChild(factItem);
     });
