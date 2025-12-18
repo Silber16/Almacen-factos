@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const factsController = require('../Controllers/Facts'); 
+import factsController from '../Controllers/Facts.js'; 
 
 router.get('/', factsController.getAll);
 router.get('/:id', factsController.getById);
@@ -11,4 +11,4 @@ router.post('/', factsController.create);
 router.put('/:id', factsController.update);
 router.delete('/:id', factsController.remove);
 
-module.exports = router;
+export default router;
