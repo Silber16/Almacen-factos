@@ -1,4 +1,4 @@
-const factsRepository = require("../Repositories/FactsRepository")
+import * as factsRepository from "../Repositories/FactsRepository.js"
 
 async function getAllFacts() {
     try {
@@ -49,8 +49,8 @@ async function getFactsByCategoryName(category) {
 }
 
 async function createNewFact(factData) {
-    if (!factData || !factData.title || !factData.text || !factData.category) {
-        throw new err("Datos de hecho incompletos o inválidos."); 
+    if (!factData || !factData.title || !factData.content || !factData.category) {
+        throw new Error("Datos de hecho incompletos o inválidos."); 
     }
     
     try {
@@ -94,7 +94,7 @@ async function deleteFactById(id) {
     }
 }
 
-module.exports = {
+export {
     getAllFacts,
     getFact,
     getFactsByUser,
