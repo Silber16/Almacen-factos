@@ -12,6 +12,7 @@ services:
       - ./backend:/app
       - /app/node_modules 
     restart: unless-stopped
+    command: npm start
 
   frontend:
     build: ./frontend
