@@ -1,4 +1,4 @@
-//obtener elementos del DOM
+// Obtener elementos del DOM
 const lobby = document.getElementById('lobby');
 const playing = document.getElementById('playing');
 const result = document.getElementById('result');
@@ -25,215 +25,121 @@ const factoRevisionTexto = document.getElementById('facto-revision-texto');
 const btnVerdaderoRevision = document.getElementById('btn-verdadero-revision');
 const btnFalsoRevision = document.getElementById('btn-falso-revision');
 
-const API_URL = 'http://localhost:3000/quiz';
+// URL API
+const API_URL = 'http://localhost:3000/api/quiz';
 
-
-//variables de juego
-let preguntaActual = null;
+// Variables de juego
+let quizIdActual = null; 
 let tiempoRestante = 30;
-let intervalTimer = null;
-let userId = 1; //por ahora hardcodeado
-let respuestaCorrectaGuardada = null;
+let intervalTimer = null; 
+let explicacionIA = ""; 
+let fuenteUrl = ""; 
+let respuestaCorrectaBoolean = null; 
+let textoPreguntaMostrada = ""; // <--- AQUÍ GUARDAREMOS LO QUE SALIÓ EN PLAYING
 
-
-//funcion para cambiar estados de juego
 function cambiarEstado(estadoActivo) {
     lobby.classList.remove('active');
     playing.classList.remove('active');
     result.classList.remove('active');
-
+    verFacto.classList.remove('active'); 
     estadoActivo.classList.add('active');
 }
 
+function detenerTimer() {
+    if (intervalTimer) {
+        clearInterval(intervalTimer);
+        intervalTimer = null;
+    }
+}
 
-//iniciar juego
-btnJugar.addEventListener('click', async () => {
-    await obtenerPregunta();
-    cambiarEstado(playing);
-    iniciarTimer();
-})
-
-//obtener pregunta del back
 async function obtenerPregunta() {
     try {
         const response = await fetch(`${API_URL}/pregunta`);
         const data = await response.json();
-
-        preguntaActual = {
-            factoId: data.id,
-            texto: data.modified_content,
-            contenidoOriginal: data.modified_content,
-            font: data.font
-        };
-
-        preguntaTexto.textContent = data.modified_content;
-
+        quizIdActual = data.quizId;
+        
+        // Guardamos el texto para repetirlo en la revisión
+        textoPreguntaMostrada = data.question; 
+        preguntaTexto.textContent = textoPreguntaMostrada;
+        
+        fuenteUrl = data.fuente || ""; 
     } catch (error) {
-        console.error('Error al obtener pregunta:', error);
-        alert('Error al cargar la pregunta. Intente de nuevo.')
+        console.error('Error:', error);
     }
 }
 
-
-//iniciar el timer
 function iniciarTimer() {
-    tiempoRestante= 30;
+    detenerTimer(); 
+    tiempoRestante = 30;
     timerTexto.textContent = tiempoRestante;
     timerProgreso.style.width = '100%';
-    timerProgreso.classList.remove('alerta');
-    timerTexto.classList.remove('alerta');
-
     intervalTimer = setInterval(() => {
         tiempoRestante--;
         timerTexto.textContent = tiempoRestante;
-
-        const porcentaje = (tiempoRestante / 30) * 100;
-        timerProgreso.style.width = porcentaje + '%';
-
-        if (tiempoRestante <= 10) {
-            timerProgreso.classList.add('alerta');
-            timerTexto.classList.add('alerta')
-        }
-        if (tiempoRestante === 0) {
+        timerProgreso.style.width = (tiempoRestante / 30 * 100) + '%';
+        if (tiempoRestante <= 0) {
             detenerTimer();
             manejarTimeout();
         }
     }, 1000);
 }
 
-function detenerTimer() {
-    clearInterval(intervalTimer);
-}
-
-//funcion q maneja cuando se acaba el tiempo, obtiene el puntaje sin sumar puntos
-async function manejarTimeout() {
-    try {
-        const response = await fetch(`${API_URL}/puntaje/${userId}`);
-        const data = await response.json();
-
-        mostrarResultado({
-            correcto: false,
-            puntosGanados: 0,
-            puntajeTotal: data.puntajeTotal || 0,
-            timeout: true
-        });
-    } catch (error) {
-
-        mostrarResultado({
-            correcto: false,
-            puntosGanados: 0,
-            puntajeTotal: 0,
-            timeout: true
-        });
-    }
-}
-
-//manejo de las respuestas del usuario
-btnVerdadero.addEventListener('click', () => {
-    detenerTimer();
-    validarRespuesta(true);
-});
-
-btnFalso.addEventListener('click', () => {
-    detenerTimer();
-    validarRespuesta(false);
-});
-
-
-//validar respuesta del usuario
 async function validarRespuesta(respuestaUsuario) {
+    detenerTimer();
+    const token = localStorage.getItem('token');
     try {
         const response = await fetch(`${API_URL}/respuesta`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                factoId: preguntaActual.factoId,
-                textoMostrado: preguntaActual.texto,
-                respuestaUsuario: respuestaUsuario,
-                userId: userId
-            })
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ quizId: quizIdActual, respuestaUsuario: respuestaUsuario })
         });
-
         const data = await response.json();
-        respuestaCorrectaGuardada = data.respuestaCorrecta;
+        explicacionIA = data.mensaje; 
+        respuestaCorrectaBoolean = data.respuestaCorrecta; 
         mostrarResultado(data);
-
-    } catch (error) {
-        console.error('Error al validar respuesta:', error);
-        alert('Error al validar respuesta. Intente de nuevo.');
-    }
+    } catch (error) { console.error(error); }
 }
 
-
-//funcion q muestra los resultados
 function mostrarResultado(data) {
-    if (data.timeout) {
-        resultadoIcono.textContent = '⏱️';
-        resultadoMensaje.textContent = '¡TIEMPO AGOTADO!';
-        btnSalir.style.display = 'inline-block';
-    } else if (data.correcto) {
-        resultadoIcono.textContent = '✅';
-        resultadoMensaje.textContent = '¡CORRECTO!';
-        btnSalir.style.display = 'none';
-    } else {
-        resultadoIcono.textContent = '❌';
-        resultadoMensaje.textContent = '¡INCORRECTO!';
-        btnSalir.style.display = 'inline-block';
-    }
+    detenerTimer();
+    resultadoIcono.textContent = data.correcto ? '✅' : '❌';
+    resultadoMensaje.textContent = data.correcto ? '¡CORRECTO!' : '¡INCORRECTO!';
+    puntosGanados.textContent = data.correcto ? "10" : "0";
+    puntajeTotal.textContent = data.nuevoPuntaje || "0";
 
-    puntosGanados.textContent = data.puntosGanados;
-    puntajeTotal.textContent = data.puntajeTotal;
-
-    //fuente
-    if (preguntaActual.font) {
-        linkFuente.href = preguntaActual.font;
+    if (fuenteUrl) {
+        linkFuente.href = fuenteUrl;
         linkFuente.style.display = 'inline-block';
     } else {
         linkFuente.style.display = 'none';
     }
-
-    cambiarEstado(result)
+    cambiarEstado(result);
 }
 
-//boton para pasar a la siguiente pregunta
-btnSiguiente.addEventListener('click', async () => {
-    await obtenerPregunta();
-    cambiarEstado(playing);
-    iniciarTimer();
-});
-//boton salir
-btnSalir.addEventListener('click', () => {
-    cambiarEstado(lobby);
-});
+// BOTONES
+btnJugar.onclick = async () => { await obtenerPregunta(); cambiarEstado(playing); iniciarTimer(); };
+btnVerdadero.onclick = () => validarRespuesta(true);
+btnFalso.onclick = () => validarRespuesta(false);
+btnSiguiente.onclick = async () => { await obtenerPregunta(); cambiarEstado(playing); iniciarTimer(); };
+btnSalir.onclick = () => { detenerTimer(); cambiarEstado(lobby); };
+btnVerFacto.onclick = (e) => { e.preventDefault(); mostrarFactoCompleto(); };
+btnVolverResultado.onclick = () => cambiarEstado(result);
 
-
-//evento para volver a ver el facto
-btnVerFacto.addEventListener('click', (e) => {
-    e.preventDefault();
-    mostrarFactoCompleto();
-});
-btnVolverResultado.addEventListener('click', () => {
-    verFacto.classList.remove('active');
-    cambiarEstado(result);
-});
-
+// REVISIÓN CORREGIDA
 function mostrarFactoCompleto() {
-    //mostrar el mismo texto que vio en el quiz
-    factoRevisionTexto.textContent = preguntaActual.texto;
+    // 1. Mostramos EL MISMO TEXTO que vio en el estado Playing
+    factoRevisionTexto.textContent = textoPreguntaMostrada;
 
-    //limpiar clases anteriores
-    btnVerdaderoRevision.classList.remove('correcta');
-    btnVerdaderoRevision.classList.remove('correcta-falso');
-    btnFalsoRevision.classList.remove('correcta');
-    btnFalsoRevision.classList.remove('correcta-falso');
-    
-    //resalta el boton de la respuesta q haya sido correcta
-    if (respuestaCorrectaGuardada === true) {
+    // 2. Limpiamos clases
+    btnVerdaderoRevision.classList.remove('correcta', 'correcta-falso');
+    btnFalsoRevision.classList.remove('correcta', 'correcta-falso');
+
+    // 3. Pintamos el botón que era el correcto
+    if (respuestaCorrectaBoolean === true) {
         btnVerdaderoRevision.classList.add('correcta');
-    } else {
-        btnFalsoRevision.classList.add('correcta-falso'); 
+    } else if (respuestaCorrectaBoolean === false) {
+        btnFalsoRevision.classList.add('correcta-falso');
     }
+    
     cambiarEstado(verFacto);
 }

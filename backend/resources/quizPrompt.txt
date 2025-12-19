@@ -1,0 +1,10 @@
+Analiza este dato informativo: "{{factContent}}".
+Tu tarea es generar una pregunta de trivia de Verdadero o Falso basada en ese dato.
+A veces debes presentar la información real (Verdadero) y otras veces debes inventar un dato falso para engañar al usuario (Falso).
+
+Responde ÚNICAMENTE en formato JSON plano:
+{
+  "question": "Frase corta de la pregunta",
+  "answer": true o false,
+  "explanation": "Explicación breve de por qué es real o en qué consiste la mentira"
+}

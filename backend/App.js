@@ -1,28 +1,39 @@
 import express from 'express';
 import cors from 'cors';
-import { query } from './config/db.js';
-import quizRoutes from './Routes/quizRoutes.js';
+import dotenv from "dotenv";
 
-const app = express (); 
+dotenv.config();
+const app = express(); 
 
+//middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: "*"
+    origin: "http://localhost:8080",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
 }));
 
-app.use(express.json());
+//importacion de rutas
+import profileRoutes from './routes/profileRoutes.js';
+import factsRoutes from './routes/Facts.js';
+import iaRoutes from './routes/Ia.js';
+import authRoutes from './routes/login.js';
+import savedFactsRoutes from './routes/savedFactsRoutes.js'; 
+import quizRoutes from './routes/quizRoutes.js';
 
-app.get('/', async (req, res) => {
-    try {
-        const result = await db.query('SELECT * FROM facts');
-        console.log(result)
-        console.log(result.rows); 
-        res.json(result.rows);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error interno del servidor');
-    }
-});
+//endpoints
+app.use("/api/auth", authRoutes);
+app.use('/api/facts', factsRoutes);
+app.use('/api/ia', iaRoutes);
 
-app.use('/quiz', quizRoutes);
+
+app.use('/api/users', profileRoutes); 
+
+//epositorio personal
+app.use('/api/saved', savedFactsRoutes);
+
+app.use('/api/quiz', quizRoutes);
 
 export default app;

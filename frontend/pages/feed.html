@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <link rel="stylesheet" href="../styles/feed.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Monda:wght@400..700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=stars_2" />
+    </head>
+    <body>
+        <header class="header-flex" >
+            <div id="header-principal" class="header-flex" >
+                <h1 >Almacen de <span class="title-span">Factos</span></h1>
+                <a href="./profile.html" style="text-decoration: none;">
+                    <button class="button-func header-login" >
+                        <i class="fa-solid fa-user"></i>
+                    </button>
+                </a>
+            </div>
+            <nav id="header-navbar" class="header-flex" >
+                <div id="categories-btn-container">
+                    <button id="categories-btn" class="button-func" >
+                        <i class="fa-solid fa-list"></i>
+                        Filtrar Por Categoria
+                    </button>
+                    <ul id="categories-btn-options" class="hidden">
+                        
+                    </ul>
+                </div>
+                <button class="button-func btn-quiz-destacado">
+                    <i class="fa-solid fa-gamepad"></i>
+                    <a class="a-redirect" href="./quiz.html">Jugar Quiz</a>
+                </button>
+                
+                <button class="button-func">
+                    <i class="fa-solid fa-plus"></i>
+                    <a class="a-redirect" href="./createFact.html">Crear Fact</a>
+                </button>
+            </nav>
+        </header>
+        <main>
+            <ul id="facts-container">
+
+            </ul>
+        </main>
+        <script src="../js/feed.js" ></script>
+        <script src="https://kit.fontawesome.com/1ff5e69ddb.js" crossorigin="anonymous"></script>
+    </body>
+</html>

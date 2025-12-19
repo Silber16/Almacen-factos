@@ -1,14 +1,7 @@
-import pkg from 'pg';
-const { Pool } = pkg;
+import { Pool } from 'pg';
 import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-
-dotenv.config({ path: join(__dirname, './config/.env') });
+dotenv.config();
 
 const pool = new Pool({
   user: process.env.DATABASE_USERNAME,
@@ -21,4 +14,4 @@ const pool = new Pool({
   }
 });
 
-export const query = (text, params) => pool.query(text, params);
+export default { query: (text, params) => pool.query(text, params) };
