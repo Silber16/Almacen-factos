@@ -152,8 +152,9 @@ header {
     padding-top: .2rem;
 }
 
-.btn-iaResponse-container {
+.btn-container {
     display: flex;
+    gap: 1rem;
     justify-content: end;
 }
 
@@ -168,7 +169,21 @@ header {
     border-radius: .5rem;
     background-image: linear-gradient(to right, rgb(0, 87, 250), #0400f75e);
     color: var(--principal-sandwhite);
-    font-size: 1rem;
+    font-size: .9rem;
+}
+
+.fact-btn-addToRepository {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .3rem;
+    width: fit-content;
+    border: none;
+    padding: .8rem;
+    border-radius: .5rem;
+    background-color: var(--principal-orange);
+    color: #fff;
+    font-size: .9rem;
 }
 
 .fact-iaResponse {
