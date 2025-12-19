@@ -5,6 +5,9 @@ const DEFAULT_IMAGE = '../img/default-user.png';
 const params = new URLSearchParams(window.location.search);
 let currentUserId = params.get('userId');
 
+//variable para guardar mis factos originales y no recargar al cambiar pestaña
+let misFactosCache = []; 
+
 if (!currentUserId) {
     currentUserId = 1;
 }
@@ -26,6 +29,9 @@ async function loadUserProfile() {
 
         const data = await res.json();
         
+        //guardamos los factos originales en memoria
+        misFactosCache = data.factos;
+
         //mostrar boton de editar solo si es mi perfil
         const btnEdit = document.getElementById('btn-edit-profile');
         if (btnEdit) {
@@ -34,6 +40,12 @@ async function loadUserProfile() {
             } else {
                 btnEdit.classList.add('hidden');
             }
+        }
+
+        //mostrar pestaña de guardados solo si es mi perfil
+        const btnGuardados = document.getElementById('tab-guardados');
+        if (btnGuardados && data.isOwnProfile) {
+            btnGuardados.classList.remove('hidden');
         }
 
         renderProfile(data.user);
@@ -131,7 +143,7 @@ function renderFactos(factos) {
     container.innerHTML = '';
 
     if (!factos || factos.length === 0) {
-        container.innerHTML = '<p class="empty-state">No hay factos publicados.</p>';
+        container.innerHTML = '<p class="empty-state">No hay factos para mostrar.</p>';
         return;
     }
 
@@ -160,6 +172,10 @@ function setupEventListeners() {
     const btnDeletePic = document.getElementById('btn-delete-pic');
     const inputPic = document.getElementById('edit-picture');
     const deleteFlag = document.getElementById('delete-picture-flag');
+    
+    //botones de pestañas
+    const btnMisFactos = document.getElementById('tab-mis-factos');
+    const btnGuardados = document.getElementById('tab-guardados');
 
     if (btnEdit) {
         btnEdit.addEventListener('click', openEditModal);
@@ -192,6 +208,10 @@ function setupEventListeners() {
             if (deleteFlag) deleteFlag.value = 'false';
         });
     }
+
+    //listeners de pestañas
+    if (btnMisFactos) btnMisFactos.addEventListener('click', showMisFactos);
+    if (btnGuardados) btnGuardados.addEventListener('click', loadSavedFacts);
 }
 
 //logica del modal
@@ -293,5 +313,61 @@ async function handleEditProfile(e) {
     } catch (error) {
         console.error(error);
         alert('Error de conexión al actualizar');
+    }
+}
+
+
+
+function showMisFactos() {
+    //cambiar estilos visuales de botones
+    document.getElementById('tab-mis-factos').style.backgroundColor = ''; 
+    document.getElementById('tab-guardados').style.backgroundColor = '#444'; 
+    
+    //cambiar titulo de la seccion
+    document.getElementById('section-title-text').innerHTML = '<i class="fa-solid fa-lightbulb"></i> Factos Publicados';
+
+    //renderizar lo que teniamos guardado en cache
+    renderFactos(misFactosCache);
+}
+
+async function loadSavedFacts() {
+    //obtener token del localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert("Debes iniciar sesión para ver tus guardados.");
+        return;
+    }
+
+    //cambiar estilos visuales
+    document.getElementById('tab-mis-factos').style.backgroundColor = '#444';
+    document.getElementById('tab-guardados').style.backgroundColor = '#e67e22'; 
+
+    //cambiar titulo
+    document.getElementById('section-title-text').innerHTML = '<i class="fa-solid fa-bookmark"></i> Repositorio Personal';
+
+    //mostrar cargando
+    const container = document.getElementById('user-factos-container');
+    container.innerHTML = '<p>Cargando repositorio...</p>';
+
+    try {
+        //fetch con autenticacion
+        const res = await fetch(`${API_URL}/saved/${currentUserId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+
+        if (res.ok) {
+            const savedFacts = await res.json();
+            renderFactos(savedFacts);
+        } else {
+            container.innerHTML = '<p>Error al cargar el repositorio.</p>';
+        }
+
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = '<p>Error de conexión.</p>';
     }
 }

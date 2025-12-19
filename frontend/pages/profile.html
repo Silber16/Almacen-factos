@@ -60,13 +60,22 @@
 
                 <!--factos publicados-->
                 <div id="factos-section">
-                    <h3 class="section-title">
+                    <div class="tabs-container" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button id="tab-mis-factos" class="button-func active-tab" style="flex: 1;">
+                            <i class="fa-solid fa-pen-nib"></i> Publicados
+                        </button>
+                        <button id="tab-guardados" class="button-func hidden" style="flex: 1; background-color: #444;">
+                            <i class="fa-solid fa-bookmark"></i> Guardados
+                        </button>
+                    </div>
+
+                    <h3 id="section-title-text" class="section-title">
                         <i class="fa-solid fa-lightbulb"></i>
                         Factos Publicados
                     </h3>
+                    
                     <ul id="user-factos-container">
-                        <!--los factos tmb se cargan dinamicamente-->
-                    </ul>
+                        </ul>
                 </div>
             </div>
         </main>

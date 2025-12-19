@@ -1,5 +1,7 @@
-import pg from 'pg';
-import 'dotenv/config';
+import { Pool } from 'pg';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const { Pool } = pg;
 const pool = new Pool({
@@ -13,4 +15,4 @@ const pool = new Pool({
   }
 });
 
-export const query = (text, params) => pool.query(text, params);
+export default { query: (text, params) => pool.query(text, params) };

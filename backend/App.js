@@ -1,7 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import * as db from './config/db.js';
-import profileRoutes from './Routes/profileRoutes.js';
+import dotenv from "dotenv";
+import profileRoutes from './routes/profileRoutes.js';
+import factsRoutes from './routes/Facts.js';
+import iaRoutes from './routes/Ia.js';
+import authRoutes from './routes/login.js';
 
 const app = express (); 
 
@@ -11,18 +14,23 @@ app.use(cors());
 app.use(express.json());
 
 
-app.get('/', async (req, res) => {
-    try {
-        const result = await db.query('SELECT * FROM facts');
-        console.log(result)
-        console.log(result.rows); 
-        res.json(result.rows);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error interno del servidor');
-    }
-});
+dotenv.config();
+
+app.use(cors({
+    origin: "http://localhost:8080",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}));
+
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/users', profileRoutes);
+app.use('/api/facts', factsRoutes);
+app.use('/api/ia', iaRoutes);
+app.use("/api/auth", authRoutes);
+// app.use('/api/trophies', trophyRoutes);
+// app.use('/api/users', usersRoutes);
+// app.use('/api/almacen-facts', almacenFactsRoutes);
 
 export default app;

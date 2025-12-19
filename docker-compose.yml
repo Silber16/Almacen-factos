@@ -14,6 +14,7 @@ services:
       - ./backend:/app
       - /app/node_modules 
     restart: unless-stopped
+    command: npm start
 
   frontend:
     build: ./frontend
@@ -24,8 +25,6 @@ services:
       - backend
     networks:
       - mi-red
-    volumes:
-      - ./frontend:/usr/share/nginx/html:ro 
     restart: unless-stopped
 
 networks:
