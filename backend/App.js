@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import * as db from './config/db.js';
 import profileRoutes from './Routes/profileRoutes.js';
+import savedFactsRoutes from './Routes/savedFactsRoutes.js'; 
 
 const app = express (); 
 
@@ -9,7 +10,6 @@ app.use(cors());
 
 //middleware para parsear json
 app.use(express.json());
-
 
 app.get('/', async (req, res) => {
     try {
@@ -24,5 +24,6 @@ app.get('/', async (req, res) => {
 });
 
 app.use('/api/users', profileRoutes);
+app.use('/api/saved', savedFactsRoutes);
 
 export default app;
