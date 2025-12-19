@@ -96,15 +96,15 @@ async function addToRepo (factId, userId) {
 
     const query = `
         INSERT INTO 
-            facts_repository(factid, userid)
+            saved_facts(user_id, fact_id)
         VALUES 
             ($1, $2)
-        ON CONFLICT (factId, userId) DO NOTHING
-        RETURNING factId AS "factId", userId AS "userId"
+        ON CONFLICT (user_id, fact_id) DO NOTHING
+        RETURNING fact_id AS "factId", user_id AS "userId"
     `;
     const values = [
-        factId, 
-        userId
+        userId,
+        factId
     ];
 
     try {
