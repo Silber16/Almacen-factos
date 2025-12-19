@@ -5,6 +5,8 @@ import profileRoutes from './routes/profileRoutes.js';
 import factsRoutes from './routes/Facts.js';
 import iaRoutes from './routes/Ia.js';
 import authRoutes from './routes/login.js';
+import profileRoutes from './Routes/profileRoutes.js';
+import savedFactsRoutes from './Routes/savedFactsRoutes.js'; 
 
 const app = express (); 
 
@@ -32,5 +34,8 @@ app.use("/api/auth", authRoutes);
 // app.use('/api/trophies', trophyRoutes);
 // app.use('/api/users', usersRoutes);
 // app.use('/api/almacen-facts', almacenFactsRoutes);
+
+app.use('/api/users', profileRoutes);
+app.use('/api/saved', savedFactsRoutes);
 
 export default app;
