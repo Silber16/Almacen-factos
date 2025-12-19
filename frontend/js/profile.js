@@ -1,14 +1,19 @@
 const API_URL = 'http://localhost:3000/api';
 const DEFAULT_IMAGE = '../img/default-user.png';
 
-// funcion para sacar mi id del token
+//funcion para sacar mi id del token
 function getMyIdFromToken() {
     const token = localStorage.getItem('token');
     if (!token) return null;
     try {
+        // Decodificamos el payload (la parte del medio del token)
         const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.id;
+        console.log("payload del token:", payload);
+
+        // Probamos todas las variantes comunes que puede devolver el back
+        return payload.id || payload.userId || payload.sub;
     } catch (e) {
+        console.error("error al leer token", e);
         return null;
     }
 }
@@ -21,13 +26,16 @@ let currentUserId = params.get('userId');
 let misFactosCache = []; 
 
 // si no hay id en la url buscamos el nuestro, si no hay nada al login
-if (!currentUserId) {
+if (!currentUserId || currentUserId === 'undefined') {
     currentUserId = getMyIdFromToken();
 }
-
-if (!currentUserId) {
+// si despues de intentar todo no hay id, mandamos al login
+if (!currentUserId || currentUserId === 'undefined') {
+    console.warn("no se encontro id de usuario, redirigiendo...");
     window.location.href = './login.html';
 }
+
+console.log("ID que se va a pedir al backend:", currentUserId);
 
 //al cargar la pagina
 document.addEventListener('DOMContentLoaded', () => {

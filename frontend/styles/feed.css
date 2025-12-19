@@ -212,3 +212,37 @@ header {
     border-left: 2px solid yellow;
     border-bottom: 2px solid yellow;
 }
+
+
+/*La manito para el nombre de usuario en cada facto*/
+.fact-user-link {
+    text-decoration: none !important;
+    color: inherit !important; 
+    display: inline-block;
+}
+
+.fact-user {
+    cursor: pointer; /*pone la manito*/
+    transition: filter 0.2s ease;
+    background-image: linear-gradient(to right, var(--principal-orange-o75), #e4eef05e);
+    border-left: 1px solid var(--principal-orange);
+}
+
+.fact-user:hover {
+    filter: brightness(1.2); /*brilla un poquito al pasar el mouse*/
+}
+
+/*la manito para el boton de perfil en el header*/
+.header-login {
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.header-login:hover {
+    transform: scale(1.05); 
+    background-color: var(--principal-orange-o75);
+}
+
+.header-login i {
+    pointer-events: none;
+}

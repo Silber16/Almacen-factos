@@ -1,4 +1,4 @@
-import * as db from '../config/db.js';
+import db from '../config/db.js';
 
 //obtener usuario por id
 async function getUserById(userId) {

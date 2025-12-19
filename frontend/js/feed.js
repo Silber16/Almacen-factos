@@ -66,6 +66,7 @@ function renderFeed (facts) {
     facts.forEach( fact => {
         const factItem = document.createElement("li");
 
+        let ia_verdict_emoji = ""; // arreglado para que no tire error si no entra en switch
         switch (fact.ia_responseverdict) {
             case 'F':
                 ia_verdict_emoji = "❌❌❌❌"
@@ -77,11 +78,17 @@ function renderFeed (facts) {
                 ia_verdict_emoji = "🤔🤔❔❔"
                 break;
             default:
+                ia_verdict_emoji = "❓"
                 break;
         };
+
         factItem.className = "fact-item"
+        
+        // aca integramos el link al perfil usando el user_id que viene del back
         factItem.innerHTML = `
-            <label class="fact-user" >${fact.username}</label>
+            <a href="./profile.html?userId=${fact.user_id}" class="fact-user-link">
+                <label class="fact-user" style="cursor: pointer;">${fact.username}</label>
+            </a>
             <h3 class="fact-title" >${fact.title}</h3>
             <p class="fact-content" >${fact.content}</p>
             <label class="fact-category" >Categoria: ${CATEGORIES.find(cat => cat.id === fact.category)?.name ?? "No informada"}</label>
@@ -116,12 +123,9 @@ async function fetchFacts () {
     }
 }
 
-
-
 document.addEventListener('DOMContentLoaded', () => {
-
     const btnFilter = document.getElementById('categories-btn');
-    btnFilter.addEventListener('click', toggleMenuCategory);
+    if(btnFilter) btnFilter.addEventListener('click', toggleMenuCategory);
     
     fetchFacts();
     renderCategoryMenu();
