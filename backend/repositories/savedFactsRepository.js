@@ -26,11 +26,10 @@ async function isFactSaved(userId, factId) {
 //obtener los factos guardados
 async function getSavedFactsByUser(userId) {
     const text = `
-        SELECT f.*, sf.saved_at 
-        FROM facts f
+        SELECT f.* FROM facts f
         JOIN saved_facts sf ON f.id = sf.fact_id
         WHERE sf.user_id = $1
-        ORDER BY sf.saved_at DESC
+        ORDER BY f.id DESC
     `;
     const result = await db.query(text, [userId]);
     return result.rows;

@@ -8,7 +8,6 @@ function getMyIdFromToken() {
     try {
         // Decodificamos el payload (la parte del medio del token)
         const payload = JSON.parse(atob(token.split('.')[1]));
-        console.log("payload del token:", payload);
 
         // Probamos todas las variantes comunes que puede devolver el back
         return payload.id || payload.userId || payload.sub;
@@ -20,7 +19,7 @@ function getMyIdFromToken() {
 
 //leer el ID de la URL (buscamos lo que está después del ?)
 const params = new URLSearchParams(window.location.search);
-let currentUserId = params.get('userId');
+let currentUserId = params.get('userId') || params.get('id');
 
 //variable para guardar mis factos originales y no recargar al cambiar pestaña
 let misFactosCache = []; 

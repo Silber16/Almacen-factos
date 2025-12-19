@@ -6,15 +6,10 @@ const getUserProfile = async (req, res) => {
         const { userId } = req.params;
         const loggedUserId = req.user?.id || req.user?.userId || req.user?.sub;; //id del usuario logueado
         
-        console.log("ID del Perfil solicitado:", userId);
-        console.log("ID del Usuario logueado detectado:", loggedUserId);
-        
         const profileData = await profileService.getUserProfile(userId);
 
         //agregar flag si es el perfil del usuario, osea el mio
         profileData.isOwnProfile = String(userId) === String(loggedUserId);
-
-        console.log(`Comparando Perfil ${userId} con Usuario Logueado ${loggedUserId}: ${profileData.isOwnProfile}`);
 
         res.json(profileData);
 
