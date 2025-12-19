@@ -1,0 +1,49 @@
+import * as profileService from '../services/profileService.js';
+
+//obtener perfil de un usuario
+const getUserProfile = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const loggedUserId = req.user?.id || req.user?.userId || req.user?.sub;; //id del usuario logueado
+        
+        const profileData = await profileService.getUserProfile(userId);
+
+        //agregar flag si es el perfil del usuario, osea el mio
+        profileData.isOwnProfile = String(userId) === String(loggedUserId);
+
+        res.json(profileData);
+
+    } catch (error) {
+        console.error('Error al obtener el perfil:', error);
+        res.status(404).json({ error: error.message });
+    }
+};
+
+//actualizar perfil de usuario
+const updateUserProfile = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { name, username, bio, profile_picture } = req.body;
+
+        const imagePath = req.file ? req.file.path : profile_picture;
+
+        const updatedUser = await profileService.updateUserProfile(
+            userId,
+            name,
+            username,
+            bio,
+            imagePath
+        );
+        res.json(updatedUser);
+
+    } catch (error) {
+        console.error('Error al actualizar perfil:', error);
+        res.status(400).json({ error: error.message });
+    }
+};
+
+
+export {
+    getUserProfile,
+    updateUserProfile
+};

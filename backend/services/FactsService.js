@@ -1,4 +1,5 @@
 import * as factsRepository from "../repositories/FactsRepository.js"
+import * as userRepository from "../repositories/user.js"
 
 async function getAllFacts() {
     try {
@@ -50,11 +51,44 @@ async function getFactsByCategoryName(category) {
 
 async function createNewFact(factData) {
     if (!factData || !factData.title || !factData.content || !factData.category) {
-        throw new Error("Datos de hecho incompletos o inválidos."); 
+        throw new Error("Datos de fact incompletos o inválidos."); 
+    }
+
+    let factScore = 0
+    switch (factData.iaVerdict) {
+        case "V":
+            factScore = 3;
+            break;
+        case "F":
+            factScore = -3;
+            break;
+        case "I":
+            factScore = 0;
+            break;
+        default:
+            break;
+    }
+
+    try {
+        
+        if (factScore != 0)
+            await userRepository.updateScore(factScore, factData.createdBy);
+
+        const success = await factsRepository.createFact(factData); 
+        return success;
+
+    } catch (err) {
+        throw err;
+    }
+}
+
+async function addToRepo(factId, userId) {
+    if (!factId || !userId) {
+        throw new Error("Datos de fact incompletos o inválidos."); 
     }
     
     try {
-        const success = await factsRepository.createFact(factData); 
+        const success = await factsRepository.addToRepo(factId, userId); 
         return success;
 
     } catch (err) {
@@ -82,7 +116,7 @@ async function updateExistingFact(factData) {
 
 async function deleteFactById(id) {
     if (!id || isNaN(Number(id))) {
-        throw new err("ID de hecho no válido para eliminar.");
+        throw new err("ID de fact no válido para eliminar.");
     }
     
     try {
@@ -100,6 +134,7 @@ export {
     getFactsByUser,
     getFactsByCategoryName,
     createNewFact,
+    addToRepo,
     updateExistingFact,
     deleteFactById
 };

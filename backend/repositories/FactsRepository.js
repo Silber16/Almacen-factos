@@ -92,6 +92,31 @@ async function createFact (factObj) {
     }
 }
 
+async function addToRepo (factId, userId) {
+
+    const query = `
+        INSERT INTO 
+            facts_repository(factid, userid)
+        VALUES 
+            ($1, $2)
+        ON CONFLICT (factId, userId) DO NOTHING
+        RETURNING factId AS "factId", userId AS "userId"
+    `;
+    const values = [
+        factId, 
+        userId
+    ];
+
+    try {
+        const res = await db.query(query, values);
+        return res.rowCount > 0;
+        
+    } catch (error) {
+        console.error("Error al guardar fact:", error);
+        return false;
+    }
+}
+
 async function updateFact (factObj) {
     const query = `
         UPDATE Facts
@@ -146,6 +171,7 @@ export {
     getFactsByUserId,
     getFactsCategory,
     createFact,
+    addToRepo,
     updateFact,
     deleteFact
 }
