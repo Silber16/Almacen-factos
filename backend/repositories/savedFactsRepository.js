@@ -1,4 +1,5 @@
-import { query } from '../db.js';
+import db from "../config/db.js";
+
 
 //guardar factura
 async function saveFact(userId, factId) {
@@ -6,19 +7,19 @@ async function saveFact(userId, factId) {
         INSERT INTO saved_facts (user_id, fact_id)
         VALUES ($1, $2)
         ON CONFLICT (user_id, fact_id) DO NOTHING`;
-    await query(text, [userId, factId]);
+    await db.query(text, [userId, factId]);
 }
 
 //eliminar factura
 async function unsaveFact(userId, factId) {
     const text = `DELETE FROM saved_facts WHERE user_id = $1 AND fact_id = $2`;
-    await query(text, [userId, factId]);
+    await db.query(text, [userId, factId]);
 }
 
 //verificar guardado
 async function isFactSaved(userId, factId) {
     const text = `SELECT 1 FROM saved_facts WHERE user_id = $1 AND fact_id = $2`;
-    const result = await query(text, [userId, factId]);
+    const result = await db.query(text, [userId, factId]);
     return result.rowCount > 0;
 }
 
@@ -31,7 +32,7 @@ async function getSavedFactsByUser(userId) {
         WHERE sf.user_id = $1
         ORDER BY sf.saved_at DESC
     `;
-    const result = await query(text, [userId]);
+    const result = await db.query(text, [userId]);
     return result.rows;
 }
 

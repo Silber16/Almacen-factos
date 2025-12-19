@@ -1,4 +1,4 @@
-import * as savedFactsRepo from '../Repositories/savedFactsRepository.js';
+import * as savedFactsRepo from '../repositories/savedFactsRepository.js';
 
 export const toggleSaveFact = async (userId, factId) => {
     //se verifica si ya existe

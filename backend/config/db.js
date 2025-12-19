@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { Pool } = pg;
 const pool = new Pool({
   user: process.env.DATABASE_USERNAME,
   password: process.env.DATABASE_PASSWORD,

@@ -5,8 +5,7 @@ import profileRoutes from './routes/profileRoutes.js';
 import factsRoutes from './routes/Facts.js';
 import iaRoutes from './routes/Ia.js';
 import authRoutes from './routes/login.js';
-import profileRoutes from './Routes/profileRoutes.js';
-import savedFactsRoutes from './Routes/savedFactsRoutes.js'; 
+import savedFactsRoutes from './routes/savedFactsRoutes.js'; 
 
 const app = express (); 
 

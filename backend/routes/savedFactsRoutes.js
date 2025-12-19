@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as savedFactsController from '../controllers/savedFactsController.js';
-import auth from "../Middleware/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = Router();
 
