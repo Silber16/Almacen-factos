@@ -1,6 +1,6 @@
 import express from 'express';
-import factsController from '../Controllers/Facts.js'; 
-import auth from "../Middleware/auth.js"
+import factsController from '../controllers/Facts.js'; 
+import auth from "../middleware/auth.js"
 
 const router = express.Router();
 

@@ -1,12 +1,10 @@
 import express from 'express'; 
 import dotenv from "dotenv";
 
-import factsRoutes from './Routes/Facts.js';
-import iaRoutes from './Routes/Ia.js';
-import authRoutes from './Routes/login.js';
-// const trophyRoutes = require('./Routes/Trophy');
-// const usersRoutes = require('./Routes/Users');
-// const almacenFactsRoutes = require('./Routes/AlmacenFacts');
+import factsRoutes from './routes/Facts.js';
+import iaRoutes from './routes/Ia.js';
+import authRoutes from './routes/login.js';
+
 import cors from 'cors';
 const app = express (); 
 

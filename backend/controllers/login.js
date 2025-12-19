@@ -1,4 +1,4 @@
-import authService from "../Services/login.js";
+import authService from "../services/login.js";
 const register = async (req, res) => {
     try {
         const user = await authService.register(req.body);

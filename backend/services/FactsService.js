@@ -1,4 +1,4 @@
-import * as factsRepository from "../Repositories/FactsRepository.js"
+import * as factsRepository from "../repositories/FactsRepository.js"
 
 async function getAllFacts() {
     try {

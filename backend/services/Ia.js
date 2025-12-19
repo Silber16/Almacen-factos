@@ -1,4 +1,4 @@
-import * as iaRepository from "../Repositories/Ia.js"
+import * as iaRepository from "../repositories/Ia.js"
 
 async function getIaFactVerdict(factContent) {
 

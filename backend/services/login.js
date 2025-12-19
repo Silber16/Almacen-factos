@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import userRepo from "../Repositories/login.js";
+import userRepo from "../repositories/login.js";
 const securePassword = (password) => {
     if (password.length < 8) return "La contraseña debe tener al menos 8 caracteres";
     if (!/[A-Z]/.test(password)) return "Debe contener una mayúscula";
