@@ -10,4 +10,13 @@ async function getIaFactVerdict(factContent) {
     }
 }
 
-export { getIaFactVerdict} 
+async function getQuizQuestion(factContent) {
+    try {
+        const question = await iaRepository.getQuizQuestion(factContent);
+        return question; 
+    } catch (err) {
+        throw err;
+    }
+}
+
+export { getIaFactVerdict, getQuizQuestion} 

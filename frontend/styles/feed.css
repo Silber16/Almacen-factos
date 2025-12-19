@@ -261,3 +261,30 @@ header {
 .header-login i {
     pointer-events: none;
 }
+
+
+
+
+.btn-quiz {
+    background-image: linear-gradient(135deg, var(--principal-orange), #ff9d5c);
+    border: 1px solid var(--principal-sandwhite);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-quiz:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(254, 127, 45, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-quiz i {
+    font-size: 1.1rem;
+}
+
+.btn-quiz .a-redirect {
+    font-weight: 700;
+}
