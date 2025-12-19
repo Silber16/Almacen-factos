@@ -1,6 +1,18 @@
 const API_URL = 'http://localhost:3000/api';
 const DEFAULT_IMAGE = '../img/default-user.png';
 
+// funcion para sacar mi id del token
+function getMyIdFromToken() {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.id;
+    } catch (e) {
+        return null;
+    }
+}
+
 //leer el ID de la URL (buscamos lo que está después del ?)
 const params = new URLSearchParams(window.location.search);
 let currentUserId = params.get('userId');
@@ -8,8 +20,13 @@ let currentUserId = params.get('userId');
 //variable para guardar mis factos originales y no recargar al cambiar pestaña
 let misFactosCache = []; 
 
+// si no hay id en la url buscamos el nuestro, si no hay nada al login
 if (!currentUserId) {
-    currentUserId = 1;
+    currentUserId = getMyIdFromToken();
+}
+
+if (!currentUserId) {
+    window.location.href = './login.html';
 }
 
 //al cargar la pagina
@@ -21,7 +38,16 @@ document.addEventListener('DOMContentLoaded', () => {
 //logica de la carga y renderizado
 async function loadUserProfile() {
     try {
-        const res = await fetch(`${API_URL}/users/${currentUserId}`);
+        const token = localStorage.getItem('token');
+
+        // mandamos el token para que el back sepa si soy yo
+        const res = await fetch(`${API_URL}/users/${currentUserId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
         
         if (!res.ok) {
             throw new Error('Error al cargar el perfil');
@@ -29,12 +55,12 @@ async function loadUserProfile() {
 
         const data = await res.json();
         
-        //guardamos los factos originales en memoria
+        //
         misFactosCache = data.factos;
 
-        //mostrar boton de editar solo si es mi perfil
         const btnEdit = document.getElementById('btn-edit-profile');
         if (btnEdit) {
+            //si se confirma que es mi perfil se muestra el boton paa editar
             if (data.isOwnProfile) {
                 btnEdit.classList.remove('hidden');
             } else {
@@ -42,7 +68,6 @@ async function loadUserProfile() {
             }
         }
 
-        //mostrar pestaña de guardados solo si es mi perfil
         const btnGuardados = document.getElementById('tab-guardados');
         if (btnGuardados && data.isOwnProfile) {
             btnGuardados.classList.remove('hidden');
@@ -54,7 +79,7 @@ async function loadUserProfile() {
 
     } catch (error) {
         console.error(error);
-        alert('Error al cargar el perfil.');
+        //si falla porque el token expiro redigrige al login
     }
 }
 
@@ -294,7 +319,11 @@ async function handleEditProfile(e) {
     try {
         const res = await fetch(`${API_URL}/users/${currentUserId}`, {
             method: 'PUT',
-            body: formData
+            body: formData,
+            // mandamos el token para que nos deje editar
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
         });
 
         if (res.ok) {
@@ -329,6 +358,7 @@ function showMisFactos() {
     //renderizar lo que teniamos guardado en cache
     renderFactos(misFactosCache);
 }
+
 
 async function loadSavedFacts() {
     //obtener token del localStorage
