@@ -4,8 +4,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const app = express(); 
-
-//middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
@@ -14,15 +12,11 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
-
-//importacion de rutas
 import profileRoutes from './routes/profileRoutes.js';
 import factsRoutes from './routes/Facts.js';
 import iaRoutes from './routes/Ia.js';
 import authRoutes from './routes/login.js';
 import savedFactsRoutes from './routes/savedFactsRoutes.js'; 
-
-//endpoints
 app.use("/api/auth", authRoutes);
 app.use('/api/facts', factsRoutes);
 app.use('/api/ia', iaRoutes);
