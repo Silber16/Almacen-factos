@@ -51,7 +51,7 @@ async function getFactsByCategoryName(category) {
 
 async function createNewFact(factData) {
     if (!factData || !factData.title || !factData.content || !factData.category) {
-        throw new Error("Datos de hecho incompletos o inválidos."); 
+        throw new Error("Datos de fact incompletos o inválidos."); 
     }
 
     let factScore = 0
@@ -82,6 +82,20 @@ async function createNewFact(factData) {
     }
 }
 
+async function addToRepo(factId, userId) {
+    if (!factId || !userId) {
+        throw new Error("Datos de fact incompletos o inválidos."); 
+    }
+    
+    try {
+        const success = await factsRepository.addToRepo(factId, userId); 
+        return success;
+
+    } catch (err) {
+        throw err;
+    }
+}
+
 async function updateExistingFact(factData) {
     if (!factData || !factData.id || isNaN(Number(factData.id))) {
         throw new err("Se requiere un ID válido para la actualización."); 
@@ -102,7 +116,7 @@ async function updateExistingFact(factData) {
 
 async function deleteFactById(id) {
     if (!id || isNaN(Number(id))) {
-        throw new err("ID de hecho no válido para eliminar.");
+        throw new err("ID de fact no válido para eliminar.");
     }
     
     try {
@@ -120,6 +134,7 @@ export {
     getFactsByUser,
     getFactsByCategoryName,
     createNewFact,
+    addToRepo,
     updateExistingFact,
     deleteFactById
 };

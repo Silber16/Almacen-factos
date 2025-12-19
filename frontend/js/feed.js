@@ -14,7 +14,6 @@ async function filterFactsByCategory(categoryId) {
     if (!categoryId) {
         return
     }
-    console.log(categoryId)
     try {
         const res = await fetch(`http://localhost:3000/api/facts/category/${categoryId}`);
         const facts = await res.json();
@@ -57,7 +56,28 @@ function toggleIaVerdict(iaResponseDiv, iaResponseButton) {
     if (iaResponseDiv.classList.contains('display-none')) {
         iaResponseButton.innerHTML = '<span class="material-symbols-outlined">stars_2</span>Ver verificación IA';
     } else {
-        iaResponseButton.innerHTML = '<span class="material-symbols-outlined">stars_2</span>Ocultar verificación IA';
+        iaResponseButton.innerHTML = '<i class="fa-solid fa-x"></i>Ocultar verificación IA';
+    }
+}
+
+async function addToRepository(factId) {
+    try {
+        const token = localStorage.getItem('token');
+        const res = await fetch("http://localhost:3000/api/facts/addToRepo", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', 
+                'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify({factId: factId})
+        });
+
+        if (res) {
+            alert("Facto guardado en repositorio pesonal.")
+        }
+    }
+    catch (err) {
+        console.error("error al guardar el fact en el repo personal: ", err)
     }
 }
 
@@ -86,8 +106,9 @@ function renderFeed (facts) {
             <p class="fact-content" >${fact.content}</p>
             <label class="fact-category" >Categoria: ${CATEGORIES.find(cat => cat.id === fact.category)?.name ?? "No informada"}</label>
             <label class="fact-font" >Fuente: ${fact.font}</label>
-            <div class="btn-iaResponse-container">
+            <div class="btn-container">
                 <button class="fact-btn-iaResponse"><span class="material-symbols-outlined">stars_2</span>Ver verificación IA</button>
+                <button class="fact-btn-addToRepository"><i class="fa-solid fa-floppy-disk"></i>Guardar</button>
             </div>
             <div class="fact-iaResponse display-none">${ia_verdict_emoji} ${fact.ia_response}</div>
         `;
@@ -98,6 +119,12 @@ function renderFeed (facts) {
         iaResponseButton.addEventListener('click', () => {
             toggleIaVerdict(iaResponseDiv, iaResponseButton);
         });
+
+        const addToRepositoryButton = factItem.querySelector('.fact-btn-addToRepository');
+
+        addToRepositoryButton.addEventListener('click', () => {
+            addToRepository(fact.id);
+        })
 
         factsContainer.appendChild(factItem);
     });

@@ -3,7 +3,6 @@ import * as factsService from '../services/FactsService.js';
 const factsController = {
     
     getAll: async (req, res) => {
-         console.log('entra getAll');
         try {
         const facts = await factsService.getAllFacts();
         res.status(200).json(facts);
@@ -82,6 +81,24 @@ const factsController = {
             }
         } catch (err) {
             console.error("Error en el controlador al crear facto: ", err.message);
+            res.status(500);
+        }
+    },
+
+    addToRepo: async (req, res) => {
+        const factId = req.body.factId;
+        const userId = req.user.id;
+        console.log(factId, userId)
+        try {
+            const success = await factsService.addToRepo(factId, userId);
+
+            if (success) {
+                res.status(201).json({ message: "Facto guardado exitosamente." });
+            } else {
+                res.status(200).json({ message: "El facto ya se encuentra en el repositorio." });
+            }
+        } catch (err) {
+            console.error("Error en el controlador al guardar facto: ", err.message);
             res.status(500);
         }
     },
