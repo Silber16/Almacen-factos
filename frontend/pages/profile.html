@@ -96,6 +96,12 @@
                     <div class="form-group">
                         <label for="edit-picture">Foto de perfil</label>
                         <input class="input-item" type="file" id="edit-picture" accept="image/*">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                            <button type="button" id="btn-delete-pic" class="button-func" style="background-color: #d9534f; width: auto; padding: 5px 10px; font-size: 0.8rem;">
+                                <i class="fa-solid fa-trash"></i> Borrar foto
+                            </button>
+                            <input type="hidden" id="delete-picture-flag" value="false">
+                        </div>
                         <img id="preview-picture" src="" alt="Vista previa" style="display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 50%; margin-top: 0.5rem;">
                     </div>
                     <div class="modal-buttons">

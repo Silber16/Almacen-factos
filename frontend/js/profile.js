@@ -157,6 +157,9 @@ function setupEventListeners() {
     const btnClose = document.getElementById('btn-close-modal');
     const btnCancel = document.getElementById('btn-cancel-edit');
     const formEdit = document.getElementById('form-edit-profile');
+    const btnDeletePic = document.getElementById('btn-delete-pic');
+    const inputPic = document.getElementById('edit-picture');
+    const deleteFlag = document.getElementById('delete-picture-flag');
 
     if (btnEdit) {
         btnEdit.addEventListener('click', openEditModal);
@@ -173,14 +176,37 @@ function setupEventListeners() {
     if (formEdit) {
         formEdit.addEventListener('submit', handleEditProfile);
     }
+
+    if (btnDeletePic) {
+        btnDeletePic.addEventListener('click', () => {
+            if (inputPic) inputPic.value = ''; 
+            
+            if (deleteFlag) deleteFlag.value = 'true';
+
+            alert('La foto se borrará al guardar los cambios.');
+        });
+    }
+
+    if (inputPic) {
+        inputPic.addEventListener('change', () => {
+            if (deleteFlag) deleteFlag.value = 'false';
+        });
+    }
 }
 
 //logica del modal
 function openEditModal() {
     const modal = document.getElementById('edit-modal');
     if (!modal) return;
+
+    //se bloquea el scroll
+    document.body.style.overflow = 'hidden';
+
+    //se resetea la bandera
+    const deleteFlag = document.getElementById('delete-picture-flag');
+    if (deleteFlag) deleteFlag.value = 'false';
     
-    // Al estar ocultos los elementos, textContent devuelve "" (vacío), lo cual es perfecto para el input
+    //al estar ocultos los elementos, textContent devuelve vacio
     const currentName = document.getElementById('profile-name').textContent;
     const currentUsername = document.getElementById('profile-username').textContent;
     const currentBio = document.getElementById('profile-bio').textContent;
@@ -202,7 +228,9 @@ function openEditModal() {
     }
 
     const inputPic = document.getElementById('edit-picture');
-    if (inputPic) inputPic.value = currentPic.includes('default-user.png') ? '' : currentPic;
+    if (inputPic) {
+        inputPic.value = "";
+    }
 
     //se muestra el modal
     modal.classList.remove('hidden');
@@ -213,6 +241,7 @@ function closeEditModal() {
     if (modal) {
         modal.classList.add('hidden');
     }
+    document.body.style.overflow = '';
 }
 
 async function handleEditProfile(e) {
@@ -222,28 +251,30 @@ async function handleEditProfile(e) {
     const nameVal = document.getElementById('edit-name').value.trim();
     const userVal = document.getElementById('edit-username').value.trim();
     const bioVal = document.getElementById('edit-bio').value.trim();
-    const picVal = document.getElementById('edit-picture').value.trim();
+    const picInput = document.getElementById('edit-picture'); //necesitamos el input entero, no solo el value
 
+    const deleteFlag = document.getElementById('delete-picture-flag').value === 'true';
     //validacion
     if (nameVal === '' || userVal === '') {
         alert('El nombre y el usuario son obligatorios');
         return;
     }
 
-    const datosAEnviar = {
-        name: nameVal,
-        username: userVal,
-        bio: bioVal,
-        profile_picture: picVal
-    };
+    const formData = new FormData();
+    formData.append('name', nameVal);
+    formData.append('username', userVal);
+    formData.append('bio', bioVal);
+
+    if (picInput.files && picInput.files[0]) {
+        formData.append('profile_picture', picInput.files[0]);
+    } else if (deleteFlag) {
+        formData.append('profile_picture', '');
+    }
 
     try {
         const res = await fetch(`${API_URL}/users/${currentUserId}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datosAEnviar)
+            body: formData
         });
 
         if (res.ok) {
@@ -252,6 +283,7 @@ async function handleEditProfile(e) {
             
             renderProfile(userObj);
             closeEditModal();
+            document.getElementById('delete-picture-flag').value = 'false';
             alert('Perfil actualizado con éxito');
         } else {
             const errorData = await res.json();
