@@ -38,6 +38,7 @@ const res = await fetch("http://localhost:3000/api/auth/login", {
     if (res.ok) {
         alert("Login exitoso");
         localStorage.setItem("token", data.token);
+        window.location.href = './feed.html';
     }
     else {
         alert(data.error);
