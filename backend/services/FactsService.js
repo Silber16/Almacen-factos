@@ -1,4 +1,5 @@
 import * as factsRepository from "../repositories/FactsRepository.js"
+import * as userRepository from "../repositories/user.js"
 
 async function getAllFacts() {
     try {
@@ -52,8 +53,27 @@ async function createNewFact(factData) {
     if (!factData || !factData.title || !factData.content || !factData.category) {
         throw new Error("Datos de hecho incompletos o inválidos."); 
     }
-    
+
+    let factScore = 0
+    switch (factData.iaVerdict) {
+        case "V":
+            factScore = 3;
+            break;
+        case "F":
+            factScore = -3;
+            break;
+        case "I":
+            factScore = 0;
+            break;
+        default:
+            break;
+    }
+
     try {
+        
+        if (factScore != 0)
+            await userRepository.updateScore(factScore, factData.createdBy);
+
         const success = await factsRepository.createFact(factData); 
         return success;
 
