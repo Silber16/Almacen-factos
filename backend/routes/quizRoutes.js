@@ -6,9 +6,10 @@ const router = express.Router();
 
 router.get('/pregunta', quizController.obtenerPregunta);
 
-//validar respuesta
 router.post('/respuesta', auth, quizController.validarRespuesta);
 
 router.get('/puntaje', auth, quizController.obtenerPuntaje);
+
+router.get('/respuesta-timeout/:quizId', auth, quizController.obtenerRespuestaTimeout);
 
 export default router;

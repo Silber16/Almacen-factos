@@ -43,19 +43,16 @@ async function updateUserProfile(userId, name, username, bio, profilePicture) {
     if (!userId || isNaN(Number(userId))) {
         throw new Error("ID de usuario no valido.");
     }
-    //validar name
+    //validaciones
     if (name && name.length > 40) {
         throw new Error('El nombre no puede tener mas de 40 caracteres.');
     }
-    //validar username
     if (username && username.length > 20) {
         throw new Error('El username no puede tener mas de 20 caracteres.');
     }
-    //validar bio
     if (bio && bio.length > 200) {
         throw new Error('La biografia no puede tener mas de 200 caracteres.');
     }
-    //validar url de foto
     if (profilePicture && profilePicture.length > 500) {
         throw new Error('URL de imagen demasiado larga.');
     }

@@ -4,7 +4,6 @@ import db from "../config/db.js";
 //obtener y guardar la pregunta
 const obtenerPregunta = async (req, res) => {
     try {
-        // Obtenemos id, contenido y fuente del facto original
         const result = await db.query("SELECT id, content, font FROM facts ORDER BY RANDOM() LIMIT 1");
         
         if (result.rows.length === 0) {
@@ -12,9 +11,20 @@ const obtenerPregunta = async (req, res) => {
         }
 
         const factoBase = result.rows[0];
-        const triviaIA = await iaService.getQuizQuestion(factoBase.content);
+        let triviaIA;
 
-        // Persistimos la trivia en la tabla quiz_questions
+        try {
+            triviaIA = await iaService.getQuizQuestion(factoBase.content);
+        } catch (iaError) {
+            console.error('Error con Gemini (503): Usando Fallback.');
+            // Fallback en caso de que la IA esté saturada
+            triviaIA = {
+                question: `¿Es cierto que: ${factoBase.content}?`,
+                answer: true,
+                explanation: "Dato verificado de nuestro almacén de factos original."
+            };
+        }
+
         const insertQuery = `
             INSERT INTO quiz_questions (fact_id, question_text, correct_answer, explanation)
             VALUES ($1, $2, $3, $4)
@@ -32,16 +42,16 @@ const obtenerPregunta = async (req, res) => {
             quizId: nuevoQuiz.rows[0].id,
             question: triviaIA.question,
             fuente: factoBase.font,
-            factoOriginal: factoBase.content // <--- Texto original para el recordatorio
+            factoOriginal: factoBase.content 
         });
 
     } catch (error) {
-        console.error('Error al obtener pregunta de IA:', error);
-        res.status(500).json({ error: 'Error al generar la entidad Quiz.' });
+        console.error('Error al obtener pregunta:', error);
+        res.status(500).json({ error: 'Error al generar la trivia.' });
     }
 };
 
-//validar respuesta
+// validar respuesta cuando el usuario clickea
 const validarRespuesta = async (req, res) => {
     try {
         const userId = req.user.id; 
@@ -59,7 +69,6 @@ const validarRespuesta = async (req, res) => {
         let nuevoPuntaje = 0;
 
         if (esCorrecto) {
-            // Sumamos 10 puntos al usuario
             const updateResult = await db.query(
                 "UPDATE users SET score = score + 10 WHERE id = $1 RETURNING score",
                 [userId]
@@ -83,6 +92,25 @@ const validarRespuesta = async (req, res) => {
     }
 };
 
+
+const obtenerRespuestaTimeout = async (req, res) => {
+    try {
+        const { quizId } = req.params;
+        const result = await db.query("SELECT correct_answer, explanation FROM quiz_questions WHERE id = $1", [quizId]);
+        const scoreResult = await db.query("SELECT score FROM users WHERE id = $1", [req.user.id]);
+
+        if (result.rows.length === 0) return res.status(404).json({ error: "No encontrado" });
+
+        res.json({
+            respuestaCorrecta: result.rows[0].correct_answer,
+            mensaje: "Se agotó el tiempo. " + result.rows[0].explanation,
+            puntajeTotal: scoreResult.rows[0].score
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Error de servidor" });
+    }
+};
+
 const obtenerPuntaje = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -93,4 +121,9 @@ const obtenerPuntaje = async (req, res) => {
     }
 };
 
-export default { obtenerPregunta, validarRespuesta, obtenerPuntaje };
+export default {
+    obtenerPregunta,
+    validarRespuesta,
+    obtenerPuntaje,
+    obtenerRespuestaTimeout
+};
