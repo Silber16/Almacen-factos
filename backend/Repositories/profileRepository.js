@@ -22,7 +22,7 @@ async function updateUserProfile(userId, name, username, bio, profilePicture) {
     `;
     const userIdNum = parseInt(userId, 10);
 
-    const result = await db.query(query, [name, username, bio, profilePicture, userId]);
+    const result = await db.query(query, [name, username, bio, profilePicture, userIdNum]);
     
     return result.rows[0];
 }
