@@ -1,6 +1,6 @@
 import express from "express";
 import loginController from "../Controllers/login.js";
-import auth from "../middleware/auth.js";
+import auth from "../Middleware/auth.js";
 const router = express.Router();
 router.post('/register' , loginController.register);
 router.post('/login' , loginController.login);
