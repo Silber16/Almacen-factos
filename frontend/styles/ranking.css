@@ -97,3 +97,12 @@
     align-items: center;
     gap: .8rem;
 }
+.gold {
+    color: gold;
+}
+.silver{
+    color:silver;
+}
+.bronze{
+    color:#Bf8970;
+}
