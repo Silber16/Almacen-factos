@@ -18,11 +18,13 @@ import iaRoutes from './routes/Ia.js';
 import authRoutes from './routes/login.js';
 import savedFactsRoutes from './routes/savedFactsRoutes.js'; 
 import quizRoutes from './routes/quizRoutes.js';
-
+import rankingRoutes from './routes/ranking.js';
 //endpoints
 app.use("/api/auth", authRoutes);
 app.use('/api/facts', factsRoutes);
 app.use('/api/ia', iaRoutes);
+app.use('/api/ranking',rankingRoutes);
+
 
 
 app.use('/api/users', profileRoutes); 

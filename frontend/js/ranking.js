@@ -11,11 +11,10 @@ async function fetchRanking() {
 }
 
 function getPositionIcon(index) {
-    if (index === 0) return '<i class="fa-solid fa-trophy gold"></i>';
-    if (index === 1) return '<i class="fa-solid fa-medal silver"></i>';
-    if (index === 2) return '<i class="fa-solid fa-medal bronze"></i>';
-    return `#${index + 1}`;
-}
+    if (index === 0) return '<i class="fa-solid fa-trophy gold"></i>'
+    if (index === 1) return '<i class="fa-solid fa-medal silver"></i>'
+    if (index === 2) return '<i class="fa-solid fa-medal bronze"></i>'
+    else    return` <span class="ranking-position">#${index + 1}</span>`;}
 
 function renderRanking(ranking) {
     rankingList.innerHTML = "";
@@ -26,7 +25,7 @@ function renderRanking(ranking) {
 
         li.innerHTML = `
             <div class="ranking-left">
-                <span class="ranking-position">${getPositionIcon(index)}</span>
+                ${getPositionIcon(index)}
                 <span class="ranking-username">${user.username}</span>
                 <span class="ranking-facts">
                     <i class="fa-solid fa-file-lines"></i>
