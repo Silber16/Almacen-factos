@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../styles/profile.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Monda:wght@400..700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+
+        <header class="header-flex">
+            <div id="header-principal" class="header-flex">
+                <h1>Almacen de <span class="title-span">Factos</span></h1>
+                <button class="button-func header-login">
+                    <i class="fa-solid fa-user"></i>
+                </button>
+            </div>
+
+            <nav id="header-navbar" class="header-flex">
+                <a href="./feed.html" class="button-func">Volver al Feed</a>
+            </nav>
+        </header>
+
+        <main>
+            <!--info del perfil-->
+            <div id="profile-container">
+                <div id="profile-header">
+                    <button id="btn-edit-profile" class="button-func btn-floating hidden">
+                    <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <img id="profile-picture" src="" alt="">
+                    <div id="profile-info">
+                        <h2 id="profile-username">@username</h2>
+                        <h3 id="profile-name"></h3>
+                        <p id="profile-bio"></p>
+                        <div id="profile-stats">
+                            <div class="stat-item">
+                                <i class="fa-solid fa-star"></i>
+                                <span id="profile-score">0</span> puntos
+                            </div>
+                            <div class="stat-item">
+                                <i class="fa-solid fa-calendar"></i>
+                                Miembro desde <span id="profile-created">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--logros-->
+                <div id="trophies-section">
+                    <h3 class="section-title">
+                        <i class="fa-solid fa-trophy"></i>
+                        Logros
+                    </h3>
+                    <div id="trophies-container">
+                        <!--los logros se cargan dinamicamente -->
+                    </div>
+                </div>
+
+                <!--factos publicados-->
+                <div id="factos-section">
+                    <div class="tabs-container" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button id="tab-mis-factos" class="button-func active-tab" style="flex: 1;">
+                            <i class="fa-solid fa-pen-nib"></i> Publicados
+                        </button>
+                        <button id="tab-guardados" class="button-func hidden" style="flex: 1; background-color: #444;">
+                            <i class="fa-solid fa-bookmark"></i> Guardados
+                        </button>
+                    </div>
+
+                    <h3 id="section-title-text" class="section-title">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        Factos Publicados
+                    </h3>
+                    
+                    <ul id="user-factos-container">
+                        </ul>
+                </div>
+            </div>
+        </main>
+
+        <!--modal de editar perfil-->
+        <div id="edit-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Editar Perfil</h2>
+                    <button id="btn-close-modal" class="close-modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <form id="form-edit-profile">
+                    <div class="form-group">
+                        <label for="edit-name">Nombre</label>
+                        <input class="input-item" type="text" id="edit-name" maxlength="40">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-username">Username</label>
+                        <input class="input-item" type="text" id="edit-username" maxlength="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-bio">Biografía</label>
+                        <textarea id="edit-bio" class="input-item" rows="4" maxlength="200"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-picture">Foto de perfil</label>
+                        <input class="input-item" type="file" id="edit-picture" accept="image/*">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                            <button type="button" id="btn-delete-pic" class="button-func" style="background-color: #d9534f; width: auto; padding: 5px 10px; font-size: 0.8rem;">
+                                <i class="fa-solid fa-trash"></i> Borrar foto
+                            </button>
+                            <input type="hidden" id="delete-picture-flag" value="false">
+                        </div>
+                        <img id="preview-picture" src="" alt="Vista previa" style="display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 50%; margin-top: 0.5rem;">
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" id="btn-cancel-edit" class="button-func btn-cancel">Cancelar</button>
+                        <button type="submit" class="button-func btn-save">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script src="../js/profile.js"></script>
+        <script src="https://kit.fontawesome.com/1ff5e69ddb.js" crossorigin="anonymous"></script>
+    </body>
+</html>

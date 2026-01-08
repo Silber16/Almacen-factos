@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monda:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/feed.css">
+    <link rel="stylesheet" href="../styles/ranking.css">
+    <title>Ranking - Almacén de Factos</title>
+</head>
+<body>
+    <header class="header-flex">
+    <div id="header-principal" class="header-flex">
+        <h1>Almacén de <span class="title-span">Factos</span></h1>
+
+        <a href="./profile.html" class="button-func header-login" aria-label="Perfil"title="Perfil">
+            <i class="fa-solid fa-user"></i>
+        </a>
+    </div>
+    <nav id="header-navbar" class="header-flex">
+        <a class="button-func" href="./feed.html">
+            <i class="fa-solid fa-newspaper"></i>
+            Feed
+        </a>
+        <button class="button-func">
+            <i class="fa-solid fa-trophy"></i>
+            Ranking
+        </button>
+    </nav>
+</header>
+    <main class="ranking-page">
+        <div class="ranking-header">
+            <h1 class="ranking-title">
+                <i class="fa-solid fa-ranking-star"></i>
+                    Usuarios Ranking
+            </h1>
+    </div>
+        <section class="ranking-box">
+            <h3 class="ranking-box-title">
+                <i class="fa-solid fa-trophy"></i>
+                Top 10 Usuarios
+            </h3>
+            <ul id="ranking-list" class="ranking-list"></ul>
+        </section>
+    </main>
+    <script src="../js/ranking.js"></script>
+    <script src="https://kit.fontawesome.com/1ff5e69ddb.js" crossorigin="anonymous"></script>
+</body>
+</html>
