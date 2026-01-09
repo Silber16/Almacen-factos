@@ -9,6 +9,7 @@ async function getFactsAll () {
             f.font,
             f.category,
             u.username,
+            u.id as user_id,
             f.ia_response,
             f.ia_responseverdict
         FROM facts f
