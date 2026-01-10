@@ -168,7 +168,8 @@ function renderTrophies(trophies) {
     container.innerHTML = htmlString;
 }
 
-function renderFactos(factos) {
+function renderFactos(factos, canDelete = false) {
+    console.log("Datos que llegan al render:", factos);
     const container = document.getElementById('user-factos-container');
     if (!container) return;
 
@@ -181,18 +182,52 @@ function renderFactos(factos) {
 
     const htmlString = factos.map(facto => {
         //se verifica si hay fuente para mostrarla o no
-        const fuenteHtml = facto.font ? `<p class="facto-font">Fuente: ${facto.font}</p>` : '';
+        const fuenteHtml = facto.font 
+            ? `<label class="fact-font">Fuente: ${facto.font}</label>` 
+            : '';
+
+        const usuarioHtml = facto.username 
+            ? `
+            <a href="./profile.html?userId=${facto.user_id || '#'}" class="fact-user-link">
+                <label class="fact-user">${facto.username}</label>
+            </a>
+            ` 
+            : '';
+
+        //desguardado de factos
+        let deleteButtonHtml = '';
+        if (canDelete) {
+            deleteButtonHtml = `
+                <div class="btn-container">
+                    <button class="button-func btn-delete-saved" data-id="${facto.id}">
+                        <i class="fa-solid fa-trash"></i> Quitar
+                    </button>
+                </div>
+            `;
+        }
         
         return `
-            <li class="facto-item">
-                <h4 class="facto-title">${facto.title}</h4>
-                <p class="facto-content">${facto.content}</p>
+            <li class="fact-item" id="card-facto-${facto.id}">
+                ${usuarioHtml} 
+                <h3 class="fact-title">${facto.title}</h3>
+                <p class="fact-content">${facto.content}</p>
                 ${fuenteHtml}
+                ${deleteButtonHtml}
             </li>
         `;
     }).join('');
 
     container.innerHTML = htmlString;
+    if (canDelete) {
+        const deleteButtons = document.querySelectorAll('.btn-delete-saved');
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const factId = e.currentTarget.getAttribute('data-id');
+                deleteSavedFact(factId);
+            });
+        });
+    }
 }
 
 //logica botones
@@ -363,7 +398,7 @@ function showMisFactos() {
     document.getElementById('section-title-text').innerHTML = '<i class="fa-solid fa-lightbulb"></i> Factos Publicados';
 
     //renderizar lo que teniamos guardado en cache
-    renderFactos(misFactosCache);
+    renderFactos(misFactosCache, false);
 }
 
 
@@ -398,7 +433,7 @@ async function loadSavedFacts() {
 
         if (res.ok) {
             const savedFacts = await res.json();
-            renderFactos(savedFacts);
+            renderFactos(savedFacts, true);
         } else {
             container.innerHTML = '<p>Error al cargar el repositorio.</p>';
         }
@@ -406,5 +441,43 @@ async function loadSavedFacts() {
     } catch (error) {
         console.error(error);
         container.innerHTML = '<p>Error de conexión.</p>';
+    }
+}
+
+async function deleteSavedFact(factId) {
+    try {
+        const token = localStorage.getItem('token');
+        console.log("Intentando borrar facto ID:", factId);
+        const res = await fetch(`${API_URL}/saved/toggle`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ factId: factId })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            //si el backend dice saved false es que se borro
+            if (data.saved === false) {
+                
+                //se borra el facto
+                const card = document.getElementById(`card-facto-${factId}`);
+                if (card) card.remove();
+                
+                const container = document.getElementById('user-factos-container');
+                
+                if (container && container.children.length === 0) {
+                    container.innerHTML = '<p class="empty-state">No hay factos guardados.</p>';
+                }
+            } 
+        } else {
+            console.error("Error al eliminar:", data.error);
+        }
+
+    } catch (error) {
+        console.error("Error de conexión:", error);
     }
 }
