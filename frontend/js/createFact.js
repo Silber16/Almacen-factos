@@ -45,14 +45,13 @@ async function createFact(factObj) {
 form.addEventListener('submit', async function(e) { 
     const btnSubmit = document.getElementById('btn-verificar-ia');
     e.preventDefault(); 
-    
     const formData = new FormData(form);
 
     const title = formData.get('Title');
     const content = formData.get('Content');
     const font = formData.get('Font');
     const category = formData.get('Category');
-    
+
     try {
         btnSubmit.textContent = "Procesando..."
         const iaResponse = await validateFact(content);
@@ -66,12 +65,12 @@ form.addEventListener('submit', async function(e) {
             iaVerdict: iaResponse[0],
             iaResponse: iaResponse[1]
         };
-        
+        console.log(factObj)
         const res = await createFact(factObj)
         window.alert(res.message);
         window.location.href = './feed.html';
 
-        
+        return res;        
     } catch (error) {
         console.error("Error al validar o crear el fact:", error);
     }

@@ -8,6 +8,7 @@ async function getFactsAll () {
             f.content,
             f.font,
             f.category,
+            f.created_by,
             u.username,
             f.ia_response,
             f.ia_responseverdict
@@ -63,8 +64,8 @@ async function getFactById (userId) {
     }
 }
 
-async function createFact (factObj) {
-
+async function createFact (fact) {
+    console.log(fact)
     const query = `
         INSERT INTO 
             facts(title, content, font, created_by, category, ia_response, ia_responseverdict)
@@ -73,13 +74,13 @@ async function createFact (factObj) {
         RETURNING id;
     `;
     const values = [
-        factObj.title, 
-        factObj.content, 
-        factObj.font, 
-        factObj.createdBy,
-        factObj.category, 
-        factObj.iaResponse,
-        factObj.iaVerdict
+        fact.title, 
+        fact.content, 
+        fact.font, 
+        fact.createdBy,
+        fact.category, 
+        fact.iaResponse,
+        fact.iaVerdict
     ];
 
     try {

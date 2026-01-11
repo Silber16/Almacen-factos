@@ -1,15 +1,15 @@
 class Facts {
-  constructor(Id, Title, Content, Font, Category, CreatedBy, UserName, Ia_response, Ia_verdict) {
-    this.Id = Id;
-    this.Title = Title;
-    this.Content = Content;
-    this.Font = Font;
-    this.CreatedBy = CreatedBy;
-    this.UserName = UserName;
-    this.Category = Category;
-    this.ia_response = Ia_response;
-    this.ia_verdict = Ia_verdict;
+  constructor({ id, title, content, font, category, createdBy, userName, iaResponse, iaVerdict }) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
+    this.font = font;
+    this.category = category;
+    this.createdBy = createdBy;
+    this.userName = userName;
+    this.iaResponse = iaResponse;
+    this.iaVerdict = iaVerdict;
   }
 }
 
-module.exports = Facts;
+export default Facts;

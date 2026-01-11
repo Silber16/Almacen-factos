@@ -34,7 +34,6 @@ if (!currentUserId || currentUserId === 'undefined') {
     window.location.href = './login.html';
 }
 
-console.log("ID que se va a pedir al backend:", currentUserId);
 
 //al cargar la pagina
 document.addEventListener('DOMContentLoaded', () => {

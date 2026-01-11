@@ -1,10 +1,21 @@
 import * as factsRepository from "../repositories/FactsRepository.js"
 import * as userRepository from "../repositories/user.js"
+import Facts from "../models/Facts.js";
 
 async function getAllFacts() {
     try {
         const facts = await factsRepository.getFactsAll();
-        return facts; 
+        return facts.map(fact => new Facts({
+            id: fact.id,
+            title: fact.title,
+            content: fact.content,
+            font: fact.font,
+            category: fact.category,
+            createdBy: fact.created_by,
+            userName: fact.username,
+            iaResponse: fact.ia_response,
+            iaVerdict: fact.ia_responseverdict
+            }));;
     } catch (err) {
         throw err;
     }
@@ -13,13 +24,22 @@ async function getAllFacts() {
 async function getFact(id) {
     try {
         const result = await factsRepository.getFactById(id);
-        
-        if (result && result.length > 0) {
-            return result[0];
-        }
-        
-        return null; 
-        
+
+        if (!result || result.length === 0) return null;
+
+        const fact = result[0];
+
+        return new Facts(
+            fact.Id,
+            fact.Title,
+            fact.Content,
+            fact.Font,
+            fact.Category,
+            fact.CreatedBy,
+            fact.UserName,
+            fact.ia_response,
+            fact.ia_verdict
+        );
     } catch (err) {
         throw err;
     }
@@ -31,19 +51,42 @@ async function getFactsByUser(userId) {
     }
     try {
         const facts = await factsRepository.getFactsByUserId(userId);
-        return facts;
+
+        return facts.map(fact => new Facts({
+            id: fact.id,
+            title: fact.title,
+            content: fact.content,
+            font: fact.font,
+            category: fact.category,
+            createdBy: fact.created_by,
+            userName: fact.username,
+            iaResponse: fact.ia_response,
+            iaVerdict: fact.ia_responseverdict
+            }));;
     } catch (err) {
         throw err;
     }
 }
 
 async function getFactsByCategoryName(category) {
-    // if (!category || typeof category !== 'string' || category.trim().length === 0) {
-    //     throw new err("El nombre de la categoría no puede estar vacío.");
-    // }
+    if (!category || typeof category !== 'string' || category.trim().length === 0) {
+        throw new err("El parametro de categoria no es valido.");
+    }
+
     try {
         const facts = await factsRepository.getFactsCategory(category);
-        return facts;
+        
+        return facts.map(fact => new Facts({
+            id: fact.id,
+            title: fact.title,
+            content: fact.content,
+            font: fact.font,
+            category: fact.category,
+            createdBy: fact.created_by,
+            userName: fact.username,
+            iaResponse: fact.ia_response,
+            iaVerdict: fact.ia_responseverdict   
+        }));
     } catch (err) {
         throw err;
     }
@@ -73,8 +116,19 @@ async function createNewFact(factData) {
         
         if (factScore != 0)
             await userRepository.updateScore(factScore, factData.createdBy);
+        console.log(factData);
+        const fact = new Facts({
+            id: 0,
+            title: factData.title,
+            content: factData.content,
+            font: factData.font,
+            category: factData.category,
+            createdBy: factData.createdBy,
+            iaResponse: factData.iaResponse,
+            iaVerdict: factData.iaVerdict
+            });
 
-        const success = await factsRepository.createFact(factData); 
+        const success = await factsRepository.createFact(fact); 
         return success;
 
     } catch (err) {

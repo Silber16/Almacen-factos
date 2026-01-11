@@ -87,7 +87,7 @@ function renderFeed (facts) {
         const factItem = document.createElement("li");
 
         let ia_verdict_emoji = ""; // arreglado para que no tire error si no entra en switch
-        switch (fact.ia_responseverdict) {
+        switch (fact.iaVerdict) {
             case 'F':
                 ia_verdict_emoji = "❌❌❌❌"
                 break;
@@ -104,10 +104,9 @@ function renderFeed (facts) {
 
         factItem.className = "fact-item"
         
-        // aca integramos el link al perfil usando el user_id que viene del back
         factItem.innerHTML = `
-            <a href="./profile.html?userId=${fact.user_id}" class="fact-user-link">
-                <label class="fact-user" style="cursor: pointer;">${fact.username}</label>
+            <a href="./profile.html?userId=${fact.createdBy}" class="fact-user-link">
+                <label class="fact-user" style="cursor: pointer;">${fact.userName}</label>
             </a>
             <h3 class="fact-title" >${fact.title}</h3>
             <p class="fact-content" >${fact.content}</p>
@@ -117,7 +116,7 @@ function renderFeed (facts) {
                 <button class="fact-btn-iaResponse"><span class="material-symbols-outlined">stars_2</span>Ver verificación IA</button>
                 <button class="fact-btn-addToRepository"><i class="fa-solid fa-floppy-disk"></i>Guardar</button>
             </div>
-            <div class="fact-iaResponse display-none">${ia_verdict_emoji} ${fact.ia_response}</div>
+            <div class="fact-iaResponse display-none">${ia_verdict_emoji} ${fact.iaResponse}</div>
         `;
 
         const iaResponseButton = factItem.querySelector('.fact-btn-iaResponse');
@@ -141,7 +140,6 @@ async function fetchFacts () {
     try {
         const res = await fetch("http://localhost:3000/api/facts/");
         const facts = await res.json();
-        console.log(facts)
 
         renderFeed(facts);
     }
