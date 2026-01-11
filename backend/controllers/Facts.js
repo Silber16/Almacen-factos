@@ -53,6 +53,7 @@ const factsController = {
         const category = req.params.category;
         try {
             const facts = await factsService.getFactsByCategoryName(category);
+            console.log('controller: ', facts);
             res.status(200).json(facts);
 
         } catch (error) {
@@ -70,7 +71,7 @@ const factsController = {
         if (!factData) {
             return res.status(400).json({ message: "El contenido del facto no puede estar vacio." });
         }
-
+        
         try {
             const success = await factsService.createNewFact(factData);
 
@@ -88,7 +89,7 @@ const factsController = {
     addToRepo: async (req, res) => {
         const factId = req.body.factId;
         const userId = req.user.id;
-        console.log(factId, userId)
+
         try {
             const success = await factsService.addToRepo(factId, userId);
 

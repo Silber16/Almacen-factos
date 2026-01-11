@@ -33,7 +33,6 @@ const res = await fetch("http://localhost:3000/api/auth/login", {
 });
 
     const data = await res.json();
-    console.log(data);
 
     if (res.ok) {
         alert("Login exitoso");
@@ -64,7 +63,6 @@ const res = await fetch("http://localhost:3000/api/auth/register", {
 });
 
     const data = await res.json();
-    console.log(data);
 
     if (res.ok) {
         alert("Cuenta creada con éxito");

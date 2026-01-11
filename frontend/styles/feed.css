@@ -228,12 +228,11 @@ header {
     border-bottom: 2px solid yellow;
 }
 
-
-/*La manito para el nombre de usuario en cada facto*/
 .fact-user-link {
     text-decoration: none !important;
     color: inherit !important; 
     display: inline-block;
+    width: fit-content;
 }
 
 .fact-user {
