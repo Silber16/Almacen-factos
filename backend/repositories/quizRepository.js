@@ -1,27 +1,39 @@
-import { query } from '../config/db.js';
+import db from '../config/db.js';
 
-//buscar facto random en la bd
-async function getRandomFact() {
-    const query = `   
-        SELECT id, content, modified_content, font
-        FROM facts
-        WHERE modified_content IS NOT NULL
-        ORDER BY RANDOM()
-        LIMIT 1;
+//guarda la pregunta generada por la ia
+async function createQuizQuestion(factId, questionText, correctAnswer, explanation, difficulty) {
+    const query = `
+    INSERT INTO quiz_questions (fact_id, question_text, correct_answer, explanation, difficulty)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *;
     `;
-        const result = await db.query(query);
-        return result.rows[0];
+    const diff = difficulty || 'medium';
+
+    const result = await db.query(query, [factId, questionText, correctAnswer, explanation, diff]);
+    return result.rows[0];
 }
 
-//recibe el id del facto que se le mostro al usuario para validar la respuesta del usuario
-async function getFactById(id) {
+//trae preguntas random para el quiz
+async function getRandomQuestions(limit = 5) {
     const query = `
-        SELECT content, modified_content 
-        FROM facts
+    SELECT id, question_text, difficulty
+        FROM quiz_questions
+        ORDER BY RANDOM()
+        LIMIT $1;
+    `;
+    const result = await db.query(query, [limit]);
+    return result.rows;
+}
+
+//valida la respuesta
+async function getQuestionAnswer(id) {
+    const query = `
+    SELECT correct_answer, explanation 
+        FROM quiz_questions
         WHERE id = $1;
     `;
     const result = await db.query(query, [id]);
-    return result.rows
+    return result.rows[0];
 }
 
 //suma puntos a la columna score de users en caso de que el usuario haya contestado correctamente
@@ -30,8 +42,10 @@ async function updateUserPoints(userId, points) {
     UPDATE users
     SET score = score + $1 
     WHERE id = $2;
+    RETURNING score;
     `;
-    await db.query(query, [points, userId]);
+    const result = await db.query(query, [points, userId]);
+    return result.rows[0];
 }
 
 //una vez que termine el juego se le va a mostrar al usuario su puntaje total
@@ -42,13 +56,14 @@ async function getUserPoints(userId) {
         WHERE id = $1;
         `;
     const result = await db.query(query, [userId]);
-    return result.rows;
+    return result.rows[0];
 }
 
 
 export default {
-    getRandomFact,
-    getFactById,
+    createQuizQuestion,
+    getRandomQuestions,
+    getQuestionAnswer,
     updateUserPoints,
     getUserPoints
 };

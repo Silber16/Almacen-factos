@@ -1,4 +1,7 @@
 import * as factsService from '../services/FactsService.js';
+import quizRepository from '../repositories/quizRepository.js';
+import { analyzeFact } from "../services/Ia.js";
+
 
 const factsController = {
     
@@ -63,6 +66,7 @@ const factsController = {
     },
 
     create: async (req, res) => {
+        //se obtienen los datos del body
         const factData = req.body;
         const userId = req.user.id;
         
@@ -73,14 +77,48 @@ const factsController = {
         }
         
         try {
-            const success = await factsService.createNewFact(factData);
+            //se llama a la ia (verificacion y quiz)
+            console.log("Analizando facto con IA...");
+            const aiResult = await analyzeFact(factData.title, factData.content);
+            let verdict = "Pendiente"
+            let explanation = "Procesando"
 
-            if (success) {
-                res.status(201).json({ message: "Facto creado exitosamente." });
+            if (aiResult && aiResult.verification) {
+                verdict = aiResult.verification.verdict.slice(0, 10);
+                explanation = aiResult.verification.explanation;
             } else {
-                res.status(500).json({ message: "Error al crear el facto." });
+                verdict = "Error";
+                explanation = "Fallo critico en IA.";
             }
-        } catch (err) {
+            //se agregan los datos de la ia al objeto q va al service
+            factData.ia_response = explanation;
+            factData.ia_responseverdict = verdict;
+
+            //se guarda la factura
+            const newFact = await factsService.createNewFact(factData);
+
+            //verifico si se creo correctamente
+            if (newFact) {
+                //se guarda la pregunta de quiz
+                if (aiResult && aiResult.quiz && newFact.id) {
+                    await quizRepository.createQuizQuestion(
+                        newFact.id,
+                        aiResult.quiz.question_text,
+                        aiResult.quiz.correct_answer,
+                        aiResult.quiz.explanation,
+                        aiResult.quiz.difficulty
+                    );
+                    console.log("Pregunta de quiz guardada.");
+                }
+
+                res.status(201).json({
+                    message: "Facto creado exitosamente.",
+                    fact: newFact
+                });
+            } else {
+                res.status(500).json({ message: "Error al crear facto." });
+            }
+        } catch(err) {
             console.error("Error en el controlador al crear facto: ", err.message);
             res.status(500);
         }
