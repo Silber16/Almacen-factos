@@ -217,3 +217,10 @@ function mostrarFactoCompleto() {
     
     cambiarEstado(verFacto);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const navBtnHome = document.getElementById('btn-quiz');
+    navBtnHome.classList.toggle('nav-btn-active');
+
+});

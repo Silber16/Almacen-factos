@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8"> 
+        <link rel="stylesheet" href="../home.css">
         <link rel="stylesheet" href="../styles/feed.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,42 +11,43 @@
         <title>Almacende Factos</title>
     </head>
     <body>
-        <header class="header-flex" >
-            <div id="header-principal" class="header-flex" >
-                <h1 >Almacen de <span class="title-span">Factos</span></h1>
-                <a href="./profile.html" style="text-decoration: none;">
-                    <button class="button-func header-login" >
-                        <i class="fa-solid fa-user"></i>
-                    </button>
+        <header class="header-flex">
+            <div id="header-principal" class="header-flex">
+                <h1>Almacen de <span class="title-span">Factos</span></h1>
+                <a href="./profile.html" class="button-func header-login" aria-label="Perfil">
+                    <i class="fa-solid fa-user"></i>
                 </a>
             </div>
-            <nav id="header-navbar" class="header-flex" >
+
+            <div id="header-navbar" class="header-flex">
                 <div id="categories-btn-container">
-                    <button id="categories-btn" class="button-func" >
+                    <button id="categories-btn" class="button-func">
                         <i class="fa-solid fa-list"></i>
                         Filtrar Por Categoria
                     </button>
                     <ul id="categories-btn-options" class="hidden">
-                        
-                    </ul>
-                </div>
-                <button class="button-func btn-quiz-destacado">
-                    <i class="fa-solid fa-gamepad"></i>
-                    <a class="a-redirect" href="./quiz.html">Jugar Quiz</a>
-                </button>
-                
-                <button class="button-func">
-                    <i class="fa-solid fa-plus"></i>
-                    <a class="a-redirect" href="./createFact.html">Crear Fact</a>
-                </button>
-            </nav>
-        </header>
+                        </ul>
+                    
+                    <a href="./createFact.html" class="button-func">
+                        <i class="fa-solid fa-plus"></i> Crear Fact
+                    </a>
+                </div> 
+            </div> </header>
+
         <main>
             <ul id="facts-container">
-
-            </ul>
+                </ul>
         </main>
-        <script src="../js/feed.js" ></script>
+
+        <nav id="nav-btns-container">
+            <ul class="nav-list">
+                <li id="btn-home" class="nav-btn"><a href="./feed.html" title="Inicio"><i class="fa-solid fa-house"></i></a></li>
+                <li id="btn-quiz" class="nav-btn"><a href="./quiz.html" title="Quiz"><i class="fa-solid fa-question"></i></a></li>
+                <li id="btn-ranking" class="nav-btn"><a href="./ranking.html" title="Ranking"><i class="fa-solid fa-ranking-star"></i></a></li>
+            </ul>
+        </nav>
+
+        <script src="../js/feed.js"></script>
         <script src="https://kit.fontawesome.com/1ff5e69ddb.js" crossorigin="anonymous"></script>
     </body>
 </html>

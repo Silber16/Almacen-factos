@@ -154,4 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     fetchFacts();
     renderCategoryMenu();
+
+    const navBtnHome = document.getElementById('btn-home');
+    navBtnHome.classList.toggle('nav-btn-active');
+
 });
