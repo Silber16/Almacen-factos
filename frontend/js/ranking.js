@@ -41,4 +41,12 @@ function renderRanking(ranking) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", fetchRanking);
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    fetchRanking();
+
+    const navBtnHome = document.getElementById('btn-ranking');
+    navBtnHome.classList.toggle('nav-btn-active');
+
+});
