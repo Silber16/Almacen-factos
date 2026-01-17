@@ -105,7 +105,7 @@ header {
 .fact-item {
     list-style: none;
     padding: 2rem;
-    background-color: var(--principal-green);
+    background-color: #004643a9;
     border-radius: 1rem;
     color: var(--principal-sandwhite);
     display: flex;

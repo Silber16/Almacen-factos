@@ -149,22 +149,17 @@ function renderTrophies(trophies) {
         container.innerHTML = '<p class="empty-state">Aún no hay logros.</p>';
         return;
     }
-
-    const htmlString = trophies.map(trophy => {
-        const date = new Date(trophy.earned_at).toLocaleDateString('es-AR');
+    const trophiesHTML = trophies.map(trophy => {
         return `
-            <div class="trophy-item">
-                <div class="trophy-title">
-                    <i class="fa-solid fa-trophy"></i> ${trophy.title}
-                </div>
-                <div class="trophy-description">${trophy.description}</div>
-                <div class="trophy-points">${trophy.pointsneeded} puntos necesarios</div>
-                <div class="trophy-earned">Obtenido: ${date}</div>
-            </div>
+            <li class="trophy-item" key="${trophy.id}" >
+                <img class="trophy-img" src="${trophy.iconUrl}" />
+                <h3 class="trophy-title" >${trophy.title}</h3>
+                <label class="trophy-points" >pts: ${trophy.points}</label>
+            </li>
         `;
     }).join('');
 
-    container.innerHTML = htmlString;
+    container.innerHTML = trophiesHTML;
 }
 
 function renderFactos(factos, canDelete = false) {

@@ -1,5 +1,6 @@
 import * as userRepository from '../repositories/profileRepository.js';
 import User from '../models/Users.js';
+import Trophy from '../models/Trophy.js';
 
 //obtener perfil completo de un usuario
 async function getUserProfile(userId) {
@@ -23,9 +24,18 @@ async function getUserProfile(userId) {
             userData.created_at,
             userData.score
         );
-        //obtener factos y logros del usuario
+
+        //facts del usuario
         const factos = await userRepository.getUserFactos(userId);
-        const trophies = await userRepository.getUserTrophies(userId);
+
+        //trofeos/logros del usuario
+        const preTrophies = await userRepository.getUserTrophies(parseInt(user.score));
+        const trophies = preTrophies.map(t => new Trophy({
+            id: t.id,
+            title: t.title,
+            iconUrl: t.iconurl,
+            points: t.points
+        }));
         
         return {
             user,
