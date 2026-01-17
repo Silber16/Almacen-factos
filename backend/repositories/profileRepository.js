@@ -46,7 +46,7 @@ async function getUserFactos(userId) {
 //obtener logros del usuario
 async function getUserTrophies(userId) {
     const query = `
-        SELECT t.id, t.title, t.description, t.iconurl, t.points, t.category, ut.achieved_at
+        SELECT t.id, t.title, t.description, t.iconurl, t.points, ut.achieved_at
         FROM trophies t
         INNER JOIN user_trophies ut ON t.id = ut.trophy_id
         WHERE ut.user_id = $1

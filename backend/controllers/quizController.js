@@ -1,129 +1,75 @@
-import * as iaService from "../services/Ia.js";
-import db from "../config/db.js";
+import quizRepository from "../repositories/quizRepository.js";
 
-//obtener y guardar la pregunta
-const obtenerPregunta = async (req, res) => {
+//inicio de quiz
+const startQuiz = async (req, res) => {
     try {
-        const result = await db.query("SELECT id, content, font FROM facts ORDER BY RANDOM() LIMIT 1");
+        //llama al repository para traer 5 preguntas random 
+        const questions = await quizRepository.getRandomQuestions(5);
         
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'No hay factos en la base de datos.' });
+        if (!questions || questions.length === 0) {
+            return res.status(404).json({ error: "No hay suficientes preguntas para jugar. ¡Creá algunos factos primero!" });
         }
 
-        const factoBase = result.rows[0];
-        let triviaIA;
-
-        try {
-            triviaIA = await iaService.getQuizQuestion(factoBase.content);
-        } catch (iaError) {
-            console.error('Error con Gemini (503): Usando Fallback.');
-            // Fallback en caso de que la IA esté saturada
-            triviaIA = {
-                question: `¿Es cierto que: ${factoBase.content}?`,
-                answer: true,
-                explanation: "Dato verificado de nuestro almacén de factos original."
-            };
-        }
-
-        const insertQuery = `
-            INSERT INTO quiz_questions (fact_id, question_text, correct_answer, explanation)
-            VALUES ($1, $2, $3, $4)
-            RETURNING id;
-        `;
-        
-        const nuevoQuiz = await db.query(insertQuery, [
-            factoBase.id, 
-            triviaIA.question, 
-            triviaIA.answer, 
-            triviaIA.explanation
-        ]);
-
-        res.json({
-            quizId: nuevoQuiz.rows[0].id,
-            question: triviaIA.question,
-            fuente: factoBase.font,
-            factoOriginal: factoBase.content 
-        });
-
+        //se manda el array al front
+        res.status(200).json(questions);
     } catch (error) {
-        console.error('Error al obtener pregunta:', error);
-        res.status(500).json({ error: 'Error al generar la trivia.' });
+        console.error("Error al iniciar el quiz:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
     }
 };
 
-// validar respuesta cuando el usuario clickea
-const validarRespuesta = async (req, res) => {
+//verificacion de respuesta del usuario
+const verifyAnswer = async (req, res) => {
+    const { questionId, userAnswer } = req.body; 
+
     try {
-        const userId = req.user.id; 
-        const { quizId, respuestaUsuario } = req.body;
-
-        const quizResult = await db.query("SELECT correct_answer, explanation FROM quiz_questions WHERE id = $1", [quizId]);
-
-        if (quizResult.rows.length === 0) {
-            return res.status(404).json({ error: "Pregunta no encontrada." });
+        //busca la respuesta correcta en la bd
+        const questionData = await quizRepository.getQuestionAnswer(questionId);
+        
+        if (!questionData) {
+            return res.status(404).json({ error: "Pregunta no encontrada" });
         }
 
-        const { correct_answer, explanation } = quizResult.rows[0];
-        const esCorrecto = (respuestaUsuario === correct_answer);
-
-        let nuevoPuntaje = 0;
-
-        if (esCorrecto) {
-            const updateResult = await db.query(
-                "UPDATE users SET score = score + 10 WHERE id = $1 RETURNING score",
-                [userId]
-            );
-            nuevoPuntaje = updateResult.rows[0].score;
-        } else {
-            const scoreResult = await db.query("SELECT score FROM users WHERE id = $1", [userId]);
-            nuevoPuntaje = scoreResult.rows[0]?.score || 0;
-        }
-
-        res.json({ 
-            correcto: esCorrecto, 
-            mensaje: explanation, 
-            nuevoPuntaje: nuevoPuntaje,
-            respuestaCorrecta: correct_answer 
+        //comparacion
+        const isCorrect = questionData.correct_answer === userAnswer;
+        
+        res.status(200).json({ 
+            correct: isCorrect, 
+            explanation: questionData.explanation 
         });
 
     } catch (error) {
-        console.error('Error al validar respuesta:', error);
-        res.status(500).json({ error: 'Error del servidor' });
-    }
-};
-
-
-const obtenerRespuestaTimeout = async (req, res) => {
-    try {
-        const { quizId } = req.params;
-        const result = await db.query("SELECT correct_answer, explanation FROM quiz_questions WHERE id = $1", [quizId]);
-        const scoreResult = await db.query("SELECT score FROM users WHERE id = $1", [req.user.id]);
-
-        if (result.rows.length === 0) return res.status(404).json({ error: "No encontrado" });
-
-        res.json({
-            respuestaCorrecta: result.rows[0].correct_answer,
-            mensaje: "Se agotó el tiempo. " + result.rows[0].explanation,
-            puntajeTotal: scoreResult.rows[0].score
-        });
-    } catch (error) {
+        console.error("Error verificando respuesta:", error);
         res.status(500).json({ error: "Error de servidor" });
     }
 };
 
-const obtenerPuntaje = async (req, res) => {
+//actualizacion de puntaje
+const updateScore = async (req, res) => {
+    const { points } = req.body;
+    
+    const userId = req.user ? req.user.id : req.body.userId;
+
+    if (!userId) {
+        return res.status(401).json({ error: "Usuario no autenticado" });
+    }
+
     try {
-        const userId = req.user.id;
-        const result = await db.query("SELECT score FROM users WHERE id = $1", [userId]);
-        res.json({ puntajeTotal: result.rows[0]?.score || 0 });
+        const newScore = await quizRepository.updateUserPoints(userId, points);
+        
+        //devuelve el puntaje total acumulado
+        res.status(200).json({ 
+            message: "Puntaje actualizado", 
+            score: newScore 
+        });
     } catch (error) {
-        res.status(500).json({ error: 'Error del servidor' });
+        console.error("Error actualizando puntaje:", error);
+        res.status(500).json({ error: "Error de servidor" });
     }
 };
 
 export default {
-    obtenerPregunta,
-    validarRespuesta,
-    obtenerPuntaje,
-    obtenerRespuestaTimeout
+    startQuiz,
+    verifyAnswer,
+    updateScore
 };

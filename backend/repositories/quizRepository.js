@@ -16,10 +16,11 @@ async function createQuizQuestion(factId, questionText, correctAnswer, explanati
 //trae preguntas random para el quiz
 async function getRandomQuestions(limit = 5) {
     const query = `
-    SELECT id, question_text, difficulty
-        FROM quiz_questions
-        ORDER BY RANDOM()
-        LIMIT $1;
+    SELECT qq.id, qq.question_text, qq.difficulty, f.font
+    FROM quiz_questions qq
+    JOIN facts f ON qq.fact_id = f.id
+    ORDER BY RANDOM()
+    LIMIT $1;
     `;
     const result = await db.query(query, [limit]);
     return result.rows;
@@ -41,7 +42,7 @@ async function updateUserPoints(userId, points) {
     const query = `
     UPDATE users
     SET score = score + $1 
-    WHERE id = $2;
+    WHERE id = $2
     RETURNING score;
     `;
     const result = await db.query(query, [points, userId]);
