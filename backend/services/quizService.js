@@ -1,31 +1,26 @@
 import quizRepository from '../repositories/quizRepository.js';
 
-
-//traer facto
+// 1. TRAER PREGUNTA (Va a la tabla quiz_questions)
 async function obtenerPreguntaRandom() {
     try {
-        const facto = await quizRepository.getRandomFact();
+        // Usamos la función que creamos recién en el repo
+        const pregunta = await quizRepository.getRandomQuestion();
         
-        if (!facto) {
+        if (!pregunta) {
             return null;
         }
-        //aca se elige aleatoriamente 50/50 si mostrar el facto verdadero o el falso
-        const mostrarModificado = Math.random() < 0.5;
-        //si el numero que salio es mayor a 0.5 se muestra el original
-        //si el numero que salio es menor a 0.5 se muestra el modificado
-        let textoMostrado;
-        if (mostrarModificado) {
-            textoMostrado = facto.modified_content;
-        } else {
-            textoMostrado = facto.content;
-        }
 
-        //objeto que se envia al controlador
+        // Devolvemos el objeto limpio al frontend
+        // NOTA: Si tu frontend espera "options", acá deberías mandarlas.
+        // Como tu tabla quiz_questions parece ser de texto directo, mandamos eso.
         return {
-            id: facto.id,
-            modified_content: textoMostrado,
-            tiempoLimite: 30,
-            font: facto.font
+            questionId: pregunta.id, // ID de la pregunta, no del facto
+            questionText: pregunta.question_text, 
+            difficulty: pregunta.difficulty,
+            image: pregunta.image, // Viene del join con facts
+            source: pregunta.font,
+            // Si es multiple choice y tenés las opciones en la BD, van acá.
+            // Si es Open Text (escribir respuesta), el front solo muestra la pregunta.
         };
 
     } catch (err) {
@@ -33,67 +28,43 @@ async function obtenerPreguntaRandom() {
     }
 }
 
-
-
-async function validarYActualizarPuntos(factoId, textoMostrado, respuestaUsuario, userId) {
-    //validar parametros
-    if (!factoId || isNaN(Number(factoId))) {
-        throw new Error("ID de facto no valido.");
-    }
-    if (!userId || isNaN(Number(userId))) {
-        throw new Error("ID de usuario no valido.");
-    }
+// 2. VALIDAR RESPUESTA (Compara con lo guardado en quiz_questions)
+async function validarYActualizarPuntos(questionId, respuestaUsuario, userId) {
+    // Validaciones básicas
+    if (!questionId || isNaN(Number(questionId))) throw new Error("ID de pregunta no válido.");
+    if (!userId || isNaN(Number(userId))) throw new Error("ID de usuario no válido.");
 
     try {
-        //buscar el facto
-        const facts = await quizRepository.getFactById(factoId);
+        // Buscamos la respuesta CORRECTA en la base de datos
+        const datosPregunta = await quizRepository.getQuestionAnswer(questionId);
 
-        if (!facts || facts.length === 0) {
-            throw new Error("Facto no encontrado.");
-        }
-        const facto = facts[0];
-
-        //determinar respuesta correcta
-        let respuestaCorrecta;
-
-        if (textoMostrado === facto.content) {
-            respuestaCorrecta = true;
-        } else if (textoMostrado === facto.modified_content) {
-            respuestaCorrecta = false;
-        } else {
-            throw new Error("El texto mostrado no coincide con ningun facto.");
+        if (!datosPregunta) {
+            throw new Error("Pregunta no encontrada.");
         }
 
-        //verificar respusta del usuario
-        let respondioCorrectamente;
-        let puntosGanados;
+        const respuestaCorrecta = datosPregunta.correct_answer;
+        const explicacion = datosPregunta.explanation;
 
-        if (respuestaUsuario === respuestaCorrecta) {
-            respondioCorrectamente = true;
-            puntosGanados = 10;
-        } else {
-            respondioCorrectamente = false;
-            puntosGanados = 0;
+        // Lógica de comparación (ignorando mayúsculas/minúsculas si es texto)
+        // Si es multiple choice, comparamos exacto.
+        const esCorrecto = respuestaUsuario.toString().trim().toLowerCase() === respuestaCorrecta.toString().trim().toLowerCase();
+
+        let puntosGanados = 0;
+        if (esCorrecto) {
+            puntosGanados = 10; // O podés variar según dificultad
+            await quizRepository.updateUserPoints(userId, puntosGanados);
         }
 
-        //actualizar puntos
-        await quizRepository.updateUserPoints(userId, puntosGanados);
-
-        
-        //obtener puntaje total
+        // Obtener puntaje actualizado
         const userPoints = await quizRepository.getUserPoints(userId);
-        
-        if (!userPoints || userPoints.length === 0) {
-            throw new Error('Usuario no encontrado');
-        }
-
-        const puntajeTotal = userPoints[0].score;
+        const puntajeTotal = userPoints ? userPoints.score : 0; // Ajuste por si devuelve objeto o array
 
         return {
-            correcto: respondioCorrectamente,
+            correcto: esCorrecto,
             puntosGanados,
             puntajeTotal,
-            respuestaCorrecta: respuestaCorrecta
+            respuestaCorrecta, // Se la mandamos para que el front muestre cuál era
+            explicacion // Y la explicación de la IA
         };
 
     } catch(err) {

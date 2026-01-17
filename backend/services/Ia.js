@@ -22,13 +22,20 @@ async function analyzeFact(title, content) {
 
         1. VERIFICACIÓN:
             Genera un veredicto claro y conciso (máximo 300 caracteres), argumentando si crees que la información es verdadera o falsa.
-            Expresalo como una opinión basada en argumentos.
+            Expresalo como una opinión basada en argumentos solidos.
 
         2. QUIZ:
-            Genera una afirmación muy breve y clara para un juego de Verdadero o Falso basada en este tema.
-            - 50% probabilidad de ser VERDADERA.
-            - 50% probabilidad de ser FALSA (cambiando un dato clave).
-            - Define la dificultad (easy, medium, hard).
+            Genera una afirmación o pregunta muy breve, clara y directa para un juego de Verdadero o Falso basada en este tema.
+            REGLAS DE ORO PARA EL QUIZ:
+                - CONTEXTO: Imagina que el jugador NO ha leído el texto original. La afirmación debe tener sentido por sí sola.
+                - PROHIBIDO: Nunca uses frases como "El texto sugiere", "Según el autor", "Como se menciona arriba" o "En este artículo".
+                - FORMATO: Debe ser una sentencia directa sobre el mundo real (histórica, científica, curiosa).
+    
+            LÓGICA VERDADERO/FALSO:
+                - Tira una moneda (50% probabilidad).
+                - Si decides que sea VERDADERA: Extrae el dato más curioso y afírmalo directamente.
+                - Si decides que sea FALSA: Toma un dato clave y cámbialo sutilmente para que suene plausible pero sea incorrecto.
+                - Define la dificultad (easy, medium, hard).
 
         ESTRUCTURA JSON OBLIGATORIA:
         {

@@ -9,11 +9,43 @@ async function createQuizQuestion(factId, questionText, correctAnswer, explanati
     `;
     const diff = difficulty || 'medium';
 
-    const result = await db.query(query, [factId, questionText, correctAnswer, explanation, diff]);
-    return result.rows[0];
+    try {
+        const result = await db.query(query, [factId, questionText, correctAnswer, explanation, diff]);
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error al guardar pregunta de quiz:", error);
+        throw error;
+    }
 }
 
-//trae preguntas random para el quiz
+//traeuna sola pregunta random para el quiz
+async function getRandomQuestion() {
+    const query = `
+    SELECT 
+        qq.id, 
+        qq.question_text, 
+        qq.correct_answer, 
+        qq.explanation, 
+        qq.difficulty, 
+        qq.fact_id,
+        f.font,
+        f.iconurl as image -- Asumiendo que tenés la imagen en facts
+    FROM quiz_questions qq
+    JOIN facts f ON qq.fact_id = f.id
+    ORDER BY RANDOM()
+    LIMIT 1;
+    `;
+    
+    try {
+        const result = await db.query(query);
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error al obtener pregunta random:", error);
+        throw error;
+    }
+}
+
+//trae preguntas random para el quiz (Versión lista/plural)
 async function getRandomQuestions(limit = 5) {
     const query = `
     SELECT qq.id, qq.question_text, qq.difficulty, f.font
@@ -63,6 +95,7 @@ async function getUserPoints(userId) {
 
 export default {
     createQuizQuestion,
+    getRandomQuestion,
     getRandomQuestions,
     getQuestionAnswer,
     updateUserPoints,
