@@ -1,97 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Facto o Falso?</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monda:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../home.css">
+    <link rel="stylesheet" href="../styles/quiz.css">
+    
+    <script src="https://kit.fontawesome.com/1ff5e69ddb.js" crossorigin="anonymous"></script>
+</head>
+<body>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>¿Facto o Falso?</title>
-        
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Monda:wght@400..700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="../home.css">
-        <link rel="stylesheet" href="../styles/quiz.css">
-    </head>
-    <body>
+    <header class="header-flex">
+        <div id="header-principal" class="header-flex">
+            <a href="./feed.html" style="text-decoration: none; color: inherit;">
+                <h1>Almacén de <span class="title-span">Factos</span></h1>
+            </a>
+            <button class="button-func header-login">
+                <i class="fa-solid fa-user"></i>
+            </button>
+        </div>
+    </header>
 
-        <header class="header-flex">
-    <div id="header-principal" class="header-flex">
-        <a href="./feed.html" style="text-decoration: none; color: inherit;">
-            <h1>Almacén de <span class="title-span">Factos</span></h1>
-        </a>
-        <button class="button-func header-login">
-            <i class="fa-solid fa-user"></i>
-        </button>
-    </div>
-</header>
-        <div class="container">
+    <div class="container">
 
-            <!--Estado LOBBY-->
-            <div id="lobby" class="screen active">
-                <h1>¿<span class="accent">Facto</span> o <span class="accent">Falso</span>?</h1>
-                <p class="subtitle">Porque no todo lo que parece real lo es.</p>
-                <button id="btn-jugar" class="boton">🎮 JUGAR</button>
-            </div>
-
-            <!--Estado PLAYING-->
-            <div id="playing" class="screen">
-                <div id="timer-container">
-                    <div id="timer-barra">
-                        <div id="timer-progreso"></div>
-                    </div>
-                    <div id="timer-texto">30</div>
-                </div>
-                <div class="pregunta-card">
-                    <p id="pregunta-texto"></p>
-                </div>
-                <div class="botones-respuesta">
-                    <button id="btn-verdadero" class="boton-respuesta verdadero">✅ VERDADERO</button>
-                    <button id="btn-falso" class="boton-respuesta falso">❌ FALSO</button>
-                </div>
-            </div>
-
-            <!--Estado RESULT-->
-            <div id="result" class="screen">
-                <div id="resultado-icono"></div>
-                <div id="resultado-mensaje"></div>
-                <div class="puntaje-info">
-                    <p>Puntos ganados: <span id="puntos-ganados" class="accent">0</span></p>
-                    <p>Puntaje total: <span id="puntaje-total" class="accent">0</span></p>
-                    <a id="btn-ver-facto" class="link-fuente">📖 Ver facto</a>
-                    <a id="link-fuente" href="#" target="_blank" class="link-fuente">🔗 Chequealo acá</a>
-                </div>
-                <div class="botones-resultado">
-                    <button id="btn-siguiente" class="boton">➡️ SIGUIENTE</button>
-                    <button id="btn-salir" class="boton boton-secundario">🚪 SALIR</button>
-                </div>
-            </div>
-
-            <!--Estado VER_FACTO-->
-            <div id="ver-facto" class="screen">
-
-                <div class="pregunta-card">
-                    <p id="facto-revision-texto"></p>
-                </div>
-
-                <div class="botones-respuesta-revision">
-                    <button id="btn-verdadero-revision" class="boton-respuesta verdadero" disabled>✅ VERDADERO</button>
-                    <button id="btn-falso-revision" class="boton-respuesta falso" disabled>❌ FALSO</button>
-                </div>
-
-                <button id="btn-volver-resultado" class="boton">⬅️ VOLVER</button>
-            </div>
-
-             <nav id="nav-btns-container">
-                <ul class="nav-list">
-                    <li id="btn-home" class="nav-btn"><a href="./feed.html" title="Inicio"><i class="fa-solid fa-house"></i></a></li>
-                    <li id="btn-quiz" class="nav-btn"><a href="./quiz.html" title="Quiz"><i class="fa-solid fa-question"></i></a></li>
-                    <li id="btn-ranking" class="nav-btn"><a href="./ranking.html" title="Ranking"><i class="fa-solid fa-ranking-star"></i></a></li>
-                </ul>
-            </nav>
+        <div id="lobby" class="screen active">
+            <h1>¿<span class="accent">Facto</span> o <span class="accent">Falso</span>?</h1>
+            <p class="subtitle">Porque no todo lo que parece real lo es.</p>
+            <button id="btn-jugar" class="boton">🎮 JUGAR</button>
         </div>
 
-        <script src="https://kit.fontawesome.com/1ff5e69ddb.js" crossorigin="anonymous"></script>
+        <div id="playing" class="screen">
 
-        <script src="../js/quiz.js"></script>
-    </body>
+            <div id="feedback-overlay-container" style="display: none;">
+                <div class="feedback-content-box">
+                <i id="feedback-big-icon" class="fa-solid fa-check"></i>
+                <h2 id="feedback-big-text">RESULTADO</h2>
+                </div>
+            </div>
+
+            <div id="progress-indicator" style="text-align: center; margin-bottom: 10px; color: #888; font-family: 'Monda';">
+                Pregunta <span id="current-q-num">1</span> de 5
+            </div>
+
+            <div id="timer-container">
+                <div id="timer-barra">
+                    <div id="timer-progreso"></div>
+                </div>
+                <div id="timer-texto">30</div>
+            </div>
+
+            <div class="pregunta-card">
+                <p id="pregunta-texto"></p>
+                
+                <p id="feedback-flotante" style="display: none; font-weight: bold; margin-top: 15px; text-align: center; font-size: 1.2rem;"></p>
+            </div>
+
+            <div class="botones-respuesta">
+                <button id="btn-verdadero" class="boton-respuesta verdadero">✅ VERDADERO</button>
+                <button id="btn-falso" class="boton-respuesta falso">❌ FALSO</button>
+            </div>
+        </div>
+
+        <div id="final-summary" class="screen">
+            <h1>Resumen de <span class="accent">Partida</span></h1>
+
+            <div class="score-summary-container">
+                <div class="score-box">
+                    <p>Puntos Partida</p>
+                    <div id="round-score" class="score-number">+0</div>
+                </div>
+                <div class="score-box highlight">
+                    <p>Tu Ranking Total</p>
+                    <div id="total-ranking-score" class="score-number">...</div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Revisión</th>
+                            <th>La Posta</th>
+                            <th>Tu Respuesta</th>
+                            <th>Fuente</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summary-body">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="botones-resultado">
+                <button id="btn-reintentar" class="boton">🔄 JUGAR OTRA VEZ</button>
+                <button id="btn-salir-summary" class="boton boton-secundario">🚪 SALIR AL LOBBY</button>
+            </div>
+        </div>
+
+        <nav id="nav-btns-container">
+            <ul class="nav-list">
+                <li id="btn-home" class="nav-btn"><a href="./feed.html" title="Inicio"><i class="fa-solid fa-house"></i></a></li>
+                <li id="btn-quiz" class="nav-btn"><a href="./quiz.html" title="Quiz"><i class="fa-solid fa-question"></i></a></li>
+                <li id="btn-ranking" class="nav-btn"><a href="./ranking.html" title="Ranking"><i class="fa-solid fa-ranking-star"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="modal-facto" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 style="color: var(--naranja-principal);">Ver Facto</h2>
+            <p id="modal-facto-texto" class="modal-text"></p>
+            <hr style="border: 0; border-top: 1px solid #444; margin: 10px 0;">
+            <p id="modal-facto-explicacion" class="modal-subtext"></p>
+        </div>
+    </div>
+
+    <script src="../js/quiz.js"></script>
+</body>
 </html>

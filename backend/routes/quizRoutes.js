@@ -4,12 +4,10 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/pregunta', quizController.obtenerPregunta);
+router.get('/start', auth, quizController.startQuiz);
 
-router.post('/respuesta', auth, quizController.validarRespuesta);
+router.post('/verify', auth, quizController.verifyAnswer);
 
-router.get('/puntaje', auth, quizController.obtenerPuntaje);
-
-router.get('/respuesta-timeout/:quizId', auth, quizController.obtenerRespuestaTimeout);
+router.post('/score', auth, quizController.updateScore);
 
 export default router;

@@ -29,17 +29,17 @@ async function getFact(id) {
 
         const fact = result[0];
 
-        return new Facts(
-            fact.Id,
-            fact.Title,
-            fact.Content,
-            fact.Font,
-            fact.Category,
-            fact.CreatedBy,
-            fact.UserName,
-            fact.ia_response,
-            fact.ia_verdict
-        );
+        return new Facts({
+            id: fact.id,
+            title: fact.title,
+            content: fact.content,
+            font: fact.font,
+            category: fact.category,
+            createdBy: fact.created_by,
+            userName: fact.username,
+            iaResponse: fact.ia_response,
+            iaVerdict: fact.ia_responseverdict
+        });
     } catch (err) {
         throw err;
     }
@@ -97,6 +97,16 @@ async function createNewFact(factData) {
         throw new Error("Datos de fact incompletos o inválidos."); 
     }
 
+    //el controller manda verdadero o fals con texto completo
+    //tomo la primera letra para q coincida con el switch(V o F)
+    let verdictChar = '';
+    if (factData.ia_responseverdict) {
+        verdictChar = factData.ia_responseverdict.charAt(0).toUpperCase();
+    } else if (factrData.iaVerdict) {
+        verdictChar = factData.iaVerdict.charAt(0).toUpperCase();
+    }
+
+    //switch para la suma o resta de puntos, agarra V y Verdadero
     let factScore = 0
     switch (factData.iaVerdict) {
         case "V":
@@ -105,10 +115,8 @@ async function createNewFact(factData) {
         case "F":
             factScore = -3;
             break;
-        case "I":
-            factScore = 0;
-            break;
         default:
+            factScore = 0;
             break;
     }
 
@@ -116,7 +124,7 @@ async function createNewFact(factData) {
         
         if (factScore != 0)
             await userRepository.updateScore(factScore, factData.createdBy);
-        console.log(factData);
+
         const fact = new Facts({
             id: 0,
             title: factData.title,
@@ -124,13 +132,12 @@ async function createNewFact(factData) {
             font: factData.font,
             category: factData.category,
             createdBy: factData.createdBy,
-            iaResponse: factData.iaResponse,
-            iaVerdict: factData.iaVerdict
+            iaResponse: factData.iaResponse || factData.ia_response,
+            iaVerdict: factData.iaVerdict || factData.ia_responseverdict
             });
 
-        const success = await factsRepository.createFact(fact); 
-        return success;
-
+        const createdFact = await factsRepository.createFact(fact); 
+        return createdFact;
     } catch (err) {
         throw err;
     }

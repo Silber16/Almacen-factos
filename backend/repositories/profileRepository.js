@@ -46,7 +46,7 @@ async function getUserFactos(userId) {
 //obtener logros del usuario
 async function getUserTrophies(userPoints) {
     const query = `
-        SELECT t.id, t.iconurl, t.points
+        SELECT t.id, t.title, t.description, t.iconurl, t.points, ut.achieved_at
         FROM trophies t
         WHERE t.points <= $1
         ORDER BY t.points DESC;

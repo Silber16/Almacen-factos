@@ -28,10 +28,10 @@ async function getFactsAll () {
 }
 
 async function getFactsByUserId (userId) {
-    const query = `SELECT * FROM facts WHERE userId = ${userId}`;
+    const query = `SELECT * FROM facts WHERE created_by = $1`;
 
     try {
-        const result = await db.query(query);
+        const result = await db.query(query, [userId]);
 
         return result.rows;
     } catch (err) {
@@ -41,10 +41,10 @@ async function getFactsByUserId (userId) {
 }
 
 async function getFactsCategory (category) {
-    const query = `SELECT * FROM facts WHERE category = ${category}`;
+    const query = `SELECT * FROM facts WHERE category = $1`;
     
     try {
-        const result = await db.query(query);
+        const result = await db.query(query, [category]);
         return result.rows;
     } catch (err) {
         console.error("Error al obtener facts: ", err);
@@ -52,11 +52,11 @@ async function getFactsCategory (category) {
     }
 }
 
-async function getFactById (userId) {
-    const query = `SELECT * FROM facts WHERE id = ${userId}`;
+async function getFactById (id) {
+    const query = `SELECT * FROM facts WHERE id = $1`;
     
     try {
-        const result = await db.query(query);
+        const result = await db.query(query, [id]);
 
         return result.rows;
     } catch (err) {
@@ -72,7 +72,7 @@ async function createFact (fact) {
             facts(title, content, font, created_by, category, ia_response, ia_responseverdict)
         VALUES 
             ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING id;
+        RETURNING *;
     `;
     const values = [
         fact.title, 
@@ -86,11 +86,11 @@ async function createFact (fact) {
 
     try {
         const result = await db.query(query, values);
-        return result.rowCount > 0;
+        return result.rows[0]; 
 
     } catch (error) {
         console.error("Error al crear fact:", error);
-        return false;
+        return null;
     }
 }
 
@@ -153,10 +153,10 @@ async function updateFact (factObj) {
 }
 
 async function deleteFact (factId) {
-    const query = `DELETE FROM facts WHERE id = ${factId}`;
+    const query = `DELETE FROM facts WHERE id = $1`;
 
     try {
-        const result = await db.query(query);
+        const result = await db.query(query, [factId]);
         return result.rowCount == 1;
 
     } catch (err) {
