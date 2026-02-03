@@ -36,6 +36,7 @@ async function getUserProfile(userId) {
         const trophies = preTrophies.map(t => new Trophy({
             id: t.id,
             title: t.title,
+            name: t.title,
             iconUrl: t.iconurl,
             points: t.points
         }));

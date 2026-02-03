@@ -1,7 +1,8 @@
 class Trophy {
-  constructor({ id, title, points, iconUrl }) {
+  constructor({ id, title, name, points, iconUrl }) {
     this.id = id;
-    this.title = this.title;
+    this.title = title;
+    this.name = name || title;
     this.iconUrl = iconUrl;
     this.points = points;
   }
