@@ -28,8 +28,11 @@ async function getUserProfile(userId) {
         //facts del usuario
         const factos = await userRepository.getUserFactos(userId);
 
+        const currentScore = parseInt(user.score) || 0;
+
         //trofeos/logros del usuario
-        const preTrophies = await userRepository.getUserTrophies(parseInt(user.score));
+        const preTrophies = await userRepository.getUserTrophies(currentScore);
+        
         const trophies = preTrophies.map(t => new Trophy({
             id: t.id,
             title: t.title,
