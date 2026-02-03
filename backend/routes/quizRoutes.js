@@ -4,7 +4,7 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/start', auth, quizController.startQuiz);
+router.post('/start', auth, quizController.startQuiz);
 
 router.post('/verify', auth, quizController.verifyAnswer);
 

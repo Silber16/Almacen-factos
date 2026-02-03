@@ -1,16 +1,19 @@
 import quizRepository from "../repositories/quizRepository.js";
+import quizService from "../services/quizService.js";
 
 //inicio de quiz
 const startQuiz = async (req, res) => {
     try {
-        //llama al repository para traer 5 preguntas random 
-        const questions = await quizRepository.getRandomQuestions(5);
+        //se lee la lista de excluidos del body (si es q existe)
+        const { excludeIds } = req.body;
+        const idsToExclude = Array.isArray(excludeIds) ? excludeIds : [];
         
+        const questions = await quizService.generateQuiz(idsToExclude);
+
         if (!questions || questions.length === 0) {
             return res.status(404).json({ error: "No hay suficientes preguntas para jugar. ¡Creá algunos factos primero!" });
         }
 
-        //se manda el array al front
         res.status(200).json(questions);
     } catch (error) {
         console.error("Error al iniciar el quiz:", error);

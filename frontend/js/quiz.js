@@ -38,6 +38,7 @@ const closeModalBtn = document.querySelector('.close-modal');
 //config global
 const API_URL = 'http://localhost:3000/api/quiz';
 let preguntasArray = []; 
+let preguntasVistas = [];
 let indicePreguntaActual = 0;
 let puntajeAcumuladoPartida = 0; 
 let historialResultados = []; 
@@ -108,14 +109,33 @@ async function comenzarJuego() {
 
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/start`, { 
-            headers: { 'Authorization': `Bearer ${token}` }
+
+        //se manda la list para excluir ids
+        const res = await fetch(`${API_URL}/start`, {
+            method: 'POST',
+            headers: { 
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                excludeIds: preguntasVistas //se le dice al back q no mostrar
+            })
         });
         
         if (!res.ok) throw new Error('Error al obtener preguntas');
 
         preguntasArray = await res.json();
         
+        //logica de acumulacion, se guardan los ids en la lista para excluir
+        if (preguntasArray && preguntasArray.length > 0) {
+            preguntasArray.forEach(pregunta => {
+                //verifico que no este para no duplicar
+                if (!preguntasVistas.includes(pregunta.id)) {
+                    preguntasVistas.push(pregunta.id)
+                }
+            });
+        }
+
         //reseteo de variables de partida
         indicePreguntaActual = 0;
         puntajeAcumuladoPartida = 0;
@@ -126,7 +146,7 @@ async function comenzarJuego() {
 
     } catch (error) {
         console.error(error);
-        alert("Error al iniciar. Revisá tu conexión o que el Backend esté corriendo.");
+        alert("Error al iniciar. Revisá tu conexión.");
     } finally {
         btnJugar.innerHTML = btnOriginalText;
         btnJugar.disabled = false;

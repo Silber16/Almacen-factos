@@ -1,41 +1,38 @@
 import quizRepository from '../repositories/quizRepository.js';
 
-// 1. TRAER PREGUNTA (Va a la tabla quiz_questions)
-async function obtenerPreguntaRandom() {
+//trae 5 preguntas respetando la lista para que no se repitan 
+async function generateQuiz(excludeIds = []) {
+    const LIMIT = 5;
+
     try {
-        // Usamos la función que creamos recién en el repo
-        const pregunta = await quizRepository.getRandomQuestion();
+        //le pasamos al repo la lista de ids q ya le salieron al usuario para que las excluya
+        let questions = await quizRepository.getRandomQuestions(LIMIT, excludeIds);
         
-        if (!pregunta) {
-            return null;
+        //cuando el usuario jugo mucho, se completa con preguntas que ya salieron
+        if (questions.length < LIMIT) {
+            const faltantes = LIMIT - questions.length;
+
+            const relleno = await quizRepository.getRandomQuestions(faltantes, []);
+            
+            //se unen las q no salieron con las que ya si
+            questions = [...questions, ...relleno];
         }
 
-        // Devolvemos el objeto limpio al frontend
-        // NOTA: Si tu frontend espera "options", acá deberías mandarlas.
-        // Como tu tabla quiz_questions parece ser de texto directo, mandamos eso.
-        return {
-            questionId: pregunta.id, // ID de la pregunta, no del facto
-            questionText: pregunta.question_text, 
-            difficulty: pregunta.difficulty,
-            image: pregunta.image, // Viene del join con facts
-            source: pregunta.font,
-            // Si es multiple choice y tenés las opciones en la BD, van acá.
-            // Si es Open Text (escribir respuesta), el front solo muestra la pregunta.
-        };
+        //se deveulve el array de 5 preguntas al controller
+        return questions;
 
     } catch (err) {
         throw err;
     }
 }
 
-// 2. VALIDAR RESPUESTA (Compara con lo guardado en quiz_questions)
+//se valida la respuesta omparando con lo guardado en quiz_questions
 async function validarYActualizarPuntos(questionId, respuestaUsuario, userId) {
-    // Validaciones básicas
     if (!questionId || isNaN(Number(questionId))) throw new Error("ID de pregunta no válido.");
     if (!userId || isNaN(Number(userId))) throw new Error("ID de usuario no válido.");
 
     try {
-        // Buscamos la respuesta CORRECTA en la base de datos
+        //se busca la correcta en la bd
         const datosPregunta = await quizRepository.getQuestionAnswer(questionId);
 
         if (!datosPregunta) {
@@ -45,17 +42,16 @@ async function validarYActualizarPuntos(questionId, respuestaUsuario, userId) {
         const respuestaCorrecta = datosPregunta.correct_answer;
         const explicacion = datosPregunta.explanation;
 
-        // Lógica de comparación (ignorando mayúsculas/minúsculas si es texto)
-        // Si es multiple choice, comparamos exacto.
+        //logica de comparacion
         const esCorrecto = respuestaUsuario.toString().trim().toLowerCase() === respuestaCorrecta.toString().trim().toLowerCase();
 
         let puntosGanados = 0;
         if (esCorrecto) {
-            puntosGanados = 10; // O podés variar según dificultad
+            puntosGanados = 10;
             await quizRepository.updateUserPoints(userId, puntosGanados);
         }
 
-        // Obtener puntaje actualizado
+        //obtener puntaje actualizado
         const userPoints = await quizRepository.getUserPoints(userId);
         const puntajeTotal = userPoints ? userPoints.score : 0; // Ajuste por si devuelve objeto o array
 
@@ -63,8 +59,8 @@ async function validarYActualizarPuntos(questionId, respuestaUsuario, userId) {
             correcto: esCorrecto,
             puntosGanados,
             puntajeTotal,
-            respuestaCorrecta, // Se la mandamos para que el front muestre cuál era
-            explicacion // Y la explicación de la IA
+            respuestaCorrecta, //se la mandopara que el front muestre cual era
+            explicacion
         };
 
     } catch(err) {
@@ -73,6 +69,6 @@ async function validarYActualizarPuntos(questionId, respuestaUsuario, userId) {
 }
 
 export default {
-    obtenerPreguntaRandom,
+    generateQuiz,
     validarYActualizarPuntos
 };
