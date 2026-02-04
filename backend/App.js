@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from "dotenv";
+import { iniciarCronJobs } from './services/cronService.js';
 
 dotenv.config();
 const app = express(); 
@@ -19,6 +20,9 @@ import authRoutes from './routes/login.js';
 import savedFactsRoutes from './routes/savedFactsRoutes.js'; 
 import quizRoutes from './routes/quizRoutes.js';
 import rankingRoutes from './routes/ranking.js';
+
+iniciarCronJobs();
+
 //endpoints
 app.use("/api/auth", authRoutes);
 app.use('/api/facts', factsRoutes);
