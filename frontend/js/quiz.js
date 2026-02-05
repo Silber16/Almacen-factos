@@ -281,7 +281,7 @@ function mostrarFeedbackVisual(esCorrecto, esTimeout) {
         feedbackOverlay.classList.add('correcto');
     } else {
         feedbackBigIcon.className = 'fa-solid fa-circle-xmark';
-        feedbackBigText.textContent = 'INCORRECTO';
+        feedbackBigText.textContent = '¡INCORRECTO!';
         feedbackOverlay.classList.add('incorrecto');
     }
 
