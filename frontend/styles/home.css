@@ -98,3 +98,15 @@ button:hover {
   font-weight: 200;
   text-align: center;
 }
+.fa-gamepad::before{
+  font-size: 30px;
+  color : #fe7f2d;  
+}
+.fa-user::before{
+  font-size: 30px;
+  color : #fe7f2d;  
+}
+.fa-atom::before{
+  font-size: 30px;
+  color : #fe7f2d;  
+}
