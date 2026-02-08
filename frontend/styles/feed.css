@@ -77,6 +77,14 @@ header {
     display: none;  
 }
 
+#categories-btn-options li {
+    cursor: pointer;
+}
+
+#categories-btn-options li:hover{
+    color: var(--principal-grey);
+}
+
 .button-func {
     background-color: var(--principal-orange);
     padding: .6rem;
@@ -261,6 +269,10 @@ header {
     pointer-events: none;
 }
 
+#create-fact-link {
+    text-decoration: none;
+    color: var(--principal-sandwhite);
+}
 
 
 

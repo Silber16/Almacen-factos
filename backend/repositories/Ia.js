@@ -1,5 +1,5 @@
 import {GoogleGenAI} from "@google/genai";
-import fs from 'fs/promises'; //necesario para leer el txt
+import fs from 'fs/promises'; 
 import path from 'path';
 
 const MODEL =  "gemini-2.5-flash";
@@ -39,7 +39,6 @@ async function getQuizQuestion(factContent) {
         throw err;
     }
 }
-
 
 export {
 

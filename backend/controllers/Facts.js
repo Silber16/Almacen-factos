@@ -56,7 +56,6 @@ const factsController = {
         const category = req.params.category;
         try {
             const facts = await factsService.getFactsByCategoryName(category);
-            console.log('controller: ', facts);
             res.status(200).json(facts);
 
         } catch (error) {
@@ -78,7 +77,6 @@ const factsController = {
         
         try {
             //se llama a la ia (verificacion y quiz)
-            console.log("Analizando facto con IA...");
             const aiResult = await analyzeFact(factData.title, factData.content);
             let verdict = "Pendiente"
             let explanation = "Procesando"
