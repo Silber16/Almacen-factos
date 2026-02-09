@@ -100,7 +100,7 @@ header {
 }
 
 #facts-container {
-    padding-top: 4rem;
+    padding: 4rem 0 8rem 0;
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -298,4 +298,43 @@ header {
 
 .btn-quiz .a-redirect {
     font-weight: 700;
+}
+
+#feed-loader {
+    position: fixed;
+    display: flex;
+    gap: .2rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--principal-sandwhite);
+    font-size: 1rem;
+    z-index: 10000;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.loader-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

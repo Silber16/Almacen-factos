@@ -1,4 +1,11 @@
 const factsContainer = document.getElementById("facts-container");
+const feedEnd = document.getElementById("feed-end");
+
+let currentOffset = 0;
+let currentCategory = null; 
+const LIMIT = 10;
+let isLoading = false;
+let hasMore = true;
 
 const CATEGORIES = [
     { id: 1, name: 'Geografía' },
@@ -15,9 +22,13 @@ async function filterFactsByCategory(categoryId) {
         return
     }
     try {
+        currentOffset = 0; 
+        hasMore = true;    
+        currentCategory = categoryId;
+        
         const res = await fetch(`http://localhost:3000/api/facts/category/${categoryId}`);
         const facts = await res.json();
-        renderFeed(facts);
+        renderFeed(facts, true); 
     }
     catch (err) {
         console.error("error al obtener los facts para cargar el feed: ", err)
@@ -34,7 +45,13 @@ function renderCategoryMenu() {
 
     const allOption = document.createElement('li');
     allOption.textContent = 'Todos';
-    allOption.onclick = () => fetchFacts(); 
+    allOption.onclick = () => {
+        currentOffset = 0;
+        hasMore = true;
+        currentCategory = null;
+        fetchFacts(0);
+        toggleMenuCategory();
+    };
     manuCategories.appendChild(allOption);
 
     CATEGORIES.forEach(category => {
@@ -81,12 +98,15 @@ async function addToRepository(factId) {
     }
 }
 
-function renderFeed (facts) {
-    factsContainer.innerHTML = ''
-    facts.forEach( fact => {
+function renderFeed(facts, clearContainer = false) {
+    if (clearContainer) {
+        factsContainer.innerHTML = '';
+    }
+    
+    facts.forEach(fact => {
         const factItem = document.createElement("li");
 
-        let ia_verdict_emoji = ""; // arreglado para que no tire error si no entra en switch
+        let ia_verdict_emoji = "";
         switch (fact.iaVerdict) {
             case 'F':
                 ia_verdict_emoji = "❌❌❌❌"
@@ -136,26 +156,60 @@ function renderFeed (facts) {
     });
 }
 
-async function fetchFacts () {
+async function fetchFacts(offset = 0) {
+    if (isLoading || !hasMore) return;
+    
+    isLoading = true;
+    const loader = document.getElementById('feed-loader');
+    loader.classList.remove('loader-hidden');
+    loader.classList.add('loader-visible');
+
     try {
-        const res = await fetch("http://localhost:3000/api/facts/");
+        const res = await fetch(`http://localhost:3000/api/facts/?limit=${LIMIT}&offset=${offset}`);
         const facts = await res.json();
 
-        renderFeed(facts);
+        if (facts.length === 0) {
+            hasMore = false;
+            return;
+        }
+
+        renderFeed(facts, offset == 0);
+        
+        currentOffset += LIMIT;
     }
     catch (err) {
         console.error("error al obtener los facts para cargar el feed: ", err)
     }
+    finally {
+        isLoading = false;
+        loader.classList.remove('loader-visible');
+        loader.classList.add('loader-hidden');
+    }
+}
+
+function loadMoreFacts() {
+     const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && hasMore && !isLoading) {
+                document.getElementById('feed-loader').toggle
+                fetchFacts(currentOffset);
+            }
+        });
+    }, { 
+        rootMargin: '200px',
+        threshold: 0.1
+    });
+    observer.observe(feedEnd);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const btnFilter = document.getElementById('categories-btn');
     if(btnFilter) btnFilter.addEventListener('click', toggleMenuCategory);
     
-    fetchFacts();
+    fetchFacts(0);
+    loadMoreFacts();
     renderCategoryMenu();
 
     const navBtnHome = document.getElementById('btn-home');
     navBtnHome.classList.toggle('nav-btn-active');
-
 });

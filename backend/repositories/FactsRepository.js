@@ -1,6 +1,6 @@
 import db from "../config/db.js";
 
-async function getFactsAll () {
+async function getFactsAll (limit = 10, offset = 0) {
     const query = `
         SELECT
             f.id,
@@ -16,10 +16,11 @@ async function getFactsAll () {
         FROM facts f
         LEFT JOIN users u ON f.created_by = u.id
         ORDER BY id DESC
+        LIMIT $1 OFFSET $2
         `;
     
     try {
-        const result = await db.query(query);
+        const result = await db.query(query, [limit, offset]);
         return result.rows;
     } catch (err) {
         console.error("Error al obtener facts: ", err);
@@ -28,7 +29,20 @@ async function getFactsAll () {
 }
 
 async function getFactsByUserId (userId) {
-    const query = `SELECT * FROM facts WHERE created_by = $1`;
+    const query = `
+        SELECT
+            id,
+            title,
+            content,
+            font,
+            category,
+            created_by,
+            ia_response,
+            ia_responseverdict
+        FROM facts f
+        WHERE created_by = $1
+        ORDER BY id DESC
+        `;
 
     try {
         const result = await db.query(query, [userId]);
@@ -41,8 +55,23 @@ async function getFactsByUserId (userId) {
 }
 
 async function getFactsCategory (category) {
-    const query = `SELECT * FROM facts WHERE category = $1`;
-    
+    const query = `
+        SELECT
+            f.id,
+            f.title,
+            f.content,
+            f.font,
+            f.category,
+            f.created_by,
+            u.username,
+            u.id as user_id,
+            f.ia_response,
+            f.ia_responseverdict
+        FROM facts f
+        LEFT JOIN users u ON f.created_by = u.id
+        WHERE f.category = $1
+        ORDER BY id DESC
+        `;
     try {
         const result = await db.query(query, [category]);
         return result.rows;
@@ -53,7 +82,23 @@ async function getFactsCategory (category) {
 }
 
 async function getFactById (id) {
-    const query = `SELECT * FROM facts WHERE id = $1`;
+    const query = `
+        SELECT
+            f.id,
+            f.title,
+            f.content,
+            f.font,
+            f.category,
+            f.created_by,
+            u.username,
+            u.id as user_id,
+            f.ia_response,
+            f.ia_responseverdict
+        FROM facts f
+        LEFT JOIN users u ON f.created_by = u.id
+        WHERE f.id = $1
+        ORDER BY id DESC
+        `;
     
     try {
         const result = await db.query(query, [id]);
