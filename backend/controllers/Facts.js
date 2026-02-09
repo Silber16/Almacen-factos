@@ -7,11 +7,14 @@ const factsController = {
     
     getAll: async (req, res) => {
         try {
-        const facts = await factsService.getAllFacts();
-        res.status(200).json(facts);
+            const limit = parseInt(req.query.limit) || 10;
+            const offset = parseInt(req.query.offset) || 0;
+
+            const facts = await factsService.getAllFacts(limit, offset);
+            res.status(200).json(facts);
         } catch (err) {
             console.error("Error en el controlador al obtener facts: ", err.message);
-            res.status(500);
+            res.status(500).json({ error: err.message });
         }
     },
 

@@ -2,9 +2,9 @@ import * as factsRepository from "../repositories/FactsRepository.js"
 import * as userRepository from "../repositories/user.js"
 import Facts from "../models/Facts.js";
 
-async function getAllFacts() {
+async function getAllFacts(limit, offset) {
     try {
-        const facts = await factsRepository.getFactsAll();
+        const facts = await factsRepository.getFactsAll(limit, offset);
         return facts.map(fact => new Facts({
             id: fact.id,
             title: fact.title,
