@@ -384,58 +384,91 @@ async function handleEditProfile(e) {
 
 
 function showMisFactos() {
-    //cambiar estilos visuales de botones
-    document.getElementById('tab-mis-factos').style.backgroundColor = ''; 
-    document.getElementById('tab-guardados').style.backgroundColor = '#444'; 
+    const container = document.getElementById('user-factos-container');
+    container.classList.add('slide-out');
     
-    //cambiar titulo de la seccion
-    document.getElementById('section-title-text').innerHTML = '<i class="fa-solid fa-lightbulb"></i> Factos Publicados';
+    setTimeout(() => {
+        document.getElementById('tab-mis-factos').style.backgroundColor = ''; 
+        document.getElementById('tab-guardados').style.backgroundColor = '#444'; 
+        
+        //cambiar titulo de la seccion
+        document.getElementById('section-title-text').innerHTML = '<i class="fa-solid fa-lightbulb"></i> Factos Publicados';
 
-    //renderizar lo que teniamos guardado en cache
-    renderFactos(misFactosCache, false);
+        //renderizar lo que teniamos guardado en cache
+        renderFactos(misFactosCache, false);
+        
+        container.classList.remove('slide-out');
+        container.classList.add('slide-in');
+        
+        setTimeout(() => {
+            container.classList.remove('slide-in');
+        }, 500);
+    }, 250);
 }
 
 
 async function loadSavedFacts() {
     //obtener token del localStorage
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert("Debes iniciar sesión para ver tus guardados.");
-        return;
-    }
-
-    //cambiar estilos visuales
-    document.getElementById('tab-mis-factos').style.backgroundColor = '#444';
-    document.getElementById('tab-guardados').style.backgroundColor = '#e67e22'; 
-
-    //cambiar titulo
-    document.getElementById('section-title-text').innerHTML = '<i class="fa-solid fa-bookmark"></i> Repositorio Personal';
-
-    //mostrar cargando
     const container = document.getElementById('user-factos-container');
-    container.innerHTML = '<p>Cargando repositorio...</p>';
-
-    try {
-        //fetch con autenticacion
-        const res = await fetch(`${API_URL}/saved/${currentUserId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` 
-            }
-        });
-
-        if (res.ok) {
-            const savedFacts = await res.json();
-            renderFactos(savedFacts, true);
-        } else {
-            container.innerHTML = '<p>Error al cargar el repositorio.</p>';
+    container.classList.add('slide-out');
+    
+    setTimeout(async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("Debes iniciar sesión para ver tus guardados.");
+            return;
         }
 
-    } catch (error) {
-        console.error(error);
-        container.innerHTML = '<p>Error de conexión.</p>';
-    }
+        //cambiar estilos visuales
+        document.getElementById('tab-mis-factos').style.backgroundColor = '#444';
+        document.getElementById('tab-guardados').style.backgroundColor = '#e67e22'; 
+
+        //cambiar titulo
+        document.getElementById('section-title-text').innerHTML = '<i class="fa-solid fa-bookmark"></i> Repositorio Personal';
+
+        //mostrar cargando
+        container.innerHTML = '<p>Cargando repositorio...</p>';
+
+        try {
+            //fetch con autenticacion
+            const res = await fetch(`${API_URL}/saved/${currentUserId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                }
+            });
+
+            if (res.ok) {
+                const savedFacts = await res.json();
+                renderFactos(savedFacts, true);
+                container.classList.remove('slide-out');
+                container.classList.add('slide-in');
+                
+                setTimeout(() => {
+                    container.classList.remove('slide-in');
+                }, 500);
+            } else {
+                container.innerHTML = '<p>Error al cargar el repositorio.</p>';
+                container.classList.remove('slide-out');
+                container.classList.add('slide-in');
+                
+                setTimeout(() => {
+                    container.classList.remove('slide-in');
+                }, 500);
+            }
+
+        } catch (error) {
+            console.error(error);
+            container.innerHTML = '<p>Error de conexión.</p>';
+            container.classList.remove('slide-out');
+            container.classList.add('slide-in');
+            
+            setTimeout(() => {
+                container.classList.remove('slide-in');
+            }, 500);
+        }
+    }, 250);
 }
 
 async function deleteSavedFact(factId) {
