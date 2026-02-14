@@ -110,3 +110,26 @@ button:hover {
   font-size: 30px;
   color : #fe7f2d;  
 }
+
+/* Animaciones para cambio de página */
+.hero {
+    animation: fadeInUp 1s ease-out;
+}
+
+.features {
+    animation: fadeInUp 1.5s ease-out;
+}
+
+.columna {
+    animation: fadeInUp 2s ease-out;
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
