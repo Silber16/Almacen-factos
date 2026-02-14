@@ -74,7 +74,13 @@ header {
 
 #categories-btn-options {
     list-style: none;
-    display: none;  
+    display: none;
+}
+
+.show {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 #categories-btn-options li {
@@ -213,6 +219,9 @@ header {
     color: var(--principal-sandwhite);
     background-image: linear-gradient(to right, var(--principal-orange), var(--principal-orange-o75));
     border-radius: .8rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease;
 }
 
 .a-redirect {

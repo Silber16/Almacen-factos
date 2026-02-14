@@ -36,7 +36,7 @@ async function filterFactsByCategory(categoryId) {
 }
 
 function toggleMenuCategory() {
-    document.getElementById('categories-btn-options').classList.toggle('hidden');
+    document.getElementById('categories-btn-options').classList.toggle('show');
 }
 
 function renderCategoryMenu() {
@@ -188,7 +188,7 @@ async function fetchFacts(offset = 0) {
 }
 
 function loadMoreFacts() {
-     const observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && hasMore && !isLoading) {
                 document.getElementById('feed-loader').toggle
