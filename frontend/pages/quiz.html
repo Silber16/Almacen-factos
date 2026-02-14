@@ -25,9 +25,7 @@
                 <i class="fa-solid fa-user"></i>
             </a>
         </div>
-
-        <div id="header-navbar" class="header-flex">
-            </div>
+        <div id="header-navbar" class="header-flex"></div>
     </header>
 
     <div class="container">
@@ -35,15 +33,18 @@
         <div id="lobby" class="screen active">
             <h1>¿<span class="accent">Facto</span> o <span class="accent">Falso</span>?</h1>
             <p class="subtitle">Porque no todo lo que parece real lo es.</p>
-            <button id="btn-jugar" class="boton">🎮 JUGAR</button>
+
+            <div class="modo-selector">
+                <button id="btn-jugar" class="boton">🎮 MODO CLÁSICO</button>
+                <button id="btn-survival" class="boton boton-survival">💀 SUPERVIVENCIA</button>
+            </div>
         </div>
 
         <div id="playing" class="screen">
-
             <div id="feedback-overlay-container">
                 <div class="feedback-content-box">
-                <i id="feedback-big-icon" class="fa-solid fa-check"></i>
-                <h2 id="feedback-big-text">RESULTADO</h2>
+                    <i id="feedback-big-icon" class="fa-solid fa-check"></i>
+                    <h2 id="feedback-big-text">RESULTADO</h2>
                 </div>
             </div>
 
@@ -60,8 +61,7 @@
 
             <div class="pregunta-card">
                 <p id="pregunta-texto"></p>
-                
-                <p id="feedback-flotante" style="display: none; font-weight: bold; margin-top: 15px; text-align: center; font-size: 1.2rem;"></p>
+                <p id="feedback-flotante" style="display: none;"></p>
             </div>
 
             <div class="botones-respuesta">
@@ -75,12 +75,41 @@
 
             <div class="score-summary-container">
                 <div class="score-box">
-                    <p>Puntos Partida</p>
-                    <div id="round-score" class="score-number">+0</div>
+                    <p id="label-puntos-partida">Puntos Partida</p>
+                    <div id="round-score" class="score-number">0</div>
                 </div>
+
+                <div id="survival-points-box" class="score-box" style="display: none;">
+                    <p>Puntos Ganados</p>
+                    <div id="survival-total-points" class="score-number">+0</div>
+                </div>
+
                 <div class="score-box highlight">
-                    <p>Tu Ranking Total</p>
+                    <p id="label-ranking">Tu Ranking Total</p>
                     <div id="total-ranking-score" class="score-number">...</div>
+                </div>
+            </div>
+
+            <div id="survival-result-container" style="display: none; margin-bottom: 25px;">
+                <h2 class="survival-title">¡FIN DE LA RACHA!</h2>
+                <div class="survival-stats" style="text-align: center; margin: 15px 0;">
+                    <p>Lograste <span id="survival-final-streak" class="highlight-val">0</span> respuestas correctas.</p>
+                    <div id="new-record-badge" class="badge-record" style="display: none;">
+                        ✨ ¡NUEVO RÉCORD PERSONAL! ✨
+                    </div>
+                </div>
+                
+                <div class="survival-explanation-box">
+                    <p id="survival-explanation" style="font-style: italic; opacity: 0.9;"></p>
+                    <p style="margin-top: 10px; font-weight: bold;">
+                        La posta era: <span id="survival-correct-val" style="color: var(--naranja-principal);"></span>
+                    </p>
+                    
+                    <div id="survival-source-container" style="margin-top: 20px; display: none; text-align: center;">
+                        <a id="survival-source-link" href="#" target="_blank" class="boton-fuente-survival">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> CHEQUEALO ACÁ
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -96,8 +125,7 @@
                             <th>Pts</th>
                         </tr>
                     </thead>
-                    <tbody id="summary-body">
-                        </tbody>
+                    <tbody id="summary-body"></tbody>
                 </table>
             </div>
 
@@ -109,9 +137,9 @@
 
         <nav id="nav-btns-container">
             <ul class="nav-list">
-                <li id="btn-home" class="nav-btn"><a href="./feed.html" title="Inicio"><i class="fa-solid fa-house"></i></a></li>
-                <li id="btn-quiz" class="nav-btn"><a href="./quiz.html" title="Quiz"><i class="fa-solid fa-question"></i></a></li>
-                <li id="btn-ranking" class="nav-btn"><a href="./ranking.html" title="Ranking"><i class="fa-solid fa-ranking-star"></i></a></li>
+                <li id="btn-home" class="nav-btn"><a href="./feed.html"><i class="fa-solid fa-house"></i></a></li>
+                <li id="btn-quiz" class="nav-btn"><a href="./quiz.html"><i class="fa-solid fa-question"></i></a></li>
+                <li id="btn-ranking" class="nav-btn"><a href="./ranking.html"><i class="fa-solid fa-ranking-star"></i></a></li>
             </ul>
         </nav>
     </div>

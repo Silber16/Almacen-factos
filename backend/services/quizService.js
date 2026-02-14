@@ -43,7 +43,7 @@ async function validarYActualizarPuntos(questionId, respuestaUsuario, userId) {
         const explicacion = datosPregunta.explanation;
 
         //logica de comparacion
-        const esCorrecto = respuestaUsuario.toString().trim().toLowerCase() === respuestaCorrecta.toString().trim().toLowerCase();
+        const esCorrecto = String(respuestaUsuario).trim().toLowerCase() === String(respuestaCorrecta).trim().toLowerCase();
 
         let puntosGanados = 0;
         if (esCorrecto) {
@@ -53,13 +53,13 @@ async function validarYActualizarPuntos(questionId, respuestaUsuario, userId) {
 
         //obtener puntaje actualizado
         const userPoints = await quizRepository.getUserPoints(userId);
-        const puntajeTotal = userPoints ? userPoints.score : 0; // Ajuste por si devuelve objeto o array
+        const puntajeTotal = userPoints ? userPoints.score : 0; 
 
         return {
             correcto: esCorrecto,
             puntosGanados,
             puntajeTotal,
-            respuestaCorrecta, //se la mandopara que el front muestre cual era
+            respuestaCorrecta, 
             explicacion
         };
 
@@ -68,7 +68,94 @@ async function validarYActualizarPuntos(questionId, respuestaUsuario, userId) {
     }
 }
 
+//survival
+async function processSurvivalAnswer(userId, questionId, respuestaUsuario, rachaActual, excludeIds = []) {
+    try {
+        if (!questionId) {
+            const nextQuestionArray = await quizRepository.getRandomQuestions(1, excludeIds);
+            return {
+                status: 'sigue',
+                siguientePregunta: nextQuestionArray[0],
+                nuevaRacha: 0,
+                puntosGanados: 0
+            };
+        }
+
+        //se buscan los datos de la pregunta para validar
+        const datosPregunta = await quizRepository.getQuestionAnswer(questionId);
+        if (!datosPregunta) throw new Error("Pregunta no encontrada.");
+
+        const esCorrecto = String(respuestaUsuario).trim().toLowerCase() === String(datosPregunta.correct_answer).trim().toLowerCase();
+
+        //si el usuario respondio bien se sigue
+        if (esCorrecto) {
+            const nuevaRacha = rachaActual + 1;
+            
+            //puntos 3 de base + 10 cada 3 preguntas
+            let puntosAGanar = 3;
+            if (nuevaRacha % 3 === 0) {
+                puntosAGanar += 10;
+            }
+
+            //se metene los puntos en el score global
+            await quizRepository.updateUserPoints(userId, puntosAGanar);
+
+            //se busca la sigueinte pregunta excluyendo las q ya salieron
+            const nextQuestionArray = await quizRepository.getRandomQuestions(1, excludeIds);
+            const siguientePregunta = nextQuestionArray[0] || null;
+
+            return {
+                status: 'sigue',
+                correcto: true,
+                nuevaRacha,
+                puntosGanados: puntosAGanar,
+                siguientePregunta
+            };
+        } 
+
+        //cuando el user pifia
+        else {
+            //se busca el record actual en la bd
+            const recordData = await quizRepository.getSurvivalRecord(userId);
+            const recordAnterior = recordData ? recordData.max_survival_record : 0;
+            
+            let esNuevoRecord = false;
+            let puntosBonusRecord = 0;
+
+            //si mejoro el record
+            if (rachaActual > recordAnterior) {
+                esNuevoRecord = true;
+                puntosBonusRecord = 10;
+                //se actualiza
+                await quizRepository.updateSurvivalRecord(userId, rachaActual);
+                //premio por nuevo record
+                await quizRepository.updateUserPoints(userId, puntosBonusRecord);
+            }
+
+            //se guarda el intento en quiz_attempts
+            await quizRepository.createSurvivalAttempt(userId, rachaActual);
+
+            return {
+                status: 'game_over',
+                correcto: false,
+                rachaFinal: rachaActual,
+                mejorRacha: esNuevoRecord ? rachaActual : recordAnterior,
+                esNuevoRecord,
+                puntosBonusRecord,
+                explicacion: datosPregunta.explanation,
+                respuestaCorrecta: datosPregunta.correct_answer,
+                fuenteUrl: datosPregunta.source || datosPregunta.font || '#'
+            };
+        }
+
+    } catch (err) {
+        console.error("Error en el servicio de supervivencia:", err);
+        throw err;
+    }
+}
+
 export default {
     generateQuiz,
-    validarYActualizarPuntos
+    validarYActualizarPuntos,
+    processSurvivalAnswer
 };

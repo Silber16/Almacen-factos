@@ -71,8 +71,54 @@ const updateScore = async (req, res) => {
     }
 };
 
+//survival
+//endpoint para procesar una respuesta en el survival
+async function checkSurvivalAnswer(req, res) {
+    //rachaActual es cuantas viene contestando bien
+    //excludeIds es el array de idss que ya salieron para no repetir
+    const { questionId, answer, rachaActual, excludeIds } = req.body;
+    
+    //obtenemos el id del usuario
+    const userId = req.user ? req.user.id : req.body.userId; 
+
+    try {
+        if (!questionId) {
+            const resultadoInicial = await quizService.processSurvivalAnswer(
+                userId, 
+                null, 
+                null, 
+                0, 
+                excludeIds || []
+            );
+            return res.status(200).json(resultadoInicial);
+        }
+
+        //si ya hay una pregunta en juego, ahi si exigimos la respuesta para validar
+        if (answer === undefined) {
+            return res.status(400).json({ error: "Faltan datos obligatorios (answer)." });
+        }
+
+        //se llama al service
+        const resultado = await quizService.processSurvivalAnswer(
+            userId, 
+            questionId, 
+            answer, 
+            parseInt(rachaActual) || 0, 
+            excludeIds || []
+        );
+
+        //se devuelve el resultado al cliente
+        return res.status(200).json(resultado);
+
+    } catch (error) {
+        console.error("Error en checkSurvivalAnswer:", error);
+        return res.status(500).json({ error: "Error interno al procesar la racha." });
+    }
+}
+
 export default {
     startQuiz,
     verifyAnswer,
-    updateScore
+    updateScore,
+    checkSurvivalAnswer
 };

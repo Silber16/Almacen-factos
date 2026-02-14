@@ -10,4 +10,6 @@ router.post('/verify', auth, quizController.verifyAnswer);
 
 router.post('/score', auth, quizController.updateScore);
 
+router.post('/survival/check', auth, quizController.checkSurvivalAnswer);
+
 export default router;

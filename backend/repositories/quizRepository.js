@@ -18,7 +18,7 @@ async function createQuizQuestion(factId, questionText, correctAnswer, explanati
     }
 }
 
-//traeuna sola pregunta random para el quiz
+//trae una sola pregunta random para el quiz
 async function getRandomQuestion() {
     const query = `
     SELECT 
@@ -29,7 +29,7 @@ async function getRandomQuestion() {
         qq.difficulty, 
         qq.fact_id,
         f.font,
-        f.iconurl as image -- Asumiendo que tenés la imagen en facts
+        f.iconurl as image 
     FROM quiz_questions qq
     JOIN facts f ON qq.fact_id = f.id
     ORDER BY RANDOM()
@@ -45,8 +45,7 @@ async function getRandomQuestion() {
     }
 }
 
-//trae preguntas random para el quiz (version lista/plural)
-//le paso el array de ids para excluir
+//trae preguntas random para el quiz
 async function getRandomQuestions(limit = 5, excludeIds = []) {
     let query = `
     SELECT qq.id, qq.question_text, qq.difficulty, f.font
@@ -55,19 +54,14 @@ async function getRandomQuestions(limit = 5, excludeIds = []) {
     `;
     const params = [];
 
-    //logica de filtrado para que no se repitan las mismas preguntas
+    //logica de filtrado para que no se repitan
     if (excludeIds.length > 0) {
-        //se generan los huecos dinamicos
         const placeholders = excludeIds.map((_, index) => `$${index + 1}`).join(', ');
-        
-        //se agrega el filtro a la query
         query += ` WHERE qq.id NOT IN (${placeholders})`;
         params.push(...excludeIds);
     }
     
-    //el indice del limite depende de cuantos ids haya
-    const limitParamIndex = params.length +1;
-
+    const limitParamIndex = params.length + 1;
     query += ` ORDER BY RANDOM() LIMIT $${limitParamIndex};`;
     params.push(limit);
 
@@ -80,18 +74,24 @@ async function getRandomQuestions(limit = 5, excludeIds = []) {
     }
 }
 
-//valida la respuesta
+//trae la pregunta
 async function getQuestionAnswer(id) {
     const query = `
-    SELECT correct_answer, explanation 
-        FROM quiz_questions
-        WHERE id = $1;
+    SELECT qq.correct_answer, qq.explanation, f.font 
+    FROM quiz_questions qq
+    JOIN facts f ON qq.fact_id = f.id
+    WHERE qq.id = $1;
     `;
-    const result = await db.query(query, [id]);
-    return result.rows[0];
+    try {
+        const result = await db.query(query, [id]);
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error en getQuestionAnswer:", error);
+        throw error;
+    }
 }
 
-//suma puntos a la columna score de users en caso de que el usuario haya contestado correctamente
+//suma puntos a la columna score
 async function updateUserPoints(userId, points) {
     const query = `
     UPDATE users
@@ -103,7 +103,7 @@ async function updateUserPoints(userId, points) {
     return result.rows[0];
 }
 
-//una vez que termine el juego se le va a mostrar al usuario su puntaje total
+//trae puntaje total
 async function getUserPoints(userId) {
     const query = `
         SELECT score 
@@ -114,6 +114,56 @@ async function getUserPoints(userId) {
     return result.rows[0];
 }
 
+//MODO SURVIVAL
+
+//actualiza el record de racha maxima
+async function updateSurvivalRecord(userId, newRecord) {
+    const query = `
+    UPDATE users
+    SET max_survival_record = $1
+    WHERE id = $2 AND max_survival_record < $1
+    RETURNING max_survival_record;
+    `;
+    try {
+        const result = await db.query(query, [newRecord, userId]);
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error al actualizar récord de supervivencia en DB:", error);
+        throw error;
+    }
+}
+
+//trae el record actual
+async function getSurvivalRecord(userId) {
+    const query = `
+    SELECT max_survival_record 
+    FROM users 
+    WHERE id = $1;
+    `;
+    try {
+        const result = await db.query(query, [userId]);
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error al obtener récord de supervivencia de DB:", error);
+        throw error;
+    }
+}
+
+//registra el intento en el historial
+async function createSurvivalAttempt(userId, score) {
+    const query = `
+    INSERT INTO quiz_attempts (user_id, score, game_mode)
+    VALUES ($1, $2, 'survival')
+    RETURNING *;
+    `;
+    try {
+        const result = await db.query(query, [userId, score]);
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error al registrar intento de racha en DB:", error);
+        throw error;
+    }
+}
 
 export default {
     createQuizQuestion,
@@ -121,5 +171,8 @@ export default {
     getRandomQuestions,
     getQuestionAnswer,
     updateUserPoints,
-    getUserPoints
+    getUserPoints,
+    updateSurvivalRecord,
+    getSurvivalRecord,
+    createSurvivalAttempt
 };
