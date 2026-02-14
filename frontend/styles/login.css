@@ -137,3 +137,28 @@ label {
     color: rgba(255, 255, 255, 0.371);
     font-size: 1.1rem;
 }
+.container {
+    animation: fadeInUp 1s ease-out;
+}
+
+.tabs {
+    animation: fadeInUp 1.2s ease-out;
+}
+
+form {
+    animation: fadeInUp 1.4s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+#login-form, #register-form {
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.6s ease;
+}
