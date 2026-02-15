@@ -17,7 +17,7 @@ btnRegister.addEventListener("click", () => {
     btnLogin.classList.remove("active");
     loginForm.style.display = "none";
     registerForm.style.display = "block";
-    subtitle.textContent = "Únete a nuestra comunidad";
+    subtitle.textContent = "Unite a nuestra comunidad";
 });
 
 loginForm.addEventListener("submit", async (e) => {
@@ -26,11 +26,11 @@ loginForm.addEventListener("submit", async (e) => {
     const identifier = document.getElementById("login-identifier").value;
     const password = document.getElementById("login-password").value;
 
-const res = await fetch("http://localhost:3000/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ identifier, password })
-});
+    const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier, password })
+    });
 
     const data = await res.json();
 
@@ -43,6 +43,7 @@ const res = await fetch("http://localhost:3000/api/auth/login", {
         alert(data.error);
     }
 });
+
 registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -56,7 +57,7 @@ registerForm.addEventListener("submit", async (e) => {
         return;
     }
 
-const res = await fetch("http://localhost:3000/api/auth/register", {
+const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userData)

@@ -52,7 +52,6 @@ const modalExplicacion = document.getElementById('modal-facto-explicacion');
 const closeModalBtn = document.querySelector('.close-modal');
 
 //config global
-const API_URL = 'http://localhost:3000/api/quiz';
 let preguntasArray = []; 
 let preguntasVistas = [];
 let indicePreguntaActual = 0;
@@ -150,7 +149,7 @@ async function comenzarJuego(modo = 'clasico') {
             preguntasVistasSupervivencia = [];
             if(currentQNum) currentQNum.parentElement.style.visibility = 'hidden'; 
 
-            const res = await fetch(`${API_URL}/survival/check`, {
+            const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/quiz/survival/check`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ rachaActual: 0, excludeIds: [] }) 
@@ -160,7 +159,7 @@ async function comenzarJuego(modo = 'clasico') {
         } 
         else {
             if(currentQNum) currentQNum.parentElement.style.visibility = 'visible';
-            const res = await fetch(`${API_URL}/start`, {
+            const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/quiz/start`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ excludeIds: preguntasVistas })
@@ -227,7 +226,7 @@ async function procesarRespuesta(respuestaUsuario, esTimeout = false) {
 async function manejarRespuestaSurvival(respuestaUsuario, esTimeout, questionId) {
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/survival/check`, {
+        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/quiz/survival/check`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify({ 
@@ -268,7 +267,7 @@ async function manejarRespuestaClasico(respuestaUsuario, esTimeout, preguntaActu
     } else {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`${API_URL}/verify`, { 
+            const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/quiz/verify`, { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ questionId: preguntaActual.id, userAnswer: respuestaUsuario })
@@ -349,7 +348,7 @@ async function finalizarJuego() {
     let rankingTotal = "...";
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/score`, { 
+        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/quiz/score`, { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify({ points: puntajeAcumuladoPartida })

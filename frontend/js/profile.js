@@ -1,4 +1,3 @@
-const API_URL = 'http://localhost:3000/api';
 const DEFAULT_IMAGE = '../img/default-user.png';
 
 //funcion para sacar mi id del token
@@ -47,7 +46,7 @@ async function loadUserProfile() {
         const token = localStorage.getItem('token');
 
         // mandamos el token para que el back sepa si soy yo
-        const res = await fetch(`${API_URL}/users/${currentUserId}`, {
+        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/users/${currentUserId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -163,7 +162,6 @@ function renderTrophies(trophies) {
 }
 
 function renderFactos(factos, canDelete = false) {
-    console.log("Datos que llegan al render:", factos);
     const container = document.getElementById('user-factos-container');
     if (!container) return;
 
@@ -332,10 +330,10 @@ async function handleEditProfile(e) {
     const nameVal = document.getElementById('edit-name').value.trim();
     const userVal = document.getElementById('edit-username').value.trim();
     const bioVal = document.getElementById('edit-bio').value.trim();
-    const picInput = document.getElementById('edit-picture'); //necesitamos el input entero, no solo el value
+    const picInput = document.getElementById('edit-picture'); 
 
     const deleteFlag = document.getElementById('delete-picture-flag').value === 'true';
-    //validacion
+  
     if (nameVal === '' || userVal === '') {
         alert('El nombre y el usuario son obligatorios');
         return;
@@ -353,7 +351,7 @@ async function handleEditProfile(e) {
     }
 
     try {
-        const res = await fetch(`${API_URL}/users/${currentUserId}`, {
+        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/users/${currentUserId}`, {
             method: 'PUT',
             body: formData,
             // mandamos el token para que nos deje editar
@@ -431,7 +429,7 @@ async function loadSavedFacts() {
 
         try {
             //fetch con autenticacion
-            const res = await fetch(`${API_URL}/saved/${currentUserId}`, {
+            const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/saved/${currentUserId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -474,8 +472,7 @@ async function loadSavedFacts() {
 async function deleteSavedFact(factId) {
     try {
         const token = localStorage.getItem('token');
-        console.log("Intentando borrar facto ID:", factId);
-        const res = await fetch(`${API_URL}/saved/toggle`, {
+        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/saved/toggle`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
