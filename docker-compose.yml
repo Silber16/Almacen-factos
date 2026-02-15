@@ -15,9 +15,11 @@ services:
       - /app/node_modules 
     restart: unless-stopped
     command: npm start
-
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      args:
+        - VITE_BACKEND_URI=http://localhost:3000 
     container_name: mi-frontend
     ports:
       - "8080:80"
