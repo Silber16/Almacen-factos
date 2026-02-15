@@ -23,11 +23,12 @@ async function filterFactsByCategory(categoryId) {
     }
     try {
         currentOffset = 0; 
-        hasMore = true;    
+        hasMore = false;
         currentCategory = categoryId;
         
-        const res = await fetch(`http://localhost:3000/api/facts/category/${categoryId}`);
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/facts/category/${categoryId}`);
         const facts = await res.json();
+
         renderFeed(facts, true); 
     }
     catch (err) {
@@ -80,7 +81,7 @@ function toggleIaVerdict(iaResponseDiv, iaResponseButton) {
 async function addToRepository(factId) {
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch("http://localhost:3000/api/facts/addToRepo", {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/facts/addToRepo`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', 
@@ -165,7 +166,8 @@ async function fetchFacts(offset = 0) {
     loader.classList.add('loader-visible');
 
     try {
-        const res = await fetch(`http://localhost:3000/api/facts/?limit=${LIMIT}&offset=${offset}`);
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/facts/?limit=${LIMIT}&offset=${offset}`);
+        console.log(res);
         const facts = await res.json();
 
         if (facts.length === 0) {
@@ -191,8 +193,9 @@ function loadMoreFacts() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && hasMore && !isLoading) {
-                document.getElementById('feed-loader').toggle
+                if (entry.isIntersecting && hasMore && !isLoading && currentCategory === null) {
                 fetchFacts(currentOffset);
+            }
             }
         });
     }, { 

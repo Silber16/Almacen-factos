@@ -4,7 +4,7 @@ const form = document.getElementById('form-create-fact');
 async function createFact(factObj) {
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch("http://localhost:3000/api/facts/", {
+        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/facts/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +40,6 @@ form.addEventListener('submit', async function(e) {
 
         const formData = new FormData(form);
 
-        //se arma el objeto con los datos del usuario
         const factObj = {
             title: formData.get('Title'),
             content: formData.get('Content'),
@@ -52,17 +51,12 @@ form.addEventListener('submit', async function(e) {
         console.log("Enviando al servidor:", factObj);
         const res = await createFact(factObj);
 
-        //veredicto de la ia
-        const veredicto = res.fact.ia_responseverdict || "Procesando";
-        
-        window.alert(`¡Facto Publicado con Éxito!\nVeredicto IA: ${veredicto}`);
         window.location.href = './feed.html';      
 
     } catch (error) {
         console.error("Error en el proceso:", error);
         window.alert("Hubo un error: " + error.message);
         
-        //si falla se restaura el boton para que intente de nuevo
         btnSubmit.textContent = textoOriginal;
         btnSubmit.disabled = false;
     }
