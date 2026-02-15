@@ -134,7 +134,7 @@ function renderFeed(facts, clearContainer = false) {
             <label class="fact-font" >Fuente: ${fact.font}</label>
             <div class="btn-container">
                 <button class="fact-btn-iaResponse"><span class="material-symbols-outlined">stars_2</span>Ver verificación IA</button>
-                <button class="fact-btn-addToRepository"><i class="fa-solid fa-floppy-disk"></i>Guardar</button>
+                <button id="btn-save-fact" class="fact-btn-addToRepository"><i class="fa-solid fa-floppy-disk"></i>Guardar</button>
             </div>
             <div class="fact-iaResponse display-none">${ia_verdict_emoji} ${fact.iaResponse}</div>
         `;

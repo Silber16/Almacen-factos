@@ -100,9 +100,11 @@ header {
     border: 1px solid var(--principal-orange);
 }
 
-#categories-btn {
+#categories-btn:hover {
+    cursor: pointer;
     background-color: transparent;
     color: var(--principal-orange);
+    transition: transform 0.2s, background-color 0.2s;
 }
 
 #facts-container {
@@ -353,6 +355,10 @@ header {
 
 main {
     animation: fadeInUp 1.2s ease-out;
+}
+#btn-save-fact:hover{
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
 }
 
 @keyframes fadeInUp {
