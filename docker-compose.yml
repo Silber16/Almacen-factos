@@ -19,7 +19,7 @@ services:
     build: 
       context: ./frontend
       args:
-        - VITE_VITE_BACKEND_URI=http://localhost:3000 
+        - VITE_BACKEND_URI=http://localhost:3000 
     container_name: mi-frontend
     ports:
       - "8080:80"
