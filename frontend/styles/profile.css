@@ -7,14 +7,6 @@
     --principal-sandwhite: #E4EEF0;
     --principal-grey: #d3d3d3; /* Agregué este gris para fuentes */
 }
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Monda", sans-serif;
-}
-
 body {
     font-family: Arial, sans-serif;
     background-color: var(--principal-dark);
