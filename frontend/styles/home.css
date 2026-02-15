@@ -1,6 +1,4 @@
-* {
-  box-sizing: border-box;
-}
+
 p {
   color: #E4EEF0;
 }
@@ -19,6 +17,9 @@ body {
   background-color: #16232A;
   text-align: center;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .features {
   background-color: #16232A; 
@@ -94,7 +95,6 @@ button:hover {
 }
 .pie{
   font-size: 13px;
-  font-family: 'Times New Roman', Times, serif;
   font-weight: 200;
   text-align: center;
 }
