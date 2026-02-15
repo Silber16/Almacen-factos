@@ -6,14 +6,6 @@
     --principal-orange-o75: #fe812dc9;
     --principal-sandwhite: #E4EEF0;
 }
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Monda", sans-serif;
-}
-
 body {
     font-family: Arial, sans-serif;
     background-color: var(--principal-dark);
@@ -120,7 +112,6 @@ main h1 {
 }
 
 #btn-verificar-ia {
-    width: 50%;
     border-radius: 1rem;
     border: none;
     margin-top: 1rem;
