@@ -1,6 +1,0 @@
-{
-  "scripts": {},
-  "dependencies": {
-    "@google/genai": "^1.29.1"
-  }
-}
