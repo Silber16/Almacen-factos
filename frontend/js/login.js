@@ -26,7 +26,7 @@ loginForm.addEventListener("submit", async (e) => {
     const identifier = document.getElementById("login-identifier").value;
     const password = document.getElementById("login-password").value;
 
-    const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/auth/login`, {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier, password })
@@ -57,7 +57,7 @@ registerForm.addEventListener("submit", async (e) => {
         return;
     }
 
-const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/auth/register`, {
+const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userData)

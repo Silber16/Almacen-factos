@@ -1,12 +1,12 @@
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
 COPY . .
 
-ARG VITE_VITE_BACKEND_URI
-ENV VITE_VITE_BACKEND_URI=$VITE_VITE_BACKEND_URI
+ARG VITE_BACKEND_URI
+ENV VITE_BACKEND_URI=$VITE_BACKEND_URI
 
 RUN npm run build
 
