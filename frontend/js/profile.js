@@ -46,7 +46,7 @@ async function loadUserProfile() {
         const token = localStorage.getItem('token');
 
         // mandamos el token para que el back sepa si soy yo
-        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/users/${currentUserId}`, {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/users/${currentUserId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -351,7 +351,7 @@ async function handleEditProfile(e) {
     }
 
     try {
-        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/users/${currentUserId}`, {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/users/${currentUserId}`, {
             method: 'PUT',
             body: formData,
             // mandamos el token para que nos deje editar
@@ -429,7 +429,7 @@ async function loadSavedFacts() {
 
         try {
             //fetch con autenticacion
-            const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/saved/${currentUserId}`, {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/saved/${currentUserId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -472,7 +472,7 @@ async function loadSavedFacts() {
 async function deleteSavedFact(factId) {
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/saved/toggle`, {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/saved/toggle`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

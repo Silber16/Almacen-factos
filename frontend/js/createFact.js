@@ -4,7 +4,7 @@ const form = document.getElementById('form-create-fact');
 async function createFact(factObj) {
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/facts/`, {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/facts/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
