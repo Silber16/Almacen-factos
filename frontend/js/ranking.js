@@ -2,7 +2,7 @@ const rankingList = document.getElementById("ranking-list");
 
 async function fetchRanking() {
     try {
-        const res = await fetch(`${import.meta.env.VITE_VITE_BACKEND_URI}/api/ranking`);
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/ranking`);
         const ranking = await res.json();
         renderRanking(ranking);
     } catch (err) {
