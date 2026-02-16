@@ -1,3 +1,12 @@
+:root {
+    --principal-green: #004643;
+    --principal-green-o75: #004643c2;
+    --principal-dark: #16232A;
+    --principal-orange: #fe7f2d;
+    --principal-orange-o75: #fe812dc9;
+    --principal-sandwhite: #E4EEF0;
+    --principal-grey: #d3d3d3;
+}
 .ranking-page {
     min-height: 100vh;
     background-color: var(--principal-dark);
@@ -71,8 +80,13 @@
 .ranking-username {
     font-size: 1.1rem;
     font-weight: 600;
+    text-decoration:none;
+    color : var(--principal-grey);
 }
-
+.ranking-username:hover {
+    cursor: pointer;
+    color : var(--principal-orange);
+}
 .ranking-facts {
     font-size: .9rem;
     opacity: .85;

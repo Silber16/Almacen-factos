@@ -26,10 +26,14 @@ function renderRanking(ranking) {
         li.innerHTML = `
             <div class="ranking-left">
                 ${getPositionIcon(index)}
-                <span class="ranking-username">${user.username}</span>
+                <a href="./profile.html?userId=${user.id}" class="ranking-username">${user.username}</a>
                 <span class="ranking-facts">
                     <i class="fa-solid fa-file-lines"></i>
                     ${user.facts_count} factos
+                </span>
+                <span class = "ranking-facts">
+                <span>💀 Record Survival </span>
+                ${user.max_survival_record ?? 0}
                 </span>
             </div>
             <div class="ranking-right">
