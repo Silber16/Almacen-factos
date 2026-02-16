@@ -59,8 +59,8 @@ const factsController = {
         const category = req.params.category;
         try {
             const facts = await factsService.getFactsByCategoryName(category);
+            
             res.status(200).json(facts);
-
         } catch (error) {
             console.error("Error en el controlador al obtener facts: ", error.message);
             res.status(500);
