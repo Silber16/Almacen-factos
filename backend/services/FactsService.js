@@ -97,8 +97,6 @@ async function createNewFact(factData) {
         throw new Error("Datos de fact incompletos o inválidos."); 
     }
 
-    //el controller manda verdadero o fals con texto completo
-    //tomo la primera letra para q coincida con el switch(V o F)
     let verdictChar = '';
     if (factData.ia_responseverdict) {
         verdictChar = factData.ia_responseverdict.charAt(0).toUpperCase();
@@ -106,7 +104,6 @@ async function createNewFact(factData) {
         verdictChar = factData.iaVerdict.charAt(0).toUpperCase();
     }
 
-    //switch para la suma o resta de puntos, agarra V y Verdadero
     let factScore = 0
     switch (factData.iaVerdict) {
         case "V":

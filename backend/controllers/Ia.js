@@ -4,7 +4,6 @@ const iaController = {
     
     getIaFactVerdict: async (req, res) => {
         const { content } = req.body;
-        console.log(content)
         try {
         const iaVerdict = await iaService.getIaFactVerdict(content);
         res.status(200).json(iaVerdict);
