@@ -16,12 +16,17 @@
                 - PROHIBIDO: Nunca uses frases como "El texto sugiere", "Según el autor", "Como se menciona arriba" o "En este artículo".
                 - FORMATO: Debe ser una sentencia directa sobre el mundo real (histórica, científica, curiosa).
     
-            LÓGICA VERDADERO/FALSO:
-                - Tira una moneda (50% probabilidad).
-                - Si decides que sea VERDADERA: Extrae el dato más curioso y afírmalo directamente.
-                - Si decides que sea FALSA: Toma un dato clave y cámbialo sutilmente para que suene plausible pero sea incorrecto.
-                - Define la dificultad (easy, medium, hard).
+            LÓGICA DE GENERACIÓN OBLIGATORIA:
+                {forced_logic}
 
+                - Si la orden es VERDADERA: Extrae el dato más curioso y afírmalo directamente
+
+                - Si la orden es FALSA: Debes SABOTEAR la información de forma SIGNIFICATIVA. 
+                    * CAMBIA: El protagonista, el lugar, el invento o el desenlace de la historia.
+                    * PROHIBIDO: No hagas cambios mediocres (como sumar/restar 1 o 2 metros, o cambiar un año por el siguiente).
+                    * OBJETIVO: La afirmación debe sonar como un hecho histórico o científico real, pero ser conceptualmente falsa. 
+                    Ejemplo: Si el texto dice "Colón llegó a América", no digas "Colón llegó en 1493" (mediocre). Di: "Vasco da Gama fue el primer europeo en llegar a las costas de América" (Falso, plausible y divertido).
+        
         ESTRUCTURA JSON OBLIGATORIA:
         {
             "verification": {
@@ -30,8 +35,8 @@
             },
             "quiz": {
                 "question_text": "Afirmación corta para el juego",
-                "correct_answer": true, 
-                "explanation": "Explicación breve",
+                "correct_answer": true_o_false_seguncorresponda, 
+                "explanation": "Explicación breve de por que es verdad o por que es mentira",
                 "difficulty": "medium"
             }
         }
