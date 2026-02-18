@@ -214,7 +214,7 @@ function renderFactos(factos, canDelete = false) {
             <div class="btn-container">
                 <button class="fact-btn-iaResponse"><span class="material-symbols-outlined">stars_2</span>Ver verificación IA</button>
                 ${canDelete ? `
-                <button class="fact-btn-addToRepository" style="background-color: #e74c3c; cursor: pointer;">
+                <button class="fact-btn-addToRepository">
                     <i class="fa-solid fa-trash"></i> Quitar
                 </button>` : ''}
             </div>

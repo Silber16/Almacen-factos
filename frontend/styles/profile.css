@@ -318,6 +318,27 @@ main {
     transform: translateY(-2px);
 }
 
+.fact-btn-addToRepository {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .3rem;
+    width: fit-content;
+    border: none;
+    padding: .8rem;
+    border-radius: .5rem;
+    background-color: #e74c3c;
+    color: #fff;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.fact-btn-addToRepository:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+}
+
 /*modal*/
 .modal {
     position: fixed;
@@ -540,24 +561,13 @@ main {
     cursor: pointer;
 }
 
-.fact-btn-addToRepository {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: .3rem;
-    width: fit-content;
-    border: none;
-    padding: .8rem;
-    border-radius: .5rem;
-    color: #fff;
-    font-size: .9rem;
-}
 
 .fact-iaResponse {
     border-radius: 1rem;
     background-image: linear-gradient(to right, rgba(0, 87, 250, 0.705), #0400f73d);
     padding: 2rem;
     font-size: 1rem;
+    margin-top: 1rem;
 }
 
 .display-none {
