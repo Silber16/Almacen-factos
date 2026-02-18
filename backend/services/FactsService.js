@@ -97,15 +97,8 @@ async function createNewFact(factData) {
         throw new Error("Datos de fact incompletos o inválidos."); 
     }
 
-    let verdictChar = '';
-    if (factData.ia_responseverdict) {
-        verdictChar = factData.ia_responseverdict.charAt(0).toUpperCase();
-    } else if (factrData.iaVerdict) {
-        verdictChar = factData.iaVerdict.charAt(0).toUpperCase();
-    }
-
     let factScore = 0
-    switch (factData.iaVerdict) {
+    switch (factData.ia_responseverdict) {
         case "V":
             factScore = 3;
             break;
