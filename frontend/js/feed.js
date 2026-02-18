@@ -84,18 +84,19 @@ async function addToRepository(factId) {
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/facts/addToRepo`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json', 
-                'Authorization': `Bearer ${token}` 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({factId: factId})
+            body: JSON.stringify({ factId: factId })
         });
-        
-        if (!res.ok) {
-            console.error("No se pudo guardar el facto en el repositorio.");
+
+        if (res.ok) {
+            alert("Facto guardado en tu repositorio personal.");
+        } else {
+            console.error("Error en la respuesta del servidor");
         }
-    }
-    catch (err) {
-        console.error("error al guardar el fact en el repo personal: ", err)
+    } catch (err) {
+        console.error("Error al guardar el fact en el repo personal: ", err);
     }
 }
 
