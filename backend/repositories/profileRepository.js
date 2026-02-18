@@ -33,15 +33,24 @@ async function updateUserProfile(user) {
     return result.rows[0];
 }
 
-
 //obtener los factos publicados por el usuario, van a aparecer tipo twitter
 // obtener los factos publicados por un usuario (perfil)
 async function getUserFactos(userId) {
     const query = `
-    SELECT id, title, content, font, created_at
-    FROM facts
-    WHERE created_by = $1
-    ORDER BY created_at DESC;
+    SELECT 
+        f.id, 
+        f.title, 
+        f.content, 
+        f.font, 
+        f.ia_responseverdict, 
+        f.ia_response,
+        f.created_at,
+        f.created_by AS "createdBy",
+        u.username AS "userName"
+    FROM facts f
+    JOIN users u ON f.created_by = u.id
+    WHERE f.created_by = $1
+    ORDER BY f.created_at DESC;
     `;
 
     const { rows } = await db.query(query, [userId]);

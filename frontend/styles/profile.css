@@ -517,3 +517,49 @@ main {
     opacity: 1;
     transform: translateY(0);
 }
+
+
+.btn-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: end;
+}
+
+.fact-btn-iaResponse {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .3rem;
+    width: fit-content;
+    border: none;
+    padding: .8rem;
+    border-radius: .5rem;
+    background-image: linear-gradient(to right, rgb(0, 87, 250), #0400f75e);
+    color: var(--principal-sandwhite);
+    font-size: .9rem;
+    cursor: pointer;
+}
+
+.fact-btn-addToRepository {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .3rem;
+    width: fit-content;
+    border: none;
+    padding: .8rem;
+    border-radius: .5rem;
+    color: #fff;
+    font-size: .9rem;
+}
+
+.fact-iaResponse {
+    border-radius: 1rem;
+    background-image: linear-gradient(to right, rgba(0, 87, 250, 0.705), #0400f73d);
+    padding: 2rem;
+    font-size: 1rem;
+}
+
+.display-none {
+    display: none !important;
+}
