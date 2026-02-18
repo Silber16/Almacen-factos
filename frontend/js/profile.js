@@ -60,7 +60,6 @@ async function loadUserProfile() {
 
         const data = await res.json();
         
-        //
         misFactosCache = data.factos;
 
         const btnEdit = document.getElementById('btn-edit-profile');
@@ -91,7 +90,7 @@ async function loadUserProfile() {
 function renderProfile(user) {
     const imgElement = document.getElementById('profile-picture');
     if (imgElement) {
-        const fotoUsuario = user.profile_picture || DEFAULT_IMAGE;
+        const fotoUsuario = user.profilePicture || DEFAULT_IMAGE;
         imgElement.src = fotoUsuario;
         
         imgElement.onerror = function() {
@@ -131,8 +130,8 @@ function renderProfile(user) {
 
     //fecha
     const createdEl = document.getElementById('profile-created');
-    if (createdEl && user.created_at) {
-        const date = new Date(user.created_at);
+    if (createdEl && user.createdAt) {
+        const date = new Date(user.createdAt);
         createdEl.textContent = date.toLocaleDateString('es-AR');
     }
 }
@@ -345,9 +344,9 @@ async function handleEditProfile(e) {
     formData.append('bio', bioVal);
 
     if (picInput.files && picInput.files[0]) {
-        formData.append('profile_picture', picInput.files[0]);
+        formData.append('profilePicture', picInput.files[0]);
     } else if (deleteFlag) {
-        formData.append('profile_picture', '');
+        formData.append('profilePicture', '');
     }
 
     try {

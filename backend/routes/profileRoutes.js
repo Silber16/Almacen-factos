@@ -9,6 +9,6 @@ const router = Router();
 router.get('/:userId', auth, profileController.getUserProfile);
 
 // actualizar o editar perfil de usuario
-router.put('/:userId', auth, upload.single('profile_picture'), profileController.updateUserProfile);
+router.put('/:userId', auth, upload.single('profilePicture'), profileController.updateUserProfile);
 
 export default router;
