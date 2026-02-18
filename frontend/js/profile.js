@@ -1,5 +1,16 @@
 const DEFAULT_IMAGE = '../img/default-user.png';
 
+//boton verificacion ia
+function toggleIaVerdict(iaResponseDiv, iaResponseButton) {
+    iaResponseDiv.classList.toggle('display-none');
+            
+    if (iaResponseDiv.classList.contains('display-none')) {
+        iaResponseButton.innerHTML = '<span class="material-symbols-outlined">stars_2</span>Ver verificación IA';
+    } else {
+        iaResponseButton.innerHTML = '<i class="fa-solid fa-x"></i>Ocultar verificación IA';
+    }
+}
+
 //funcion para sacar mi id del token
 function getMyIdFromToken() {
     const token = localStorage.getItem('token');
@@ -167,59 +178,66 @@ function renderFactos(factos, canDelete = false) {
 
     container.innerHTML = '';
 
-    if (!factos || factos.length === 0) {
-        container.innerHTML = '<p class="empty-state">No hay factos para mostrar.</p>';
-        return;
-    }
+    factos.forEach(fact => {
+        fact.iaVerdict = fact.iaVerdict || fact.ia_responseverdict || fact.ia_verdict;
+        fact.iaResponse = fact.iaResponse || fact.ia_response;
+        fact.userName = fact.userName || fact.username;
+        fact.createdBy = fact.createdBy || fact.user_id;
 
-    const htmlString = factos.map(facto => {
-        //se verifica si hay fuente para mostrarla o no
-        const fuenteHtml = facto.font 
-            ? `<label class="fact-font">Fuente: ${facto.font}</label>` 
-            : '';
+        const factItem = document.createElement("li");
 
-        const usuarioHtml = facto.username 
-            ? `
-            <a href="./profile.html?userId=${facto.user_id || '#'}" class="fact-user-link">
-                <label class="fact-user">${facto.username}</label>
-            </a>
-            ` 
-            : '';
+        let ia_verdict_emoji = "";
+        switch (fact.iaVerdict) {
+            case 'F':
+                ia_verdict_emoji = "❌❌❌❌"
+                break;
+            case 'V':
+                ia_verdict_emoji = "✅✅✅✅"
+                break;
+            case 'I':
+                ia_verdict_emoji = "🤔🤔❔❔"
+                break;
+            default:
+                ia_verdict_emoji = "❓"
+                break;
+        };
 
-        //desguardado de factos
-        let deleteButtonHtml = '';
-        if (canDelete) {
-            deleteButtonHtml = `
-                <div class="btn-container">
-                    <button class="button-func btn-delete-saved" data-id="${facto.id}">
-                        <i class="fa-solid fa-trash"></i> Quitar
-                    </button>
-                </div>
-            `;
-        }
+        factItem.className = "fact-item";
+        factItem.id = `card-facto-${fact.id}`;
         
-        return `
-            <li class="fact-item" id="card-facto-${facto.id}">
-                ${usuarioHtml} 
-                <h3 class="fact-title">${facto.title}</h3>
-                <p class="fact-content">${facto.content}</p>
-                ${fuenteHtml}
-                ${deleteButtonHtml}
-            </li>
+        factItem.innerHTML = `
+            <a href="./profile.html?userId=${fact.createdBy}" class="fact-user-link">
+                <label class="fact-user" style="cursor: pointer;">${fact.userName}</label>
+            </a>
+            <h3 class="fact-title" >${fact.title}</h3>
+            <p class="fact-content" >${fact.content}</p>
+            <label class="fact-font" >Fuente: ${fact.font}</label>
+            <div class="btn-container">
+                <button class="fact-btn-iaResponse"><span class="material-symbols-outlined">stars_2</span>Ver verificación IA</button>
+                ${canDelete ? `
+                <button class="fact-btn-addToRepository" style="background-color: #e74c3c; cursor: pointer;">
+                    <i class="fa-solid fa-trash"></i> Quitar
+                </button>` : ''}
+            </div>
+            <div class="fact-iaResponse display-none">${ia_verdict_emoji} ${fact.iaResponse}</div>
         `;
-    }).join('');
 
-    container.innerHTML = htmlString;
-    if (canDelete) {
-        const deleteButtons = document.querySelectorAll('.btn-delete-saved');
-        deleteButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const factId = e.currentTarget.getAttribute('data-id');
-                deleteSavedFact(factId);
-            });
+        const iaResponseButton = factItem.querySelector('.fact-btn-iaResponse');
+        const iaResponseDiv = factItem.querySelector('.fact-iaResponse');
+
+        iaResponseButton.addEventListener('click', () => {
+            toggleIaVerdict(iaResponseDiv, iaResponseButton);
         });
-    }
+
+        const deleteButton = factItem.querySelector('.fact-btn-addToRepository');
+        if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+                deleteSavedFact(fact.id);
+            });
+        }
+
+        container.appendChild(factItem);
+    });
 }
 
 //logica botones
