@@ -111,7 +111,6 @@ async function getFactById (id) {
 }
 
 async function createFact (fact) {
-    console.log(fact)
     const query = `
         INSERT INTO 
             facts(title, content, font, created_by, category, ia_response, ia_responseverdict)

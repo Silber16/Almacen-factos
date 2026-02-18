@@ -333,7 +333,7 @@ async function handleEditProfile(e) {
     const picInput = document.getElementById('edit-picture'); 
 
     const deleteFlag = document.getElementById('delete-picture-flag').value === 'true';
-  
+
     if (nameVal === '' || userVal === '') {
         alert('El nombre y el usuario son obligatorios');
         return;
@@ -367,7 +367,6 @@ async function handleEditProfile(e) {
             renderProfile(userObj);
             closeEditModal();
             document.getElementById('delete-picture-flag').value = 'false';
-            alert('Perfil actualizado con éxito');
         } else {
             const errorData = await res.json();
             alert('Error: ' + (errorData.error || 'No se pudo actualizar'));

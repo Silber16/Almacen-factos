@@ -89,9 +89,9 @@ async function addToRepository(factId) {
             },
             body: JSON.stringify({factId: factId})
         });
-
-        if (res) {
-            alert("Facto guardado en repositorio pesonal.")
+        
+        if (!res.ok) {
+            console.error("No se pudo guardar el facto en el repositorio.");
         }
     }
     catch (err) {

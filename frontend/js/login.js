@@ -23,6 +23,7 @@ btnRegister.addEventListener("click", () => {
 loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    document.getElementById("login-error").style.display = "none";
     const identifier = document.getElementById("login-identifier").value;
     const password = document.getElementById("login-password").value;
 
@@ -35,12 +36,13 @@ loginForm.addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (res.ok) {
-        alert("Login exitoso");
         localStorage.setItem("token", data.token);
         window.location.href = './feed.html';
     }
     else {
-        alert(data.error);
+        const errorElement = document.getElementById("login-error");
+        errorElement.textContent = data.error || "Contraseña incorrecta";
+        errorElement.style.display = "block";
     }
 });
 

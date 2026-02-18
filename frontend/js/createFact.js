@@ -48,7 +48,6 @@ form.addEventListener('submit', async function(e) {
             createdBy: null
         };
 
-        console.log("Enviando al servidor:", factObj);
         const res = await createFact(factObj);
 
         window.location.href = './feed.html';      

@@ -109,6 +109,7 @@ main h1 {
     border: 1px solid var(--principal-orange);
     height: 3rem;
     text-decoration: none;
+    cursor: pointer;
 }
 
 #btn-verificar-ia {

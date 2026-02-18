@@ -109,7 +109,6 @@ const factsController = {
                         aiResult.quiz.explanation,
                         aiResult.quiz.difficulty
                     );
-                    console.log("Pregunta de quiz guardada.");
                 }
 
                 res.status(201).json({

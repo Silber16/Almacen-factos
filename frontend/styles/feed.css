@@ -183,6 +183,7 @@ header {
     background-image: linear-gradient(to right, rgb(0, 87, 250), #0400f75e);
     color: var(--principal-sandwhite);
     font-size: .9rem;
+    cursor: pointer;
 }
 
 .fact-btn-addToRepository {
