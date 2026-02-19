@@ -590,3 +590,8 @@ main {
 .fact-btn-delete:hover {
     color: #e74c3c;
 }
+.header-actions{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
