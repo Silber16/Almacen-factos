@@ -17,6 +17,17 @@ const CATEGORIES = [
     { id: 7, name: 'Otros' }
 ];
 
+function getMyIdFromToken() {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.id || payload.userId || payload.sub;
+    } catch (e) { return null; }
+}
+const myUserId = getMyIdFromToken();
+
+
 async function filterFactsByCategory(categoryId) {
     if (!categoryId) {
         return
@@ -137,7 +148,10 @@ function renderFeed(facts, clearContainer = false) {
             <div class="btn-container">
                 <button class="fact-btn-iaResponse"><span class="material-symbols-outlined">stars_2</span>Ver verificación IA</button>
                 <button id="btn-save-fact" class="fact-btn-addToRepository"><i class="fa-solid fa-floppy-disk"></i>Guardar</button>
-            </div>
+                ${String(fact.createdBy) === String(myUserId) ? `
+                    <button class="fact-btn-delete"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                ` : ''}
+                </div>
             <div class="fact-iaResponse display-none">${ia_verdict_emoji} ${fact.iaResponse}</div>
         `;
 
@@ -147,6 +161,23 @@ function renderFeed(facts, clearContainer = false) {
         iaResponseButton.addEventListener('click', () => {
             toggleIaVerdict(iaResponseDiv, iaResponseButton);
         });
+
+        const deleteButton = factItem.querySelector('.fact-btn-delete');
+        if (deleteButton) {
+            deleteButton.addEventListener('click', async () => {
+                if (!confirm('¿Seguro que querés eliminar este facto?')) return;
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/facts/${fact.id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    factItem.remove();
+                } else {
+                    alert('Error al eliminar el facto');
+                }
+            });
+        }
 
         const addToRepositoryButton = factItem.querySelector('.fact-btn-addToRepository');
 

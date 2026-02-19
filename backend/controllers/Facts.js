@@ -171,25 +171,32 @@ const factsController = {
     },
 
     remove: async (req, res) => {
-        const factId = Number(req.params.id);
+    const factId = Number(req.params.id);
+    //id del token
+    const userId = req.user.id; 
 
-        if (isNaN(factId) || factId <= 0) {
-            return res.status(400).json({ message: "ID de facto no válido." });
-        }
-
-        try {
-            const success = await factsService.deleteFactById(factId);
-
-            if (success) {
-                res.status(204).send(); 
-            } else {
-                res.status(404).json({ message: `Hecho con ID ${factId} no encontrado para eliminar.` });
-            }
-        } catch (error) {
-            console.error("Error en el controlador remove:", error.message);
-            res.status(500).json({ message: "Error interno del servidor. Posiblemente por dependencias (claves foráneas)." });
-        }
+    if (isNaN(factId) || factId <= 0) {
+        return res.status(400).json({ message: "ID de facto no válido." });
     }
+
+    try {
+        //pasan los ids al service
+        const success = await factsService.deleteFactById(factId, userId);
+
+        if (success) {
+            res.status(200).json({ message: "Facto eliminado correctamente de todos los registros." }); 
+        } else {
+            res.status(403).json({ 
+                message: "No tenés permiso para eliminar este facto o el ID no existe." 
+            });
+        }
+    } catch (error) {
+        console.error("Error en el controlador remove:", error.message);
+        res.status(500).json({ 
+            message: "Error interno al intentar eliminar el facto y sus dependencias." 
+        });
+    }
+}
 };
 
 export default factsController;

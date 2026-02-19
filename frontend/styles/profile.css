@@ -240,8 +240,6 @@ main {
     border-radius: 1rem;
     list-style: none;
     color: var(--principal-sandwhite);
-    
-
     box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     border: 1px solid rgba(255, 255, 255, 0.05);
     position: relative;
@@ -572,4 +570,23 @@ main {
 
 .display-none {
     display: none !important;
+}
+
+.fact-btn-delete {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: .85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    transition: color 0.2s ease;
+}
+
+.fact-btn-delete:hover {
+    color: #e74c3c;
 }

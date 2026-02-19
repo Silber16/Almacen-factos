@@ -165,16 +165,22 @@ async function updateExistingFact(factData) {
     }
 }
 
-async function deleteFactById(id) {
-    if (!id || isNaN(Number(id))) {
-        throw new err("ID de fact no válido para eliminar.");
+//borrar factos
+async function deleteFactById(factId, userId) {
+    if (!factId || isNaN(Number(factId))) {
+        throw new Error("ID de fact no válido para eliminar.");
+    }
+    if (!userId || isNaN(Number(userId))) {
+        throw new Error("ID de usuario no válido para esta operación.");
     }
     
     try {
-        const success = await factsRepository.deleteFact(id);
+        //le pasamos los datos al repository
+        const success = await factsRepository.deleteFact(factId, userId);
         return success;
 
     } catch (err) {
+        console.error("Error en service al intentar borrar:", err);
         throw err;
     }
 }

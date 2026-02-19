@@ -90,7 +90,7 @@ async function loadUserProfile() {
 
         renderProfile(data.user);
         renderTrophies(data.trophies);
-        renderFactos(data.factos);
+        renderFactos(data.factos, false, data.isOwnProfile);
 
     } catch (error) {
         console.error(error);
@@ -171,7 +171,7 @@ function renderTrophies(trophies) {
     container.innerHTML = trophiesHTML;
 }
 
-function renderFactos(factos, canDelete = false) {
+function renderFactos(factos, canDelete = false, canDeleteOwn = false) {
     const container = document.getElementById('user-factos-container');
     if (!container) return;
 
@@ -208,15 +208,13 @@ function renderFactos(factos, canDelete = false) {
             <a href="./profile.html?userId=${fact.createdBy}" class="fact-user-link">
                 <label class="fact-user" style="cursor: pointer;">${fact.userName}</label>
             </a>
-            <h3 class="fact-title" >${fact.title}</h3>
-            <p class="fact-content" >${fact.content}</p>
-            <label class="fact-font" >Fuente: ${fact.font}</label>
+            <h3 class="fact-title">${fact.title}</h3>
+            <p class="fact-content">${fact.content}</p>
+            <label class="fact-font">Fuente: ${fact.font}</label>
             <div class="btn-container">
                 <button class="fact-btn-iaResponse"><span class="material-symbols-outlined">stars_2</span>Ver verificación IA</button>
-                ${canDelete ? `
-                <button class="fact-btn-addToRepository">
-                    <i class="fa-solid fa-trash"></i> Quitar
-                </button>` : ''}
+                ${canDelete ? `<button class="fact-btn-addToRepository"><i class="fa-solid fa-trash"></i> Quitar</button>` : ''}
+                ${canDeleteOwn ? `<button class="fact-btn-delete"><i class="fa-solid fa-trash"></i> Eliminar</button>` : ''}
             </div>
             <div class="fact-iaResponse display-none">${ia_verdict_emoji} ${fact.iaResponse}</div>
         `;
@@ -228,10 +226,30 @@ function renderFactos(factos, canDelete = false) {
             toggleIaVerdict(iaResponseDiv, iaResponseButton);
         });
 
+        //boton eliminar del repo
         const deleteButton = factItem.querySelector('.fact-btn-addToRepository');
         if (deleteButton) {
             deleteButton.addEventListener('click', () => {
                 deleteSavedFact(fact.id);
+            });
+        }
+
+        //boton eliminar facto propio
+        const deleteOwnButton = factItem.querySelector('.fact-btn-delete');
+        if (deleteOwnButton) {
+            deleteOwnButton.addEventListener('click', async () => {
+                if (!confirm('¿Seguro que querés eliminar este facto?')) return;
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/facts/${fact.id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const card = document.getElementById(`card-facto-${fact.id}`);
+                    if (card) card.remove();
+                } else {
+                    alert('Error al eliminar el facto');
+                }
             });
         }
 
@@ -409,7 +427,7 @@ function showMisFactos() {
         document.getElementById('section-title-text').innerHTML = '<i class="fa-solid fa-lightbulb"></i> Factos Publicados';
 
         //renderizar lo que teniamos guardado en cache
-        renderFactos(misFactosCache, false);
+        renderFactos(misFactosCache, false, true);
         
         container.classList.remove('slide-out');
         container.classList.add('slide-in');

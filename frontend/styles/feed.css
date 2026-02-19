@@ -122,6 +122,7 @@ header {
     gap: 1rem;
     font-size: .8rem;
     width: 70%;
+    position: relative;
 }
 
 .fact-title {
@@ -370,3 +371,21 @@ main {
     }
 }
 
+.fact-btn-delete {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: .85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    transition: color 0.2s ease;
+}
+
+.fact-btn-delete:hover {
+    color: #e74c3c;
+}
