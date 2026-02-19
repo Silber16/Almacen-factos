@@ -306,6 +306,15 @@ function setupEventListeners() {
     //listeners de pestañas
     if (btnMisFactos) btnMisFactos.addEventListener('click', showMisFactos);
     if (btnGuardados) btnGuardados.addEventListener('click', loadSavedFacts);
+    // logout
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "./login.html";
+    });
+}
+
 }
 
 //logica del modal
