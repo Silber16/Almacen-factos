@@ -166,8 +166,15 @@ form {
 
 .error-message {
     color: red;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Sombra para que se vea sombreado */
+    text-shadow: 1px 1px 2px rgba(0 0 0/50%);
     margin-top: 5px;
     font-size: 14px;
     display: none; /* Oculto por defecto */
+}
+.password-hint {
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    text-align: left;
+    margin-top: -8px;
+    margin-bottom: 12px;
 }
