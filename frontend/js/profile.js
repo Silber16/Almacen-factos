@@ -1,4 +1,4 @@
-const DEFAULT_IMAGE = '../img/default-user.png';
+const DEFAULT_IMAGE = 'https://res.cloudinary.com/dmwdnfexz/image/upload/v1771612389/default-user_q9p0ba.png';
 
 //boton verificacion ia
 function toggleIaVerdict(iaResponseDiv, iaResponseButton) {
