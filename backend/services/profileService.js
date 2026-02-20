@@ -90,7 +90,7 @@ async function updateUserProfile(userId, name, username, bio, profilePicture) {
             name: name ?? currentUser.name,
             username: username ?? currentUser.username,
             bio: bio ?? currentUser.bio,
-            profilePicture: profilePicture ?? currentUser.profilePicture
+            profilePicture: profilePicture ?? currentUser.profile_picture,
         });
 
         const updatedUser = await userRepository.updateUserProfile(finalUser);

@@ -24,9 +24,14 @@ const updateUserProfile = async (req, res) => {
     try {
         const { userId } = req.params;
         const { name, username, bio, profilePicture } = req.body;
-
-        const imagePath = req.file ? req.file.path : profilePicture;
-
+        let imagePath;
+        if (req.file) {
+            imagePath = req.file.path; 
+        }
+        else {
+            const currentUser = await profileService.getUserProfile(userId); 
+            imagePath = currentUser.user.profilePicture; 
+        }
         const updatedUser = await profileService.updateUserProfile(
             userId,
             name,
