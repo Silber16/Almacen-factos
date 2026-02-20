@@ -253,7 +253,8 @@ async function manejarRespuestaSurvival(respuestaUsuario, esTimeout, questionId)
         }
     } catch (error) { 
         console.error("Error survival:", error); 
-        resetearBotones();
+        alert("Error al conectar con el servidor.");
+        cambiarEstado(lobby);
     }
 }
 

@@ -97,18 +97,8 @@ async function createNewFact(factData) {
         throw new Error("Datos de fact incompletos o inválidos."); 
     }
 
-    //el controller manda verdadero o fals con texto completo
-    //tomo la primera letra para q coincida con el switch(V o F)
-    let verdictChar = '';
-    if (factData.ia_responseverdict) {
-        verdictChar = factData.ia_responseverdict.charAt(0).toUpperCase();
-    } else if (factrData.iaVerdict) {
-        verdictChar = factData.iaVerdict.charAt(0).toUpperCase();
-    }
-
-    //switch para la suma o resta de puntos, agarra V y Verdadero
     let factScore = 0
-    switch (factData.iaVerdict) {
+    switch (factData.ia_responseverdict) {
         case "V":
             factScore = 3;
             break;
@@ -175,16 +165,22 @@ async function updateExistingFact(factData) {
     }
 }
 
-async function deleteFactById(id) {
-    if (!id || isNaN(Number(id))) {
-        throw new err("ID de fact no válido para eliminar.");
+//borrar factos
+async function deleteFactById(factId, userId) {
+    if (!factId || isNaN(Number(factId))) {
+        throw new Error("ID de fact no válido para eliminar.");
+    }
+    if (!userId || isNaN(Number(userId))) {
+        throw new Error("ID de usuario no válido para esta operación.");
     }
     
     try {
-        const success = await factsRepository.deleteFact(id);
+        //le pasamos los datos al repository
+        const success = await factsRepository.deleteFact(factId, userId);
         return success;
 
     } catch (err) {
+        console.error("Error en service al intentar borrar:", err);
         throw err;
     }
 }

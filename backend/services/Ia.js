@@ -11,7 +11,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 se usa cuando el usuario CREA el facto.*/
 async function analyzeFact(title, content) {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash"  });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const prompt = await processPrompt(title, content);
         const result = await model.generateContent(prompt);
         const text = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
@@ -25,8 +25,7 @@ async function analyzeFact(title, content) {
                 verdict: "Error", 
                 explanation: "No se pudo conectar con la IA. Intente más tarde."
             },
-
-        quiz: null
+            quiz: null
         };
     }
 }
@@ -35,9 +34,17 @@ async function processPrompt(title, content){
     const promptPath = path.join(process.cwd(), 'resources', 'prompts', 'promptTemplate.txt');
     const promptTemplate = await readFile(promptPath, 'utf-8');
 
+    //logica para evitar q siempre mande quiz questions true
+    //decide al azar
+    const shouldBeTrue = Math.random() < 0.5;
+    const forcedLogic = shouldBeTrue 
+        ? "OBLIGATORIO: La respuesta del quiz DEBE SER VERDADERA." 
+        : "OBLIGATORIO: La respuesta del quiz DEBE SER FALSA (cambia un dato clave sutilmente).";
+
     const prompt = promptTemplate
         .replace('{title}', title)
-        .replace('{content}', content);
+        .replace('{content}', content)
+        .replace('{forced_logic}', forcedLogic); //inyecta la orden directa
 
     return prompt;
 }

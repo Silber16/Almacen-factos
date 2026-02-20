@@ -33,7 +33,9 @@
                 <input id="login-password" type="password" placeholder="*********">
             </div>
 
-            <button type="submit" class="main-btn">➡️ Entrar</button>
+            <p id="login-error" class="error-message"></p>
+
+            <button type="submit" class="main-btn">Entrar</button>
         </form>
         <form id="register-form" style="display: none">
             <label>Email</label>
@@ -53,14 +55,14 @@
                 <span class="icon">🔒</span>
                 <input id="reg-password" type="password" placeholder="********">
             </div>
-
+            <p class="password-hint">Mínimo 8 caracteres, 1 mayúscula , 1 número y un simbolo.</p>
             <label>Confirmar Contraseña</label>
             <div class="input-box">
                 <span class="icon">🔒</span>
                 <input id="reg-password2" type="password" placeholder="********">
             </div>
-
-            <button type="submit" class="main-btn">👤 Crear Cuenta</button>
+            <p id="register-error" class="error-message"></p>
+            <button type="submit" class="main-btn">Crear Cuenta</button>
         </form>
         
     </div>

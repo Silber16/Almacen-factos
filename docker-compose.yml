@@ -6,15 +6,22 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
+      - PORT=${PORT}
+      - DATABASE_HOST=db
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_DBNAME=${DATABASE_DBNAME}
+      - JWT_SECRET=${JWT_SECRET}
     networks:
       - mi-red
-    env_file:
-      - ./backend/.env
     volumes:
       - ./backend:/app
       - /app/node_modules 
     restart: unless-stopped
     command: npm start
+    depends_on:
+      - db
+
   frontend:
     build: 
       context: ./frontend
@@ -29,6 +36,25 @@ services:
       - mi-red
     restart: unless-stopped
 
+  db:
+    image: postgres:17 
+    container_name: mi-postgres
+    ports:
+      - "5432:5432" 
+    environment:
+      - POSTGRES_DB=${DATABASE_DBNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_USER=${DATABASE_USERNAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+      - ./bd.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - mi-red
+    restart: unless-stopped
+
 networks:
   mi-red:
     driver: bridge
+
+volumes:
+  pgdata:

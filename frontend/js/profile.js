@@ -1,5 +1,16 @@
 const DEFAULT_IMAGE = '../img/default-user.png';
 
+//boton verificacion ia
+function toggleIaVerdict(iaResponseDiv, iaResponseButton) {
+    iaResponseDiv.classList.toggle('display-none');
+            
+    if (iaResponseDiv.classList.contains('display-none')) {
+        iaResponseButton.innerHTML = '<span class="material-symbols-outlined">stars_2</span>Ver verificación IA';
+    } else {
+        iaResponseButton.innerHTML = '<i class="fa-solid fa-x"></i>Ocultar verificación IA';
+    }
+}
+
 //funcion para sacar mi id del token
 function getMyIdFromToken() {
     const token = localStorage.getItem('token');
@@ -60,7 +71,6 @@ async function loadUserProfile() {
 
         const data = await res.json();
         
-        //
         misFactosCache = data.factos;
 
         const btnEdit = document.getElementById('btn-edit-profile');
@@ -80,7 +90,7 @@ async function loadUserProfile() {
 
         renderProfile(data.user);
         renderTrophies(data.trophies);
-        renderFactos(data.factos);
+        renderFactos(data.factos, false, data.isOwnProfile);
 
     } catch (error) {
         console.error(error);
@@ -91,7 +101,7 @@ async function loadUserProfile() {
 function renderProfile(user) {
     const imgElement = document.getElementById('profile-picture');
     if (imgElement) {
-        const fotoUsuario = user.profile_picture || DEFAULT_IMAGE;
+        const fotoUsuario = user.profilePicture || DEFAULT_IMAGE;
         imgElement.src = fotoUsuario;
         
         imgElement.onerror = function() {
@@ -131,8 +141,8 @@ function renderProfile(user) {
 
     //fecha
     const createdEl = document.getElementById('profile-created');
-    if (createdEl && user.created_at) {
-        const date = new Date(user.created_at);
+    if (createdEl && user.createdAt) {
+        const date = new Date(user.createdAt);
         createdEl.textContent = date.toLocaleDateString('es-AR');
     }
 }
@@ -161,65 +171,90 @@ function renderTrophies(trophies) {
     container.innerHTML = trophiesHTML;
 }
 
-function renderFactos(factos, canDelete = false) {
+function renderFactos(factos, canDelete = false, canDeleteOwn = false) {
     const container = document.getElementById('user-factos-container');
     if (!container) return;
 
     container.innerHTML = '';
 
-    if (!factos || factos.length === 0) {
-        container.innerHTML = '<p class="empty-state">No hay factos para mostrar.</p>';
-        return;
-    }
+    factos.forEach(fact => {
+        fact.iaVerdict = fact.iaVerdict || fact.ia_responseverdict || fact.ia_verdict;
+        fact.iaResponse = fact.iaResponse || fact.ia_response;
+        fact.userName = fact.userName || fact.username;
+        fact.createdBy = fact.createdBy || fact.user_id;
 
-    const htmlString = factos.map(facto => {
-        //se verifica si hay fuente para mostrarla o no
-        const fuenteHtml = facto.font 
-            ? `<label class="fact-font">Fuente: ${facto.font}</label>` 
-            : '';
+        const factItem = document.createElement("li");
 
-        const usuarioHtml = facto.username 
-            ? `
-            <a href="./profile.html?userId=${facto.user_id || '#'}" class="fact-user-link">
-                <label class="fact-user">${facto.username}</label>
-            </a>
-            ` 
-            : '';
+        let ia_verdict_emoji = "";
+        switch (fact.iaVerdict) {
+            case 'F':
+                ia_verdict_emoji = "❌❌❌❌"
+                break;
+            case 'V':
+                ia_verdict_emoji = "✅✅✅✅"
+                break;
+            case 'I':
+                ia_verdict_emoji = "🤔🤔❔❔"
+                break;
+            default:
+                ia_verdict_emoji = "❓"
+                break;
+        };
 
-        //desguardado de factos
-        let deleteButtonHtml = '';
-        if (canDelete) {
-            deleteButtonHtml = `
-                <div class="btn-container">
-                    <button class="button-func btn-delete-saved" data-id="${facto.id}">
-                        <i class="fa-solid fa-trash"></i> Quitar
-                    </button>
-                </div>
-            `;
-        }
+        factItem.className = "fact-item";
+        factItem.id = `card-facto-${fact.id}`;
         
-        return `
-            <li class="fact-item" id="card-facto-${facto.id}">
-                ${usuarioHtml} 
-                <h3 class="fact-title">${facto.title}</h3>
-                <p class="fact-content">${facto.content}</p>
-                ${fuenteHtml}
-                ${deleteButtonHtml}
-            </li>
+        factItem.innerHTML = `
+            <a href="./profile.html?userId=${fact.createdBy}" class="fact-user-link">
+                <label class="fact-user" style="cursor: pointer;">${fact.userName}</label>
+            </a>
+            <h3 class="fact-title">${fact.title}</h3>
+            <p class="fact-content">${fact.content}</p>
+            <label class="fact-font">Fuente: ${fact.font}</label>
+            <div class="btn-container">
+                <button class="fact-btn-iaResponse"><span class="material-symbols-outlined">stars_2</span>Ver verificación IA</button>
+                ${canDelete ? `<button class="fact-btn-addToRepository"><i class="fa-solid fa-trash"></i> Quitar</button>` : ''}
+                ${canDeleteOwn ? `<button class="fact-btn-delete"><i class="fa-solid fa-trash"></i> Eliminar</button>` : ''}
+            </div>
+            <div class="fact-iaResponse display-none">${ia_verdict_emoji} ${fact.iaResponse}</div>
         `;
-    }).join('');
 
-    container.innerHTML = htmlString;
-    if (canDelete) {
-        const deleteButtons = document.querySelectorAll('.btn-delete-saved');
-        deleteButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const factId = e.currentTarget.getAttribute('data-id');
-                deleteSavedFact(factId);
-            });
+        const iaResponseButton = factItem.querySelector('.fact-btn-iaResponse');
+        const iaResponseDiv = factItem.querySelector('.fact-iaResponse');
+
+        iaResponseButton.addEventListener('click', () => {
+            toggleIaVerdict(iaResponseDiv, iaResponseButton);
         });
-    }
+
+        //boton eliminar del repo
+        const deleteButton = factItem.querySelector('.fact-btn-addToRepository');
+        if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+                deleteSavedFact(fact.id);
+            });
+        }
+
+        //boton eliminar facto propio
+        const deleteOwnButton = factItem.querySelector('.fact-btn-delete');
+        if (deleteOwnButton) {
+            deleteOwnButton.addEventListener('click', async () => {
+                if (!confirm('¿Seguro que querés eliminar este facto?')) return;
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/facts/${fact.id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const card = document.getElementById(`card-facto-${fact.id}`);
+                    if (card) card.remove();
+                } else {
+                    alert('Error al eliminar el facto');
+                }
+            });
+        }
+
+        container.appendChild(factItem);
+    });
 }
 
 //logica botones
@@ -271,6 +306,15 @@ function setupEventListeners() {
     //listeners de pestañas
     if (btnMisFactos) btnMisFactos.addEventListener('click', showMisFactos);
     if (btnGuardados) btnGuardados.addEventListener('click', loadSavedFacts);
+    // logout
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "./login.html";
+    });
+}
+
 }
 
 //logica del modal
@@ -333,7 +377,7 @@ async function handleEditProfile(e) {
     const picInput = document.getElementById('edit-picture'); 
 
     const deleteFlag = document.getElementById('delete-picture-flag').value === 'true';
-  
+
     if (nameVal === '' || userVal === '') {
         alert('El nombre y el usuario son obligatorios');
         return;
@@ -345,9 +389,9 @@ async function handleEditProfile(e) {
     formData.append('bio', bioVal);
 
     if (picInput.files && picInput.files[0]) {
-        formData.append('profile_picture', picInput.files[0]);
+        formData.append('profilePicture', picInput.files[0]);
     } else if (deleteFlag) {
-        formData.append('profile_picture', '');
+        formData.append('profilePicture', '');
     }
 
     try {
@@ -367,7 +411,6 @@ async function handleEditProfile(e) {
             renderProfile(userObj);
             closeEditModal();
             document.getElementById('delete-picture-flag').value = 'false';
-            alert('Perfil actualizado con éxito');
         } else {
             const errorData = await res.json();
             alert('Error: ' + (errorData.error || 'No se pudo actualizar'));
@@ -393,7 +436,7 @@ function showMisFactos() {
         document.getElementById('section-title-text').innerHTML = '<i class="fa-solid fa-lightbulb"></i> Factos Publicados';
 
         //renderizar lo que teniamos guardado en cache
-        renderFactos(misFactosCache, false);
+        renderFactos(misFactosCache, false, true);
         
         container.classList.remove('slide-out');
         container.classList.add('slide-in');

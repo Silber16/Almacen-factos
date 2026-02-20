@@ -111,7 +111,6 @@ async function getFactById (id) {
 }
 
 async function createFact (fact) {
-    console.log(fact)
     const query = `
         INSERT INTO 
             facts(title, content, font, created_by, category, ia_response, ia_responseverdict)
@@ -197,18 +196,33 @@ async function updateFact (factObj) {
     }
 }
 
-async function deleteFact (factId) {
-    const query = `DELETE FROM facts WHERE id = $1`;
+async function deleteFact(factId, userId) {
+    //se borra el facto de todos los repos de los demas
+    const querySaved = `DELETE FROM saved_facts WHERE fact_id = $1`;
+    
+    //se borra la pregunta de quiz relacionada a ese facto
+    const queryQuiz = `DELETE FROM quiz_questions WHERE fact_id = $1`;
+    
+    //se borra el facto si el id del usuario coincide con el id de quien lo subio
+    const queryFact = `
+        DELETE FROM facts 
+        WHERE id = $1 AND created_by = $2 
+        RETURNING id;
+    `;
 
     try {
-        const result = await db.query(query, [factId]);
-        return result.rowCount == 1;
+        //
+        await db.query(querySaved, [factId]);
+        await db.query(queryQuiz, [factId]);
+
+        const result = await db.query(queryFact, [factId, userId]);
+        
+        return result.rowCount === 1;
 
     } catch (err) {
-        console.error("Error al eliminar fact:", err);
+        console.error("Error crítico al eliminar fact y sus referencias:", err);
         throw err;
     }
-    
 }
 
 

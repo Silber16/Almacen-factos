@@ -9,9 +9,9 @@ const pool = new Pool({
   host: process.env.DATABASE_HOST,
   port: process.env.DATABASE_PORT,
   database: process.env.DATABASE_DBNAME,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  ssl: process.env.DATABASE_HOST === 'db' 
+    ? false 
+    : { rejectUnauthorized: false }
 });
 
 export default { query: (text, params) => pool.query(text, params) };

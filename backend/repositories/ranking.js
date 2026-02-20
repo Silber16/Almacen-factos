@@ -5,6 +5,7 @@ export const getranking = async() => {
             u.id,
             u.username,
             u.score,
+            u.max_survival_record,
             COUNT(f.id) AS facts_count
         FROM users u
         LEFT JOIN facts f ON f.created_by = u.id

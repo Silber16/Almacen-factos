@@ -240,8 +240,6 @@ main {
     border-radius: 1rem;
     list-style: none;
     color: var(--principal-sandwhite);
-    
-
     box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     border: 1px solid rgba(255, 255, 255, 0.05);
     position: relative;
@@ -315,6 +313,27 @@ main {
 
 .btn-delete-saved:hover {
     background-color: #ff4d4d;
+    transform: translateY(-2px);
+}
+
+.fact-btn-addToRepository {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .3rem;
+    width: fit-content;
+    border: none;
+    padding: .8rem;
+    border-radius: .5rem;
+    background-color: #e74c3c;
+    color: #fff;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.fact-btn-addToRepository:hover {
+    background-color: #c0392b;
     transform: translateY(-2px);
 }
 
@@ -516,4 +535,63 @@ main {
 #user-factos-container.slide-in {
     opacity: 1;
     transform: translateY(0);
+}
+
+
+.btn-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: end;
+}
+
+.fact-btn-iaResponse {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .3rem;
+    width: fit-content;
+    border: none;
+    padding: .8rem;
+    border-radius: .5rem;
+    background-image: linear-gradient(to right, rgb(0, 87, 250), #0400f75e);
+    color: var(--principal-sandwhite);
+    font-size: .9rem;
+    cursor: pointer;
+}
+
+
+.fact-iaResponse {
+    border-radius: 1rem;
+    background-image: linear-gradient(to right, rgba(0, 87, 250, 0.705), #0400f73d);
+    padding: 2rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.display-none {
+    display: none !important;
+}
+
+.fact-btn-delete {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: .85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    transition: color 0.2s ease;
+}
+
+.fact-btn-delete:hover {
+    color: #e74c3c;
+}
+.header-actions{
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
