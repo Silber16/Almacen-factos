@@ -7,12 +7,19 @@ dotenv.config();
 const app = express(); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://almacen-factos.vercel.app'
+];
+
 app.use(cors({
-    origin: '*',
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
+
 import profileRoutes from './routes/profileRoutes.js';
 import factsRoutes from './routes/Facts.js';
 import iaRoutes from './routes/Ia.js';
