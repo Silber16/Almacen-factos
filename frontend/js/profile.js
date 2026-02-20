@@ -387,11 +387,9 @@ async function handleEditProfile(e) {
     formData.append('name', nameVal);
     formData.append('username', userVal);
     formData.append('bio', bioVal);
-
+    formData.append("deletePicture", deleteFlag ? "true" : "false");
     if (picInput.files && picInput.files[0]) {
         formData.append('profilePicture', picInput.files[0]);
-    } else if (deleteFlag) {
-        formData.append('profilePicture', '');
     }
 
     try {
