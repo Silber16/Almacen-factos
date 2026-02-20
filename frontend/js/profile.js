@@ -1,4 +1,4 @@
-const DEFAULT_IMAGE = '../img/default-user.png';
+const DEFAULT_IMAGE = 'https://res.cloudinary.com/dmwdnfexz/image/upload/v1771612389/default-user_q9p0ba.png';
 
 //boton verificacion ia
 function toggleIaVerdict(iaResponseDiv, iaResponseButton) {
@@ -387,11 +387,9 @@ async function handleEditProfile(e) {
     formData.append('name', nameVal);
     formData.append('username', userVal);
     formData.append('bio', bioVal);
-
+    formData.append("deletePicture", deleteFlag ? "true" : "false");
     if (picInput.files && picInput.files[0]) {
         formData.append('profilePicture', picInput.files[0]);
-    } else if (deleteFlag) {
-        formData.append('profilePicture', '');
     }
 
     try {
