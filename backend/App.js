@@ -10,7 +10,8 @@ app.use(express.urlencoded({ extended: true }));
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://almacen-factos.vercel.app'
+  'https://almacen-factos.vercel.app',
+  'https://almacen-factos-1.onrender.com'
 ];
 
 app.use(cors({
